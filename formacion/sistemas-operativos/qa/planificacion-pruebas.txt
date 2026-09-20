@@ -1,0 +1,13 @@
+test_duplicate_module_rejected (test_planificacion.PlanningTests.test_duplicate_module_rejected) ... ok
+test_forward_dependency_rejected (test_planificacion.PlanningTests.test_forward_dependency_rejected) ... ok
+test_lab_minutes (test_planificacion.PlanningTests.test_lab_minutes) ... ok
+test_last_session (test_planificacion.PlanningTests.test_last_session) ... ok
+test_missing_module_rejected (test_planificacion.PlanningTests.test_missing_module_rejected) ... ok
+test_session_length (test_planificacion.PlanningTests.test_session_length) ... ok
+test_totals (test_planificacion.PlanningTests.test_totals) ... ok
+test_unique_ids (test_planificacion.PlanningTests.test_unique_ids) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.006s
+
+OK

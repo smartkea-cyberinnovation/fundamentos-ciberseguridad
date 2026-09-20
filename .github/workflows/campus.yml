@@ -1,0 +1,98 @@
+name: Campus - build and acceptance
+on:
+  push:
+    branches: [main]
+    paths: ['campus/**', 'formacion/sistemas-operativos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+  pull_request:
+    paths: ['campus/**', 'formacion/sistemas-operativos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: campus-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare reports
+        run: mkdir -p campus/qa
+      - name: Compiler and release unit tests
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 -m unittest discover -s campus/tests -p 'test_*.py' -v 2>&1 | tee campus/qa/compiler.log
+      - name: Progress and navigation tests
+        shell: bash
+        run: |
+          set -o pipefail
+          node --test campus/tests/*.test.mjs 2>&1 | tee campus/qa/state.log
+          node --check campus/assets/app.js
+      - name: Compile and validate real course
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 campus/build.py | tee campus/qa/build.json
+          python3 campus/check_release.py | tee campus/qa/release.json
+      - name: Install browser test dependency
+        run: |
+          python3 -m pip install playwright==1.55.0
+          python3 -m playwright install --with-deps chromium webkit
+      - name: Chromium acceptance
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 campus/tests/browser_bilingual.py 2>&1 | tee campus/qa/browser.log
+      - name: WebKit acceptance
+        shell: bash
+        env:
+          CAMPUS_BROWSER: webkit
+        run: |
+          set -o pipefail
+          python3 campus/tests/browser_bilingual.py 2>&1 | tee campus/qa/browser-webkit.log
+      - name: Existing kit tests
+        working-directory: formacion/sistemas-operativos/kit
+        run: python3 -m unittest discover -p 'test_*.py' -v
+      - name: Existing planning tests
+        working-directory: formacion/sistemas-operativos/planificacion
+        run: python3 -m unittest discover -p 'test_*.py' -v
+      - name: Diagnostics, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: campus-diagnostics
+          path: campus/qa/
+          retention-days: 7
+      - name: Pages bundle after successful acceptance
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-pages-ready
+          path: campus/pages-ready.zip
+          retention-days: 14
+          if-no-files-found: error
+      - name: Verified source and site snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: campus-es-en-source
+          path: |
+            campus/
+            formacion/sistemas-operativos/
+            README.md
+            wrangler.jsonc
+            .github/workflows/cloudflare.yml
+            .github/workflows/campus.yml
+            !**/__pycache__/**
+            !**/*.pyc
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error

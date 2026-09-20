@@ -1,0 +1,7 @@
+**/__pycache__/
+*.pyc
+mi-laboratorio*/
+.env*
+!.env.example
+*.local.json
+planificacion-local.json

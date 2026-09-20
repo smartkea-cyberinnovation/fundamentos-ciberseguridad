@@ -1,0 +1,12 @@
+dist/
+worker-dist/
+.campus-worker-build-*
+qa/
+pages-ready.zip
+__pycache__/
+*.pyc
+.campus-build-*
+node_modules/
+.wrangler/
+.dev.vars
+.env

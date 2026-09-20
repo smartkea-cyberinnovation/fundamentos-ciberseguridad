@@ -1,0 +1,24 @@
+name: oslab
+services:
+  web:
+    build:
+      context: .
+    image: oslab-web:1.1.0
+    user: "10001:10001"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.50
+    ports:
+      - "127.0.0.1:18080:8080"
+    networks: [lab]
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+networks:
+  lab:
+    internal: true

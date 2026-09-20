@@ -1,0 +1,7 @@
+/* Index filters: readable controls and local table scrolling on small screens. */
+.outline-filters {display:flex;flex-wrap:wrap;align-items:end;gap:1rem;margin:1.5rem 0 1rem;padding:1.2rem;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;}
+.outline-filters label {display:flex;flex-direction:column;gap:.4rem;flex:1 1 180px;font-weight:600;}
+.outline-filters input,.outline-filters select {width:100%;min-width:0;font:inherit;padding:.7rem;border:1px solid #94a3b8;border-radius:8px;background:white;color:#172b3a;}
+[data-outline-row][hidden],[data-outline-section][hidden],#outline-empty[hidden] {display:none!important;}
+.publish-link {display:block;margin-top:.8rem;font-weight:600;}
+@media(max-width:600px){.outline-filters {padding:1rem;gap:.8rem}.outline-filters label {flex-basis:100%;}}

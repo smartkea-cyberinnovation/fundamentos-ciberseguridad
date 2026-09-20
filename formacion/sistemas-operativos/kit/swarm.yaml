@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  web:
+    # Imagen construida y distribuida previamente por el docente.
+    image: "${OSLAB_IMAGE:?Definir imagen autorizada accesible a todos los nodos}"
+    user: "10001:10001"
+    read_only: true
+    networks: [lab]
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 128M
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      update_config:
+        parallelism: 1
+        failure_action: rollback
+# Sin puertos publicados; acceso solo desde la red de laboratorio.
+networks:
+  lab:
+    driver: overlay
+    internal: true
+    attachable: true

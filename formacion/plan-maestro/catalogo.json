@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "edition": "1.0",
+  "reviewed_at": "2026-09-18",
+  "status": "planning_reference_not_runtime_catalogue",
+  "owner": "Wiktor Nykiel",
+  "source_document": "01-mapa-curricular.md",
+  "baseline": {
+    "repository": "smartkea-cyberinnovation/fundamentos-ciberseguridad",
+    "commit": "2f8b8d2614638d9a034e1cac92fb16c6e75bb6c5",
+    "campus_version": "2.2",
+    "modules": 32,
+    "laboratory_designs": 96,
+    "planned_hours": 480,
+    "theory_hours": 168,
+    "practice_hours": 312,
+    "preserve_existing_ids_and_progress": true
+  },
+  "proposed_additional_hours": null,
+  "translation_status": {
+    "es": "curriculum_reference_and_designs_written",
+    "en": "overview_and_bilingual_terminology_only",
+    "full_bilingual_course": "pending"
+  },
+  "areas": [
+    {"id":"A01","title_es":"Introducción a la informática","title_en":"Computing fundamentals","prerequisites":[],"legacy_modules":["M01","M02","M03","M04"],"unit_ids":["A01.U01","A01.U02","A01.U03","A01.U04","A01.U05","A01.U06"]},
+    {"id":"A02","title_es":"Terminal y automatización multiplataforma","title_en":"Cross-platform CLI and automation","prerequisites":["A01"],"legacy_modules":["M04","M05","M06","M11","M12","M14","M15","M16","M21"],"unit_ids":["A02.U01","A02.U02","A02.U03","A02.U04","A02.U05","A02.U06"]},
+    {"id":"A03","title_es":"Sistemas operativos y administración","title_en":"Operating systems and administration","prerequisites":["A01","A02"],"legacy_modules":["M03","M07","M08","M09","M10","M13","M17","M18","M19","M20","M21","M22","M23"],"unit_ids":["A03.U01","A03.U02","A03.U03","A03.U04","A03.U05","A03.U06"]},
+    {"id":"A04","title_es":"Redes y comunicaciones","title_en":"Networking and communications","prerequisites":["A03"],"legacy_modules":["M10","M18","M22","M24"],"unit_ids":["A04.U01","A04.U02","A04.U03","A04.U04","A04.U05","A04.U06"]},
+    {"id":"A05","title_es":"Virtualización, almacenamiento y copias","title_en":"Virtualization, storage and backup","prerequisites":["A03","A04"],"legacy_modules":["M01","M09"],"unit_ids":["A05.U01","A05.U02","A05.U03","A05.U04","A05.U05","A05.U06"]},
+    {"id":"A06","title_es":"Arquitecturas web, aplicaciones y datos","title_en":"Web, application and data architecture","prerequisites":["A05"],"legacy_modules":["M25","M26"],"unit_ids":["A06.U01","A06.U02","A06.U03","A06.U04","A06.U05","A06.U06"]},
+    {"id":"A07","title_es":"Cloud e infraestructura como código","title_en":"Cloud and infrastructure as code","prerequisites":["A06"],"legacy_modules":["M24","M25","M26"],"unit_ids":["A07.U01","A07.U02","A07.U03","A07.U04","A07.U05","A07.U06"]},
+    {"id":"A08","title_es":"Docker, Compose, Swarm y Kubernetes","title_en":"Containers and orchestration","prerequisites":["A07"],"legacy_modules":["M26"],"unit_ids":["A08.U01","A08.U02","A08.U03","A08.U04","A08.U05","A08.U06"]},
+    {"id":"A09","title_es":"Introducción a la ciberseguridad y amenazas","title_en":"Cybersecurity and threats","prerequisites":["A01","A04"],"legacy_modules":["M01","M28","M29","M30"],"unit_ids":["A09.U01","A09.U02","A09.U03","A09.U04","A09.U05","A09.U06"]},
+    {"id":"A10","title_es":"Elementos de protección","title_en":"Protection capabilities","prerequisites":["A09"],"legacy_modules":["M07","M19","M23","M25","M30"],"unit_ids":["A10.U01","A10.U02","A10.U03","A10.U04","A10.U05","A10.U06"]},
+    {"id":"A11","title_es":"Gobierno, funciones y equipos","title_en":"Governance, functions and teams","prerequisites":["A09","A10"],"legacy_modules":["M30","M32"],"unit_ids":["A11.U01","A11.U02","A11.U03","A11.U04","A11.U05","A11.U06"]},
+    {"id":"A12","title_es":"GRC, riesgos y correspondencias","title_en":"GRC, risk and control mapping","prerequisites":["A09","A11"],"legacy_modules":["M30","M31","M32"],"unit_ids":["A12.U01","A12.U02","A12.U03","A12.U04","A12.U05","A12.U06"]},
+    {"id":"A13","title_es":"AppSec, DevSecOps y evaluación autorizada","title_en":"AppSec and authorized assessment","prerequisites":["A06","A08","A12"],"legacy_modules":["M25","M26","M30"],"unit_ids":["A13.U01","A13.U02","A13.U03","A13.U04","A13.U05","A13.U06"]},
+    {"id":"A14","title_es":"Blue Team, incidentes y forense","title_en":"Blue Team, incident response and DFIR","prerequisites":["A03","A04","A12"],"legacy_modules":["M19","M23","M27","M28"],"unit_ids":["A14.U01","A14.U02","A14.U03","A14.U04","A14.U05","A14.U06"]},
+    {"id":"A15","title_es":"CTI, exposición y búsqueda de amenazas","title_en":"CTI, exposure and hunting","prerequisites":["A09","A14"],"legacy_modules":["M06","M16","M29"],"unit_ids":["A15.U01","A15.U02","A15.U03","A15.U04","A15.U05","A15.U06"]},
+    {"id":"A16","title_es":"Resiliencia y riesgos no exclusivamente ciber","title_en":"Resilience and wider risks","prerequisites":["A05","A12"],"legacy_modules":["M09","M28","M32"],"unit_ids":["A16.U01","A16.U02","A16.U03","A16.U04","A16.U05","A16.U06"]},
+    {"id":"A17","title_es":"IA, privacidad y asistencia por terminal","title_en":"AI, privacy and CLI assistance","prerequisites":["A02","A12","A14"],"legacy_modules":["M31"],"unit_ids":["A17.U01","A17.U02","A17.U03","A17.U04","A17.U05","A17.U06"]},
+    {"id":"A18","title_es":"Proyecto, comunicación y desarrollo profesional","title_en":"Capstone and professional practice","prerequisites":["A13","A15","A16","A17"],"legacy_modules":["M04","M32"],"unit_ids":["A18.U01","A18.U02","A18.U03","A18.U04","A18.U05","A18.U06"]}
+  ],
+  "lab_scenarios": ["LAB-01","LAB-02","LAB-03","LAB-04","LAB-05","LAB-06","LAB-07","LAB-08","LAB-09","LAB-10","LAB-11","LAB-12","LAB-13","LAB-14","LAB-15","LAB-16","LAB-17","LAB-18","LAB-19","LAB-20","LAB-21","LAB-22","LAB-23","LAB-24"],
+  "lab_execution_status": "designs_not_executed",
+  "glossary_entries": 110,
+  "nist_categories": 22,
+  "source_registry_entries": 34,
+  "crosswalk_status": "pedagogical_partial_not_normative_equivalence",
+  "web_integration_status": "pending",
+  "cross_device_otp_status": "requirements_only_not_implemented"
+}

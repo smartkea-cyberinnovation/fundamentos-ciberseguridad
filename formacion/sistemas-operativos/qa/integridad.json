@@ -1,0 +1,62 @@
+[
+  {
+    "path": "kit/.dockerignore",
+    "sha256": "9b5e71224f61bcc76c8c8458b73d04d8f88a54665b88394e2aa752dd7a3d1ce4"
+  },
+  {
+    "path": "kit/Dockerfile",
+    "sha256": "0528863a27927ed008946272371111f2a0553bcbdf40f21d8163d6343bc1b139"
+  },
+  {
+    "path": "kit/Resumen.ps1",
+    "sha256": "f1bc7bae51a62b48bac2903174fff3d6d50bf0f0b406cb18629fb916e3ac2c84"
+  },
+  {
+    "path": "kit/compose.yaml",
+    "sha256": "d4d4d4954223a8f97b460ef66ceb472b2dde5bab79f3f7cb5008f8e2bc9f6c68"
+  },
+  {
+    "path": "kit/oslab.py",
+    "sha256": "93583b4aed236a597b0fafd440b2d48491bef46faa5ea1c01d0dbca164bbf88d"
+  },
+  {
+    "path": "kit/resumen.bash",
+    "sha256": "0de73fc1b879179ee26c8b3b245e3db198b09dedcd92ebed72853471ec83e05e"
+  },
+  {
+    "path": "kit/resumen.cmd",
+    "sha256": "00529c55ddc3dfdf2f8aae45412346a946978f7c40ec0070bcabe191446a4fa8"
+  },
+  {
+    "path": "kit/resumen.zsh",
+    "sha256": "e506aa2dfc9be5ae1e5b2b31d3e1d2b2f1d9aee3a58df2629d26358640f14235"
+  },
+  {
+    "path": "kit/swarm.yaml",
+    "sha256": "270dc9f7e93fc5430aaf0bc87d610628cdb2b4f9a27b2feba16c3b7b7bd1ad79"
+  },
+  {
+    "path": "kit/test_oslab.py",
+    "sha256": "d2ae24209d6431417e8838e7b3e4da27022ac93fbf52996846ce8f007e9cab95"
+  },
+  {
+    "path": "kit/test_web.py",
+    "sha256": "84358547bb1fde20248c3da036bd8bb3ff1cf949a0ac7cfc235dee6590ed0964"
+  },
+  {
+    "path": "kit/web.py",
+    "sha256": "c7029bbf56fe449930ccb2abd15d24abb121559613f67e17d241ef1c10d1c9ab"
+  },
+  {
+    "path": "planificacion/curriculo.json",
+    "sha256": "250e36b40ffd92bf1fbe3be2794e865cf6240697b25f7b188e732fdbb71d6d1f"
+  },
+  {
+    "path": "planificacion/generar.py",
+    "sha256": "bb5df7f67391935221976ec88bd8f7044ed7d7597f37b3baec3da298184a91e1"
+  },
+  {
+    "path": "planificacion/test_planificacion.py",
+    "sha256": "957c38659f75a5f08b342100e861411ae35b291f72fec3210dd74e9e0e3b2d0f"
+  }
+]

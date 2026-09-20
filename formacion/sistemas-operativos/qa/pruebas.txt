@@ -1,0 +1,47 @@
+test_bash_missing_arguments (test_oslab.OfflineTests.test_bash_missing_arguments) ... ok
+test_bash_native_matches (test_oslab.OfflineTests.test_bash_native_matches) ... ok
+test_bash_rejects_wrong_marker (test_oslab.OfflineTests.test_bash_rejects_wrong_marker) ... ok
+test_bom_accepted (test_oslab.OfflineTests.test_bom_accepted) ... ok
+test_cli_error_json (test_oslab.OfflineTests.test_cli_error_json) ... ok
+test_duplicate_event (test_oslab.OfflineTests.test_duplicate_event) ... ok
+test_duplicate_json_key (test_oslab.OfflineTests.test_duplicate_json_key) ... ok
+test_empty_file_hash (test_oslab.OfflineTests.test_empty_file_hash) ... ok
+test_exact_matches (test_oslab.OfflineTests.test_exact_matches) ... ok
+test_file_limit (test_oslab.OfflineTests.test_file_limit) ... ok
+test_folder_rejected (test_oslab.OfflineTests.test_folder_rejected) ... ok
+test_hardlink_rejected (test_oslab.OfflineTests.test_hardlink_rejected) ... ok
+test_hash_lf_crlf_differ (test_oslab.OfflineTests.test_hash_lf_crlf_differ) ... ok
+test_hidden_file_included (test_oslab.OfflineTests.test_hidden_file_included) ... ok
+test_indicator_deduplication (test_oslab.OfflineTests.test_indicator_deduplication) ... ok
+test_init_does_not_overwrite (test_oslab.OfflineTests.test_init_does_not_overwrite) ... ok
+test_invalid_indicators (test_oslab.OfflineTests.test_invalid_indicators) ... ok
+test_manifest_expected_bytes (test_oslab.OfflineTests.test_manifest_expected_bytes) ... ok
+test_manifest_expected_count (test_oslab.OfflineTests.test_manifest_expected_count) ... ok
+test_marker_required (test_oslab.OfflineTests.test_marker_required) ... ok
+test_naive_time_rejected (test_oslab.OfflineTests.test_naive_time_rejected) ... ok
+test_negative_similar_ip (test_oslab.OfflineTests.test_negative_similar_ip) ... ok
+test_negative_subdomain (test_oslab.OfflineTests.test_negative_subdomain) ... ok
+test_no_network_or_input_changes (test_oslab.OfflineTests.test_no_network_or_input_changes) ... ok
+test_non_finite_json (test_oslab.OfflineTests.test_non_finite_json) ... ok
+test_repeatable (test_oslab.OfflineTests.test_repeatable) ... ok
+test_review_extra_action_field (test_oslab.OfflineTests.test_review_extra_action_field) ... ok
+test_review_never_certifies_truth (test_oslab.OfflineTests.test_review_never_certifies_truth) ... ok
+test_review_unknown_reference (test_oslab.OfflineTests.test_review_unknown_reference) ... ok
+test_root_symlink_rejected (test_oslab.OfflineTests.test_root_symlink_rejected) ... ok
+test_symlink_rejected (test_oslab.OfflineTests.test_symlink_rejected) ... ok
+test_timeline_order (test_oslab.OfflineTests.test_timeline_order) ... ok
+test_timeline_original_preserved (test_oslab.OfflineTests.test_timeline_original_preserved) ... ok
+test_timezone_normalization (test_oslab.OfflineTests.test_timezone_normalization) ... ok
+test_head (test_web.WebTests.test_head) ... ok
+test_health (test_web.WebTests.test_health) ... ok
+test_home (test_web.WebTests.test_home) ... ok
+test_no_file_serving (test_web.WebTests.test_no_file_serving) ... ok
+test_no_query_reflection (test_web.WebTests.test_no_query_reflection) ... ok
+test_not_found (test_web.WebTests.test_not_found) ... ok
+test_post_denied (test_web.WebTests.test_post_denied) ... ok
+test_security_headers (test_web.WebTests.test_security_headers) ... ok
+
+----------------------------------------------------------------------
+Ran 42 tests in 0.562s
+
+OK

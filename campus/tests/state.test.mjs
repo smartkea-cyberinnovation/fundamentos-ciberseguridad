@@ -1,0 +1,27 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {MAX_IMPORT,nextLabStep,emptyState,validateState,parseImport,progress,moduleDone,escapeHTML} from '../assets/state.js';
+const course={id:'fundamentos-ciberseguridad',modules:Array.from({length:32},(_,i)=>({id:`M${String(i+1).padStart(2,'0')}`,labs:['A','B','C'].map(s=>({id:`L${String(i+1).padStart(2,'0')}${s}`}))}))};
+test('estado nuevo: 32 módulos y 96 prácticas',()=>{const s=emptyState(course);assert.equal(Object.keys(s.modules).length,32);assert.equal(Object.keys(s.labs).length,96);assert.equal(progress(course,s).percent,0);});
+test('160 hitos, no horas ficticias',()=>{assert.equal(progress(course,emptyState(course)).total,160);});
+test('módulo requiere lectura, quiz y tres prácticas',()=>{const s=emptyState(course),m=course.modules[0];s.modules.M01.read=true;s.modules.M01.quiz=true;assert.equal(moduleDone(m,s),false);for(const l of m.labs)s.labs[l.id]={steps:[true,true,true,true,true],done:true};assert.equal(moduleDone(m,s),true);assert.equal(progress(course,s).completed,1);});
+test('exportación e importación conservan notas',()=>{const s=emptyState(course);s.modules.M01.notes='Texto de prueba ñ';assert.deepEqual(parseImport(JSON.stringify(s),course),s);});
+test('rechazar versión ajena',()=>{const s=emptyState(course);s.schemaVersion=7;assert.throws(()=>validateState(s,course));});
+test('rechazar otro curso',()=>{const s=emptyState(course);s.courseId='otro';assert.throws(()=>validateState(s,course));});
+test('rechazar hitos desconocidos',()=>{const s=emptyState(course);s.modules.M99=s.modules.M01;assert.throws(()=>validateState(s,course));});
+test('no finalizar práctica con fases pendientes',()=>{const s=emptyState(course);s.labs.L01A.done=true;assert.throws(()=>validateState(s,course));});
+test('rechazar tipos ambiguos',()=>{const s=emptyState(course);s.modules.M01.read='true';assert.throws(()=>validateState(s,course));});
+test('limitar notas',()=>{const s=emptyState(course);s.modules.M01.notes='x'.repeat(3001);assert.throws(()=>validateState(s,course));});
+test('limitar archivo importado',()=>{assert.throws(()=>parseImport(' '.repeat(MAX_IMPORT+1),course));});
+test('rechazar prototype pollution',()=>{const s=JSON.parse(JSON.stringify(emptyState(course)).replace('"modules":{','"modules":{"__proto__":{},'));assert.throws(()=>validateState(s,course));assert.equal({}.polluted,undefined);});
+test('rechazar JSON inválido sin alterar estado',()=>{const s=emptyState(course);assert.throws(()=>parseImport('{',course));assert.equal(progress(course,s).percent,0);});
+test('no restaurar una ruta arbitraria',()=>{const s=emptyState(course);s.lastRoute='javascript:alert(1)';assert.equal(validateState(s,course).lastRoute,'#/modulo/M01');});
+test('escapar notas y búsquedas',()=>{assert.equal(escapeHTML('<img onerror="x">'), '&lt;img onerror=&quot;x&quot;&gt;');});
+test('preferencia de plataforma limitada',()=>{const s=emptyState(course);s.preferences.platform='real-shell';assert.throws(()=>validateState(s,course));});
+test('ruta de práctica debe pertenecer al módulo',()=>{const s=emptyState(course);s.lastRoute='#/modulo/M01/practica/L32C';assert.equal(validateState(s,course).lastRoute,'#/modulo/M01');});
+
+test('límite medido en bytes UTF-8, no unidades UTF-16',()=>{assert.throws(()=>parseImport('界'.repeat(Math.floor(MAX_IMPORT/3)+1),course),/1 MiB/);});
+test('exportación Unicode de todos los módulos se puede reimportar',()=>{const s=emptyState(course);for(const m of Object.values(s.modules))m.notes='界'.repeat(3000);const text=JSON.stringify(s,null,2);assert.ok(new TextEncoder().encode(text).byteLength>200000);assert.deepEqual(parseImport(text,course),s);});
+test('reanudar práctica nueva en preparación',()=>{assert.equal(nextLabStep({steps:[false,false,false,false,false]}),0);});
+test('reanudar en primera fase pendiente',()=>{assert.equal(nextLabStep({steps:[true,true,false,false,false]}),2);});
+test('práctica terminada reabre en cierre, no en preparación',()=>{assert.equal(nextLabStep({steps:[true,true,true,true,true]}),4);});

@@ -1,0 +1,76 @@
+name: Workers - clean checkout build contract
+on:
+  pull_request:
+    paths: ['wrangler.jsonc', 'campus/**', 'formacion/**', '.github/workflows/workers-clean-build.yml']
+  push:
+    branches: [main]
+    paths: ['wrangler.jsonc', 'campus/**', 'formacion/**', '.github/workflows/workers-clean-build.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: workers-clean-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        wrangler: ['4.132.0', '4.135.0']
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+      CI: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Offline contract tests
+        run: python3 -m unittest discover -s campus/tests -p 'test_workers_build_hook.py' -v
+      - name: Raw versions upload must build missing assets without uploading
+        env:
+          WRANGLER_VERSION: ${{ matrix.wrangler }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -d campus/dist
+          test ! -d campus/worker-dist
+          mkdir -p campus/qa
+          npx --yes "wrangler@${WRANGLER_VERSION}" versions upload --dry-run --config wrangler.jsonc 2>&1 | tee campus/qa/clean-versions-upload.log
+          test -f campus/dist/index.html
+          test -f campus/worker-dist/introduccion-ciberseguridad/index.html
+          python3 campus/cloudflare.py check
+      - name: Raw production dry-run from missing assets
+        env:
+          WRANGLER_VERSION: ${{ matrix.wrangler }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -c "import shutil; shutil.rmtree('campus/dist'); shutil.rmtree('campus/worker-dist')"
+          npx --yes "wrangler@${WRANGLER_VERSION}" deploy --dry-run --config wrangler.jsonc 2>&1 | tee campus/qa/clean-deploy.log
+          python3 campus/cloudflare.py check
+      - name: Preserve reviewed source and public release
+        run: git archive --format=zip HEAD -o campus/qa/reviewed-source.zip
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: workers-clean-build-${{ matrix.wrangler }}
+          path: |
+            campus/qa/reviewed-source.zip
+            campus/pages-ready.zip
+            campus/qa/clean-*.log
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: workers-clean-failure-${{ matrix.wrangler }}
+          path: campus/qa/clean-*.log
+          if-no-files-found: warn
+          retention-days: 7

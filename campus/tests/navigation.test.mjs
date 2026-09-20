@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {introHTML,outlineHTML,searchHTML,normalise} from '../assets/navigation.js';
+import {emptyState,parseImport,validResumeRoute} from '../assets/state.js';
+const course={id:'fundamentos-ciberseguridad',blocks:[{id:'linux',title:'Linux',hours:14}],modules:[{id:'M05',title:'Archivos y permisos',block:'linux',hours:14,theoryHours:5,practiceHours:9,prerequisites:[],search:'permisos de directorios Linux',labs:[{id:'L05A',title:'Archivo',tasks:'comprobar'}]}],resources:[{id:'D01',title:'Cómo estudiar',html:'<p>Plan de aprendizaje.</p>'}]};
+test('outline links theory, practice and review',()=>{const s=outlineHTML(course,emptyState(course));for(const p of ['#/modulo/M05','#/modulo/M05/practicas','#/modulo/M05/revision'])assert.ok(s.includes(p));});
+test('intro explains manual execution and progress limits',()=>{const s=introHTML(course);assert.ok(s.includes('máquinas propias'));assert.ok(s.includes('#/recurso/D01'));});
+test('search matches independent terms and accents',()=>{assert.ok(searchHTML(course,'LINUX permisos').includes('#/modulo/M05'));assert.equal(normalise('Teoría'),'teoria');});
+test('search indexes resources',()=>assert.ok(searchHTML(course,'aprendizaje').includes('#/recurso/D01')));
+test('search escapes untrusted text',()=>assert.ok(!searchHTML(course,'<img src=x>').includes('<img')));
+test('review route survives export/import',()=>{const s=emptyState(course);s.lastRoute='#/modulo/M05/revision';assert.equal(parseImport(JSON.stringify(s),course).lastRoute,s.lastRoute);});
+test('practice overview route survives export/import',()=>{const s=emptyState(course);s.lastRoute='#/modulo/M05/practicas';assert.equal(parseImport(JSON.stringify(s),course).lastRoute,s.lastRoute);});
+test('foreign practice is not accepted as resume route',()=>{const s=emptyState(course);s.lastRoute='#/modulo/M05/practica/L06A';assert.notEqual(parseImport(JSON.stringify(s),course).lastRoute,s.lastRoute);});
+test('tab-local routes accept known module tabs only',()=>{assert.equal(validResumeRoute('#/modulo/M05/revision',course),'#/modulo/M05/revision');assert.equal(validResumeRoute('#/modulo/M05/practica/L05A',course),'#/modulo/M05/practica/L05A');assert.equal(validResumeRoute('#/modulo/M05/practica/L06A',course),null);assert.equal(validResumeRoute('https://example.test',course),null);});

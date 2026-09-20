@@ -1,0 +1,21 @@
+{
+  "name": "fundamentos-ciberseguridad",
+  "compatibility_date": "2026-09-16",
+  "workers_dev": true,
+  "preview_urls": true,
+  "routes": [
+    {
+      "pattern": "smartkea.com/introduccion-ciberseguridad/*",
+      "zone_name": "smartkea.com"
+    }
+  ],
+  "build": {
+    "command": "python3 campus/cloudflare.py build",
+    "cwd": ".",
+    "watch_dir": ["campus", "formacion"]
+  },
+  "assets": {
+    "directory": "./campus/worker-dist",
+    "not_found_handling": "404-page"
+  }
+}

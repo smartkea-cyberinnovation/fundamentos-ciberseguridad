@@ -1,0 +1,51 @@
+name: Cloudflare - static deployment acceptance
+on:
+  push:
+    branches: [main]
+    paths: ['wrangler.jsonc', 'campus/**', 'formacion/sistemas-operativos/**', '.github/workflows/cloudflare.yml']
+  pull_request:
+    paths: ['wrangler.jsonc', 'campus/**', 'formacion/sistemas-operativos/**', '.github/workflows/cloudflare.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cloudflare-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  static-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+      CI: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Wrangler configuration without upload
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p campus/qa
+          python3 campus/cloudflare.py dry-run 2>&1 | tee campus/qa/wrangler-dry-run.log
+          python3 campus/cloudflare.py check
+      - name: Exercise local Workers Static Assets runtime
+        shell: bash
+        run: |
+          npx --yes wrangler@4.132.0 dev --config wrangler.jsonc --local --ip 127.0.0.1 --port 8789 >campus/qa/wrangler-local.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          python3 campus/tests/cloudflare_smoke.py | tee campus/qa/wrangler-smoke.json
+      - name: Retain diagnostics without credentials
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-static-diagnostics
+          path: campus/qa/wrangler-*
+          retention-days: 7

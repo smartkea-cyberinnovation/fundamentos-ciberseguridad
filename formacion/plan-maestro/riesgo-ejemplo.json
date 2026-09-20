@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "R-001",
+  "kind": "synthetic_teaching_example_not_a_business_assessment",
+  "scenario_es": "Interrupción del portal por modificación no autorizada de configuración",
+  "horizon_years": 1,
+  "currency": "EUR",
+  "frequency_unit": "events/year",
+  "severity_unit": "EUR/event",
+  "inherent": {
+    "frequency": "0.40",
+    "mean_loss_per_event": "120000",
+    "expected_annual_loss": "48000"
+  },
+  "current": {
+    "frequency_reduction_from_inherent": "0.25",
+    "severity_reduction_from_inherent": "0.10",
+    "expected_frequency": "0.30",
+    "expected_mean_loss_per_event": "108000",
+    "expected_annual_loss": "32400"
+  },
+  "target": {
+    "frequency_reduction_from_inherent": "0.65",
+    "severity_reduction_from_inherent": "0.20",
+    "expected_frequency": "0.14",
+    "expected_mean_loss_per_event": "96000",
+    "expected_annual_loss": "13440",
+    "implementation_status": "proposed_not_verified"
+  },
+  "incremental_decision": {
+    "additional_annual_equivalent_cost": "12000",
+    "expected_annual_reduction_from_current": "18960",
+    "expected_net_annual_benefit": "6960",
+    "expected_net_benefit_cost_ratio": "0.58",
+    "inherent_to_target_difference_not_incremental_benefit": "34560"
+  },
+  "sensitivity": {
+    "frequency_bounds": ["0.20", "0.60"],
+    "severity_bounds": ["60000", "180000"],
+    "inherent_loss_bounds": ["12000", "108000"],
+    "target_loss_bounds": ["3360", "30240"],
+    "interpretation": "arithmetic_extremes_not_confidence_intervals"
+  },
+  "assumptions": [
+    "All inputs and control effects are synthetic, not measured vendor efficacy.",
+    "Current and target reductions use the same inherent baseline.",
+    "Mean frequency times mean loss is a simplified expected-loss model, not a full distribution.",
+    "Joint control effects must be justified; do not add effectiveness percentages or assume independent controls.",
+    "Event frequency is not automatically probability of at least one event.",
+    "Financial expectation does not replace obligations or risk to individuals."
+  ]
+}

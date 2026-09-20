@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {text,hasTranslation,messages} from '../assets/i18n.js';
+const app=fs.readFileSync(new URL('../assets/app.js',import.meta.url),'utf8');
+const html=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
+test('every literal UI translation key has an English entry',()=>{const keys=[...app.matchAll(/\bt\('([^']+)'\)/g)].map(m=>m[1]);assert.deepEqual([...new Set(keys)].filter(k=>!hasTranslation(k)),[]);});
+test('static HTML labels have translations',()=>assert.deepEqual([...html.matchAll(/data-i18n="([^"]+)"/g)].map(m=>m[1]).filter(k=>!hasTranslation(k)),[]));
+test('translations are nonempty strings',()=>{for(const value of Object.values(messages))assert.ok(typeof value==='string'&&value.trim());});
+test('Spanish source is unchanged by translator',()=>assert.equal(text('Prácticas','es'),'Prácticas'));
+test('known interface label is English',()=>assert.equal(text('Prácticas','en'),'Labs'));

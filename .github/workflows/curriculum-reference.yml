@@ -1,0 +1,43 @@
+name: Curriculum reference - structure and arithmetic
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'formacion/plan-maestro/**'
+      - '.github/workflows/curriculum-reference.yml'
+  pull_request:
+    paths:
+      - 'formacion/plan-maestro/**'
+      - '.github/workflows/curriculum-reference.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: curriculum-reference-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Reference validator tests
+        run: python3 -m unittest discover -s formacion/plan-maestro -p 'test_*.py' -v
+      - name: Validate current reference
+        run: python3 formacion/plan-maestro/validar.py > curriculum-reference-validation.json
+      - name: Retain validated reference
+        uses: actions/upload-artifact@v4
+        with:
+          name: curriculum-reference
+          path: |
+            formacion/plan-maestro/
+            curriculum-reference-validation.json
+            !**/__pycache__/**
+            !**/*.pyc
+          retention-days: 14
+          if-no-files-found: error
