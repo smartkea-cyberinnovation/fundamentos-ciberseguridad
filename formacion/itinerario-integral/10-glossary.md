@@ -87,16 +87,16 @@ Ejercicio: elige un término y explica una afirmación falsa frecuente, una impl
 | INT-G02 | Encoding | Data representation; UTF-8 is not encryption. |
 | INT-G03 | Process | Execution with state/resources; name/PID do not prove legitimacy. |
 | INT-G04 | User profile | Environment-specific account preferences/data, not the whole identity. |
-| INT-G05 | ISA | Instruction contract such as x86-64/Arm, not the complete microarchitecture. |
+| INT-G05 | ISA / instruction-set architecture | Instruction contract such as x86-64/Arm, not the complete microarchitecture. |
 | INT-G06 | Cache | Reuses data/results; can be stale and is not a backup. |
-| INT-G07 | NUMA | Memory locality affects access; latency need not be uniform. |
-| INT-G08 | GPU/NPU | Specialized acceleration; raw capacity does not compare a complete task. |
+| INT-G07 | NUMA / non-uniform memory access | Memory locality affects access; latency need not be uniform. |
+| INT-G08 | GPU/NPU / graphics or neural processing unit | Specialized acceleration; raw capacity does not compare a complete task. |
 | INT-G09 | Qubit | Quantum information unit; measurement does not reveal all possibilities at once. |
 | INT-G10 | Switch | Frame forwarding, sometimes routing; models and planes differ. |
 | INT-G11 | Router | Forwarding between networks using routes; return paths/policy matter. |
-| INT-G12 | VLAN | Logical link-layer segmentation, not automatic inter-network isolation. |
-| INT-G13 | DNS | Name records/resolution; DNS filtering does not inspect every payload. |
-| INT-G14 | TLS | Channel protection according to configuration/trust; not all E2EE terminates at a proxy. |
+| INT-G12 | VLAN / virtual local area network | Logical link-layer segmentation, not automatic inter-network isolation. |
+| INT-G13 | DNS / domain name system | Name records/resolution; DNS filtering does not inspect every payload. |
+| INT-G14 | TLS / transport layer security | Channel protection according to configuration/trust; not all E2EE terminates at a proxy. |
 | INT-G15 | QUIC | Secure multiplexed transport over UDP, not inherently insecure HTTP. |
 | INT-G16 | 6G/IMT-2030 | Evolution/standardization effort; goals/drafts are not universal commercial deployment. |
 
@@ -105,18 +105,18 @@ Ejercicio: elige un término y explica una afirmación falsa frecuente, una impl
 | ID | Concept | Definition, example and limitation |
 |---|---|---|
 | INT-G17 | Classification | Context-specific handling policy/regime; authorities do not map automatically. |
-| INT-G18 | TLP | Sharing restrictions, not legal classification or a publication licence. |
-| INT-G19 | DLP | Data-use/egress controls on defined channels; coverage and tests matter. |
-| INT-G20 | UEM/MDM | Device configuration/posture management, not complete leakage prevention. |
-| INT-G21 | LDAP | Directory protocol, not a synonym for AD, Kerberos or SSO. |
-| INT-G22 | AD DS | Microsoft domain services, not interchangeable with Entra ID. |
-| INT-G23 | IAM/IGA | Identity operations/access governance; lifecycle extends beyond login. |
-| INT-G24 | JML | Join/move/leave; movers require removal of obsolete rights. |
-| INT-G25 | RBAC | Role-based permissions; avoid unjustified accumulation. |
-| INT-G26 | ABAC | Subject/resource/action/context policies requiring trustworthy attributes. |
-| INT-G27 | SoD | Conflicting duties require criteria, separation or compensation. |
-| INT-G28 | PAM | Privilege approval/control/use; a standalone vault is not the entire capability. |
-| INT-G29 | MFA | Different factor categories; two memorized secrets are not two factors. |
+| INT-G18 | TLP / traffic light protocol | Sharing restrictions, not legal classification or a publication licence. |
+| INT-G19 | DLP / data loss prevention | Data-use/egress controls on defined channels; coverage and tests matter. |
+| INT-G20 | UEM/MDM / unified endpoint or mobile device management | Device configuration/posture management, not complete leakage prevention. |
+| INT-G21 | LDAP / lightweight directory access protocol | Directory protocol, not a synonym for AD, Kerberos or SSO. |
+| INT-G22 | AD DS / Active Directory Domain Services | Microsoft domain services, not interchangeable with Entra ID. |
+| INT-G23 | IAM/IGA / identity and access management or identity governance and administration | Identity operations/access governance; lifecycle extends beyond login. |
+| INT-G24 | JML / joiner–mover–leaver | Join/move/leave; movers require removal of obsolete rights. |
+| INT-G25 | RBAC / role-based access control | Role-based permissions; avoid unjustified accumulation. |
+| INT-G26 | ABAC / attribute-based access control | Subject/resource/action/context policies requiring trustworthy attributes. |
+| INT-G27 | SoD / separation of duties | Conflicting duties require criteria, separation or compensation. |
+| INT-G28 | PAM / privileged access management | Privilege approval/control/use; a standalone vault is not the entire capability. |
+| INT-G29 | MFA / multi-factor authentication | Different factor categories; two memorized secrets are not two factors. |
 | INT-G30 | Evidence | Observation supporting a bounded claim; dashboards do not certify all operations. |
 | INT-G31 | Residual risk | Risk remaining after considered controls; current and estimated target differ. |
 | INT-G32 | Organizational CSF profile | Contextual current/target outcomes, not an OS user profile. |
@@ -125,10 +125,10 @@ Ejercicio: elige un término y explica una afirmación falsa frecuente, una impl
 
 | ID | Concept | Definition, example and limitation |
 |---|---|---|
-| INT-G33 | WAF | Policies over visible web/API traffic, not universal business-logic repair. |
-| INT-G34 | SIEM | Event collection/correlation, not an inline firewall. |
-| INT-G35 | EDR | Endpoint telemetry/response dependent on sensors, settings and permissions. |
-| INT-G36 | SLO | Measurable service objective, not automatically a contractual guarantee. |
+| INT-G33 | WAF / web application firewall | Policies over visible web/API traffic, not universal business-logic repair. |
+| INT-G34 | SIEM / security information and event management | Event collection/correlation, not an inline firewall. |
+| INT-G35 | EDR / endpoint detection and response | Endpoint telemetry/response dependent on sensors, settings and permissions. |
+| INT-G36 | SLO / service-level objective | Measurable service objective, not automatically a contractual guarantee. |
 
 ## Implementation examples: compare capabilities and scope
 
