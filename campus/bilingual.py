@@ -5,6 +5,7 @@ import html
 import re
 from pathlib import Path
 from operations import related_reading
+from integral import IDS as INTEGRAL_IDS, translated_resources
 
 BLOCKS_EN = [
  ('Foundations and method','Understand before automating.'),
@@ -35,6 +36,9 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
         part=chunks(read_text(directory/name),r'^# (D\d{2}) · ')
         if resources.keys() & part.keys(): raise ValueError('Repeated translated resource')
         resources.update(part)
+    extra = translated_resources(directory, read_text)
+    if resources.keys() & extra.keys(): raise ValueError('Duplicate integral reference')
+    resources.update(extra)
     guides=chunks(read_text(directory/'guides.md'),r'^# (L\d{2}[ABC]) · ')
     quiz={}
     for row in csv.reader(read_text(directory/'quizzes.tsv').splitlines(),delimiter='\t'):
@@ -49,8 +53,7 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
          'blocks':[{**b,'title':v[0],'description':v[1]} for b,v in zip(spanish['blocks'],BLOCKS_EN)]}
     def render(raw,prefix):
         data=markdown(raw,prefix=prefix)
-        for key in ['html']:
-            data[key]=data[key].replace('aria-label="Tabla desplazable"','aria-label="Scrollable table"')
+        data['html']=data['html'].replace('aria-label="Tabla desplazable"','aria-label="Scrollable table"')
         for sl in data['slides']:
             sl['html']=sl['html'].replace('aria-label="Tabla desplazable"','aria-label="Scrollable table"')
         return data
@@ -59,7 +62,6 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
         matches=list(re.finditer(r'^\*\*(L\d{2}[ABC]) · (.*?)\*\*',raw,re.M))
         if [m[1] for m in matches]!=[l['id'] for l in original['labs']]: raise ValueError('Translated lab mismatch: '+mid)
         labs=[];theory=raw
-        # Labs are self-contained paragraphs. Preserve the concluding theory/rubric.
         for match,base in zip(matches,original['labs']):
             end=raw.find('\n\n',match.end());end=len(raw) if end<0 else end
             body=raw[match.end():end].strip();fields={}
@@ -85,7 +87,7 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
     for original in spanish['resources']:
         raw=resources[original['id']]
         is_operational = original['id'] in ('D22','D23','D24','D25')
-        body='\n'.join(raw.splitlines()[1:]).strip() if is_operational else raw
+        body='\n'.join(raw.splitlines()[1:]).strip() if is_operational or original['id'] in INTEGRAL_IDS else raw
         record={**original,'title':raw.splitlines()[0].split(' · ',1)[1],
             'kind':'Extended lesson' if original['kind']=='Lección ampliada' else 'Reference',**render(body,original['id'])}
         if is_operational:

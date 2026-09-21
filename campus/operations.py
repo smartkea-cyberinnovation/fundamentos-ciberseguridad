@@ -1,5 +1,6 @@
 """Explicit, append-only operational readings; no changes to hours or progress IDs."""
 from urllib.parse import quote
+from integral import add_resources as add_integral_resources
 
 READINGS = (
     ('D22', '01-identidad-bastionado.md', 'Identidades y bastionado', 'Identity and hardening'),
@@ -28,7 +29,6 @@ def related_reading(mid: str, language: str) -> str:
     return f'\n\n## {title}\n\n{note}\n\n{links}\n'
 
 def add_resources(resources, course, root, repo, markdown, read_text) -> None:
-    # Refuse accidental renumbering if the original catalogue changes underneath this extension.
     if [r['id'] for r in resources] != [f'D{i:02}' for i in range(1,22)]:
         raise ValueError('Review stable D01-D21 ordering before appending operational readings')
     for rid, filename, _, _ in READINGS:
@@ -40,3 +40,4 @@ def add_resources(resources, course, root, repo, markdown, read_text) -> None:
         body='\n'.join(raw.splitlines()[1:]).strip()
         resources.append({'id':rid,'title':raw.splitlines()[0][2:].strip(),'kind':'Lección ampliada',
             'source':repo+'/blob/main/'+quote(source,safe='/'), **markdown(body,source,rid)})
+    add_integral_resources(resources, course, root, repo, markdown, read_text)
