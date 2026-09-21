@@ -12,3 +12,11 @@
 /* Keep content below the actual wrapping header, including tablet rotation. */
 #main,.prose [id]{scroll-margin-top:calc(var(--header-height,84px) + 20px)}
 @supports(padding:env(safe-area-inset-bottom)){footer{padding-bottom:calc(20px + env(safe-area-inset-bottom))}.sidebar{padding-bottom:calc(40px + env(safe-area-inset-bottom))}}
+
+/* Campus 3.0 presentation: projector-friendly, light-only, true fullscreen. */
+#slide-progress{width:min(260px,22vw);height:6px;margin:0;flex:0 1 260px}
+dialog:fullscreen .slide-scroll{display:flex;flex-direction:column;justify-content:center;padding:clamp(36px,7vw,110px)}
+dialog:fullscreen .slide-scroll .prose{max-width:92ch;font-size:clamp(1.15rem,1.55vw,1.55rem);line-height:1.72}
+dialog:fullscreen .slide-scroll h1{font-size:clamp(2.4rem,4.8vw,5rem);max-width:24ch}
+dialog:fullscreen .presentation-bar{padding-inline:clamp(18px,4vw,64px)}
+@media(max-width:760px){#slide-progress{order:5;flex-basis:100%;width:100%}}

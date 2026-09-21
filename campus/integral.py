@@ -5,7 +5,7 @@ from urllib.parse import quote
 READINGS = tuple((f'D{n:02}', name) for n,name in enumerate((
     '01-computing.md','02-history.md','03-hardware.md','04-networks.md',
     '05-web.md','06-security.md','07-information.md','08-identity.md',
-    '09-careers.md','10-glossary.md','11-sources.md'),26))
+    '09-careers.md','10-glossary.md','11-sources.md','12-curriculum.md','13-ecosystem.md',\n    '14-library.md','15-master-glossary.md'),26))
 IDS = frozenset(r[0] for r in READINGS)
 
 def editions(raw: str) -> dict[str,str]:

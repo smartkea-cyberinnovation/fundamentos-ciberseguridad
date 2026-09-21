@@ -28,6 +28,16 @@ El glosario INT-G01–INT-G36 no renumera los G001… del plan maestro ni afirma
 
 ## Publication and validation scope
 
-The compiler appends D26–D36 after existing D01–D25; stable links and progress IDs remain unchanged. Exercises are designs and must be tested natively before teaching. The previous deployed campus, repository contents and this candidate release are distinct states. A successful build does not demonstrate production activation.
+The compiler appends D26–D40 after existing D01–D25; stable links and progress IDs remain unchanged. Exercises are designs and must be tested natively before teaching. The previous deployed campus, repository contents and this candidate release are distinct states. A successful build does not demonstrate production activation.
 
 No institutional name/logo is introduced. No account, route, DNS, security-policy or licensing changes are part of this content extension. Sources and review limitations are recorded in D36. Full legal texts, external software and private logs are not redistributed.
+
+
+## Ampliación Campus 3.0
+
+- **D37 · Itinerario maestro:** secuencia U00–U15 sin asignación de horas, desde historia y fundamentos hasta GRC, regulación, instituciones, IA y carrera.
+- **D38 · Ecosistema:** organismos públicos, Defensa, CERT/CSIRT, conferencias, laboratorios, innovación y emprendimiento.
+- **D39 · Biblioteca/videoteca:** libros gratuitos y comerciales, referencias de compra, TED/TEDx, cursos universitarios y conferencias.
+- **D40 · Glosario maestro:** vocabulario transversal y distinciones conceptuales críticas.
+
+La interfaz de presentación admite pantalla completa real, progreso y navegación con flechas/espacio, Inicio/Fin y F.

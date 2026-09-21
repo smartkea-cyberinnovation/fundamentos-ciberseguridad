@@ -1,14 +1,12 @@
 # SmartKEA · Fundamentos de ciberseguridad
 
-**Wiktor Nykiel · Campus 2.4 · Linux, Windows y macOS · Español e inglés**
+**Wiktor Nykiel · Campus 3.0 · Informática, sistemas, redes, ciberseguridad, GRC, IA e innovación · Español e inglés**
 
 **Campus público: [smartkea.com/introduccion-ciberseguridad/](https://smartkea.com/introduccion-ciberseguridad/)**
 
 **Código: [smartkea-cyberinnovation/fundamentos-ciberseguridad](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad)**
 
-Curso para comprender, administrar, automatizar y proteger sistemas. Conserva **32 módulos, 96 fichas de laboratorio y 480 horas planificadas**: 168 de teoría y 312 de práctica. Español e inglés comparten IDs, prerrequisitos y progreso. Las ocho guías ampliadas y las fichas describen actividades; estas cifras no certifican ejecución ni acreditación.
-
-El campus reúne lectura, presentación, búsqueda, autoevaluación y progreso local exportable. La biblioteca contiene **36 recursos**, incluidas cuatro lecturas de control operativo y once lecturas integrales nuevas. El [plan maestro](formacion/plan-maestro/README.md) mantiene una referencia de desarrollo de 18 áreas y 108 unidades propuestas, separada del catálogo activo; no se suman automáticamente horas.
+Curso integral y progresivo para comprender cómo hemos llegado a la informática actual, construir y operar sistemas, protegerlos, gobernar su riesgo y conectar el aprendizaje con profesiones, instituciones, investigación e innovación. El itinerario evita imponer tiempos: se organiza por prerrequisitos, resultados de aprendizaje, práctica y evidencias.\n\nEl campus reúne lectura, presentación a pantalla completa, búsqueda, autoevaluación y progreso local exportable. El plan maestro y el itinerario integral se mantienen como fuentes curriculares versionadas; las referencias externas deben verificarse antes de cada edición.
 
 ## Ruta de estudio integral / Integrated study pathway
 
@@ -26,7 +24,7 @@ Empieza por [D26: mapa de informática](https://smartkea.com/introduccion-cibers
 | [D33 · Identidades](formacion/itinerario-integral/08-identity.md) | JML, entidad–centro–puesto, SoD, RBAC/ABAC/PAM y acceso efectivo |
 | [D34 · Profesiones](formacion/itinerario-integral/09-careers.md) | Árbol funcional TIC/ciber, fuentes laborales, IA y portfolio |
 | [D35 · Glosario](formacion/itinerario-integral/10-glossary.md) | 36 fichas ES/EN complementarias, capacidades y ejemplos abiertos/comerciales |
-| [D36 · Fuentes](formacion/itinerario-integral/11-sources.md) | Referencias primarias, fechas, límites y método para noticias/profundización |
+| [D36 · Fuentes](formacion/itinerario-integral/11-sources.md) | Referencias primarias, fechas, límites y método para noticias/profundización |\n| [D37 · Itinerario maestro](formacion/itinerario-integral/12-curriculum.md) | U00–U15: historia, sistemas, redes, desarrollo, ciber, GRC, regulación, instituciones, IA y carrera |\n| [D38 · Ecosistema](formacion/itinerario-integral/13-ecosystem.md) | CCN-CERT, INCIBE, CNI, CNPIC, FCSE, MCCE, ENISA, CERT-EU, OTAN, labs, conferencias e innovación |\n| [D39 · Biblioteca/videoteca](formacion/itinerario-integral/14-library.md) | Libros gratuitos/de pago, Amazon como vía de compra, TED/TEDx, universidades y conferencias |\n| [D40 · Glosario maestro](formacion/itinerario-integral/15-master-glossary.md) | Vocabulario transversal y pares conceptuales que no deben confundirse |
 
 [Índice y alcance de la ampliación](formacion/itinerario-integral/README.md). INT-L01–INT-L18 son dieciocho diseños de actividades integradoras, no dieciocho ejecuciones acreditadas. Los árboles profesionales y el glosario son ampliables, no una lista de todos los títulos o fabricantes existentes.
 
