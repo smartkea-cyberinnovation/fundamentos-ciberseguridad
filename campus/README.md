@@ -1,12 +1,14 @@
 # Campus ES/EN · Fundamentos de ciberseguridad / Cybersecurity foundations
 
-**Wiktor Nykiel · 2.3.0 · Independent learning · Light interface.**
+**Wiktor Nykiel · 2.4.0 · Independent learning · Light interface.**
 
 ## Español
 
-Campus estático para estudiar, repasar en presentación y seguir prácticas guiadas. La edición activa conserva **32 módulos, 96 fichas, ocho guías ampliadas, 21 referencias y 480 horas planificadas**. Español e inglés son ediciones docentes paralelas con los mismos IDs, prerrequisitos y horas. Las cifras no equivalen a asistencia ni ejecución de laboratorios.
+Campus estático para estudiar, repasar en presentación y seguir prácticas guiadas. La edición activa conserva **32 módulos, 96 fichas, ocho guías ampliadas, 25 referencias y 480 horas planificadas**. Español e inglés son ediciones docentes paralelas con los mismos IDs, prerrequisitos y horas. Las cifras no equivalen a asistencia ni ejecución de laboratorios.
 
 El selector ES/EN cambia interfaz, contenidos, fichas, autoevaluaciones y referencias sin reiniciar progreso. El índice filtra por texto, bloque y avance; la biblioteca y búsqueda conectan las lecturas. La presentación usa el contenido del módulo, no una segunda copia de diapositivas. Hay lectura continua sin JavaScript en `lectura.html` y `reading.en.html`.
+
+**Control operativo:** D22 identidades, perfiles y bastionado; D23 redes y recursos compartidos; D24 navegación, cuentas y TLS; D25 detección y aceptación. Son lecturas completas ES/EN con enlaces desde quince módulos, una matriz de 16 controles, ocho reglas ilustrativas y doce diseños de laboratorio. No añaden horas o marcas de progreso ni aplican políticas a dispositivos reales. [Índice de la ampliación](../formacion/sistemas-operativos/operacion/README.md).
 
 **Continuidad:** las marcas y notas se guardan en este navegador; exportación/importación JSON para copia completa y enlace de progreso para una copia sin notas. La ruta de continuación se conserva por pestaña. Compartir una lección no comparte progreso. El enlace de progreso no es una cuenta ni transfiere autenticación. Leer [PROGRESO.md](PROGRESO.md) antes de compartir.
 
@@ -14,9 +16,11 @@ El selector ES/EN cambia interfaz, contenidos, fichas, autoevaluaciones y refere
 
 ## English
 
-A static campus for reading, presentation-based review and guided lab work. The active course has **32 modules, 96 lab briefs, eight extended guides, 21 references and 480 planned hours**. English and Spanish editions retain the same learning IDs, prerequisites and planned hours. These are not attendance or lab-execution records.
+A static campus for reading, presentation-based review and guided lab work. The active course has **32 modules, 96 lab briefs, eight extended guides, 25 references and 480 planned hours**. English and Spanish editions retain the same learning IDs, prerequisites and planned hours. These are not attendance or lab-execution records.
 
 The language selector changes the interface and learning material without resetting progress. Use the syllabus filters, internal index, search, library and previous/next navigation. Continuous reading is also available without JavaScript.
+
+**Operational control:** D22 identity/profiles/hardening; D23 networks and shares; D24 browsing/accounts/TLS; D25 detection and acceptance. Full parallel readings link from fifteen core modules and contain sixteen controls, eight illustrative policies and twelve lab designs. They do not add hours or progress milestones, or enforce restrictions on real devices. [English readings](locales/en/operations-control.md).
 
 Learning records remain in the browser. JSON backups include notes; portable links exclude them and transfer only a snapshot of milestones and resume location. A link is not authentication, cloud synchronization or a certificate. Anyone holding the full link can read and import it. See [progress and transfer](PROGRESO.md).
 
@@ -38,6 +42,7 @@ Open `http://127.0.0.1:8788/?lang=es` or `http://127.0.0.1:8788/?lang=en`. No np
 
 | Topic | Document |
 |---|---|
+| Operational control readings | [D22–D25](../formacion/sistemas-operativos/operacion/README.md) |
 | Cloudflare Pages and existing Workers setup | [DEPLOY-CLOUDFLARE.md](DEPLOY-CLOUDFLARE.md) |
 | Progress, transfers and privacy | [PROGRESO.md](PROGRESO.md) |
 | Optional identity and OTP design, not enabled | [IDENTITY-OPTIONAL.md](IDENTITY-OPTIONAL.md) |
