@@ -53,6 +53,7 @@ jobs:
         run: |
           set -o pipefail
           python3 campus/tests/browser_bilingual.py 2>&1 | tee campus/qa/browser.log
+          python3 campus/tests/browser_operations.py 2>&1 | tee campus/qa/browser-operations.log
       - name: WebKit acceptance
         shell: bash
         env:
@@ -60,6 +61,7 @@ jobs:
         run: |
           set -o pipefail
           python3 campus/tests/browser_bilingual.py 2>&1 | tee campus/qa/browser-webkit.log
+          python3 campus/tests/browser_operations.py 2>&1 | tee campus/qa/browser-operations-webkit.log
       - name: Existing kit tests
         working-directory: formacion/sistemas-operativos/kit
         run: python3 -m unittest discover -p 'test_*.py' -v
