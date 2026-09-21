@@ -7,6 +7,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import build
 from content import LESSONS, notes_and_quizzes
+from operations import READINGS
 
 class MarkdownTests(unittest.TestCase):
     def test_html_is_escaped(self):
@@ -61,6 +62,14 @@ class CurriculumTests(unittest.TestCase):
         self.assertEqual(labs[0]['tasks'],'operar.')
     def fixture(self,path):
         (path/'modulos').mkdir();(path/'planificacion').mkdir();(path/'practicas').mkdir();(path/'lecciones').mkdir()
+        # Build a complete synthetic library; production ID validation remains strict.
+        for name in build.PUBLIC_DOCS + ['PLAN-DOCENTE.md','COMO-ESTUDIAR.md','DESPLIEGUE-ESTATICO.md']:
+            (path/name).write_text('# '+name+'\nSynthetic test reference.\n',encoding='utf-8')
+        for n in range(1,9):
+            (path/'lecciones'/f'{n:02}-fixture.md').write_text(f'# Fixture {n}\nSynthetic lesson.\n',encoding='utf-8')
+        (path/'operacion').mkdir()
+        for rid,name,_,_ in READINGS:
+            (path/'operacion'/name).write_text(f'# {rid} fixture\nSynthetic operational lesson.\n',encoding='utf-8')
         mods=[];parts=[]
         for n in range(1,33):
             mid=f'M{n:02}';mods.append({'id':mid,'titulo':f'Módulo {n}','prerrequisitos':[]})
@@ -76,6 +85,7 @@ class CurriculumTests(unittest.TestCase):
             self.assertEqual(len(data['modules']),32);self.assertEqual(data['hours'],480)
             self.assertEqual(sum(len(m['labs']) for m in data['modules']),96)
             self.assertEqual(sum(m['theoryHours'] for m in data['modules']),168)
+            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,26)])
     def test_duplicate_catalog_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             path=Path(temp);self.fixture(path);p=path/'planificacion/curriculo.json'

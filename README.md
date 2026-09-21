@@ -1,6 +1,6 @@
 # SmartKEA · Fundamentos de ciberseguridad
 
-**Wiktor Nykiel · Campus 2.3 · Linux, Windows y macOS · Español e inglés**
+**Wiktor Nykiel · Campus 2.4 · Linux, Windows y macOS · Español e inglés**
 
 **Campus público: [smartkea.com/introduccion-ciberseguridad/](https://smartkea.com/introduccion-ciberseguridad/)**
 
@@ -8,7 +8,18 @@
 
 Curso para comprender, administrar, automatizar y proteger sistemas. Conserva **32 módulos, 96 fichas de laboratorio y 480 horas planificadas**: 168 de teoría y 312 de práctica. Español e inglés comparten IDs, prerrequisitos y progreso. Las ocho guías ampliadas y las fichas describen actividades; estas cifras no certifican ejecución ni acreditación.
 
-El campus reúne lectura, presentación, búsqueda, autoevaluación y progreso local exportable. La biblioteca contiene 21 referencias; el [plan maestro](formacion/plan-maestro/README.md) añade una referencia de desarrollo de 18 áreas y 108 unidades propuestas, separada del catálogo activo.
+El campus reúne lectura, presentación, búsqueda, autoevaluación y progreso local exportable. La biblioteca contiene **25 referencias**, incluidas las cuatro nuevas lecturas de control operativo. El [plan maestro](formacion/plan-maestro/README.md) añade una referencia de desarrollo de 18 áreas y 108 unidades propuestas, separada del catálogo activo.
+
+## Sistemas operativos: control verificable
+
+| Recurso | Contenido |
+|---|---|
+| [D22 · Identidades y bastionado](formacion/sistemas-operativos/operacion/01-identidad-bastionado.md) | Cuentas locales, LDAP/AD/Entra, ciclo de vida, privilegios, perfiles y política efectiva |
+| [D23 · Redes y recursos](formacion/sistemas-operativos/operacion/02-redes-recursos.md) | ACL, shares SMB/Samba/NFS, segmentación y restauración con permisos |
+| [D24 · Navegación y TLS](formacion/sistemas-operativos/operacion/03-navegacion-tls.md) | DNS/proxy/firewall, cuentas personales/corporativas, mensajería, inspección y privacidad |
+| [D25 · Detección y aceptación](formacion/sistemas-operativos/operacion/04-deteccion-laboratorios.md) | Dieciséis controles, doce diseños de laboratorio, evidencias, triaje y recuperación |
+
+[English teaching edition](campus/locales/en/operations-control.md). Las lecturas se enlazan desde los módulos pertinentes y la biblioteca; no añaden horas ni alteran el progreso. DNS no distingue todas las cuentas de un SaaS; inspección TLS no elimina E2EE. Los diseños no aplican restricciones a dispositivos reales ni acreditan una auditoría completa.
 
 ## Ruta pública y publicación
 
@@ -29,6 +40,8 @@ El custom build de Wrangler compila, valida y prepara los activos antes de subir
 
 Consultar el commit servido en [build-info.json](https://smartkea.com/introduccion-ciberseguridad/build-info.json) y compararlo con la versión activa. [Publicación y recuperación](campus/WORKERS-RECOVERY.md) documenta la conexión Git, aceptación y rollback; [configuración de Cloudflare](campus/DEPLOY-CLOUDFLARE.md) incluye la alternativa portable de Pages.
 
+La observación HTTP se puede repetir explícitamente con `python3 campus/audit_publication.py --output campus/qa/publication.json`: siete recursos públicos fijos, sin login ni cambios de cuenta. Una prueba del build no equivale a esa observación en producción.
+
 ## Compilar y comprobar
 
 Desde la raíz, con Python 3.11 o posterior:
@@ -48,7 +61,7 @@ node --test campus/tests/*.test.mjs
 python3 formacion/plan-maestro/validar.py
 ```
 
-Los workflows conservan aceptación Python/JavaScript, Chromium/WebKit, validación del plan maestro y comprobación del runtime estático. Los resultados corresponden al commit de cada ejecución; véanse [alcance y límites](campus/QA.md).
+Los workflows conservan aceptación Python/JavaScript, Chromium/WebKit, validación del plan maestro y comprobación del runtime estático. Los resultados corresponden al commit de cada ejecución; véanse [alcance y límites](campus/QA.md) y [lecturas operativas](formacion/sistemas-operativos/operacion/README.md).
 
 ## Materiales y estructura
 
@@ -56,6 +69,7 @@ Los workflows conservan aceptación Python/JavaScript, Chromium/WebKit, validaci
 |---|---|
 | Empezar y estudiar | [Guía de estudio](formacion/sistemas-operativos/COMO-ESTUDIAR.md) |
 | Temario, prácticas, evaluación y fuentes | [Índice docente](formacion/sistemas-operativos/README.md) |
+| Control operativo de sistemas | [Lecturas D22–D25](formacion/sistemas-operativos/operacion/README.md) |
 | Ampliación y continuidad | [Plan maestro](formacion/plan-maestro/README.md) |
 | Editar fuentes y traducciones | [Guía de edición](campus/EDICION.md) |
 | Aislamiento del laboratorio | [Entorno de prácticas](formacion/sistemas-operativos/LABORATORIO.md) |

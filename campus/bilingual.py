@@ -4,6 +4,7 @@ import csv
 import html
 import re
 from pathlib import Path
+from operations import related_reading
 
 BLOCKS_EN = [
  ('Foundations and method','Understand before automating.'),
@@ -30,7 +31,7 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
         part=chunks(read_text(directory/name),r'^# (M\d{2}) · ')
         if modules.keys() & part.keys(): raise ValueError('Repeated translated module')
         modules.update(part)
-    for name in ('references-core.md','references-learning.md'):
+    for name in ('references-core.md','references-learning.md','operations-control.md'):
         part=chunks(read_text(directory/name),r'^# (D\d{2}) · ')
         if resources.keys() & part.keys(): raise ValueError('Repeated translated resource')
         resources.update(part)
@@ -74,6 +75,7 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
             theory=theory.replace(raw[match.start():end],'')
         theory=re.sub(r'^## Laboratories\s*$','',theory,flags=re.M).strip()
         theory='\n'.join(theory.splitlines()[1:]).strip()
+        theory += related_reading(mid, 'en')
         rendered=render(theory,mid)
         question=dict(quiz[mid]); position=original['quiz']['correct']
         options=list(question['options']); answer=options.pop(0);options.insert(position,answer)
@@ -82,6 +84,11 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
             'labs':labs,'quiz':question,**rendered,'search':html.unescape(re.sub('<[^>]+>',' ',rendered['html']))})
     for original in spanish['resources']:
         raw=resources[original['id']]
-        out['resources'].append({**original,'title':raw.splitlines()[0].split(' · ',1)[1],
-            'kind':'Extended lesson' if original['kind']=='Lección ampliada' else 'Reference',**render(raw,original['id'])})
+        is_operational = original['id'] in ('D22','D23','D24','D25')
+        body='\n'.join(raw.splitlines()[1:]).strip() if is_operational else raw
+        record={**original,'title':raw.splitlines()[0].split(' · ',1)[1],
+            'kind':'Extended lesson' if original['kind']=='Lección ampliada' else 'Reference',**render(body,original['id'])}
+        if is_operational:
+            record['source']=spanish['repository']+'/blob/main/campus/locales/en/operations-control.md'
+        out['resources'].append(record)
     return out

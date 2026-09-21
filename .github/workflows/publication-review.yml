@@ -1,0 +1,31 @@
+name: Campus - public publication review
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ['campus/audit_publication.py', '.github/workflows/publication-review.yml']
+permissions:
+  contents: read
+concurrency:
+  group: publication-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Observe seven fixed public resources, without authentication
+        run: python3 campus/audit_publication.py --output campus/qa/publication.json
+      - name: Retain observations even when the live site differs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-publication-review
+          path: campus/qa/publication.json
+          retention-days: 7
+          if-no-files-found: error

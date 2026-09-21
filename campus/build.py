@@ -15,6 +15,7 @@ from bilingual import collect_en
 from provenance import source_commit
 from release_inputs import public_kit_files
 from publication import not_found_page
+from operations import add_resources, related_reading
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -214,6 +215,7 @@ def collect(course: Path = COURSE) -> dict:
         prerequisites = item.get('prerrequisitos', [])
         if any(x not in expected or x >= mid for x in prerequisites): raise ValueError('Prerrequisito inválido: '+mid)
         combined = notes[mid] + '\n\n## Programa y herramientas del módulo\n\n' + re.sub(r'^#[^\n]*\n','',theory)
+        combined += related_reading(mid, 'es')
         rendered = markdown(combined, source, mid)
         plain = re.sub('<[^>]+>', ' ', rendered['html'])
         q = quizzes[mid]
@@ -231,8 +233,9 @@ def collect(course: Path = COURSE) -> dict:
         resources.append({'id': 'D'+str(index+1).zfill(2), 'title':raw.splitlines()[0].lstrip('# '),
                           'kind':'Lección ampliada' if path.parent.name == 'lecciones' else 'Referencia',
                           'source':REPO+'/blob/main/'+quote(source,safe='/'), **markdown(raw, source, 'D'+str(index+1))})
+    add_resources(resources, course, ROOT, REPO, markdown, read_text)
     blocks = [{'id':b[0], 'title':b[1], 'description':b[4], 'hours':sum(m['hours'] for m in modules if m['block']==b[0])} for b in BLOCKS]
-    result = {'id':'fundamentos-ciberseguridad', 'version':'2.3.0','language':'es', 'repository':REPO, 'modules':modules,
+    result = {'id':'fundamentos-ciberseguridad', 'version':'2.4.0','language':'es', 'repository':REPO, 'modules':modules,
               'blocks':blocks, 'resources':resources, 'hours':sum(m['hours'] for m in modules)}
     if result['hours'] != 480 or sum(m['theoryHours'] for m in modules)!=168: raise ValueError('Carga incoherente.')
     route_content(result)
