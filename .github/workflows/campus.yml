@@ -2,9 +2,9 @@ name: Campus - build and acceptance
 on:
   push:
     branches: [main]
-    paths: ['campus/**', 'formacion/sistemas-operativos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+    paths: ['campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   pull_request:
-    paths: ['campus/**', 'formacion/sistemas-operativos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+    paths: ['campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   workflow_dispatch:
 permissions:
   contents: read
@@ -32,6 +32,8 @@ jobs:
         run: |
           set -o pipefail
           python3 -m unittest discover -s campus/tests -p 'test_*.py' -v 2>&1 | tee campus/qa/compiler.log
+      - name: Generate catalogs before JavaScript consumers
+        run: python3 campus/build.py && python3 campus/check_release.py
       - name: Progress and navigation tests
         shell: bash
         run: |
@@ -54,6 +56,7 @@ jobs:
           set -o pipefail
           python3 campus/tests/browser_bilingual.py 2>&1 | tee campus/qa/browser.log
           python3 campus/tests/browser_operations.py 2>&1 | tee campus/qa/browser-operations.log
+          python3 campus/tests/browser_integral.py 2>&1 | tee campus/qa/browser-integral.log
       - name: WebKit acceptance
         shell: bash
         env:
@@ -62,6 +65,7 @@ jobs:
           set -o pipefail
           python3 campus/tests/browser_bilingual.py 2>&1 | tee campus/qa/browser-webkit.log
           python3 campus/tests/browser_operations.py 2>&1 | tee campus/qa/browser-operations-webkit.log
+          python3 campus/tests/browser_integral.py 2>&1 | tee campus/qa/browser-integral-webkit.log
       - name: Existing kit tests
         working-directory: formacion/sistemas-operativos/kit
         run: python3 -m unittest discover -p 'test_*.py' -v
@@ -89,6 +93,7 @@ jobs:
           path: |
             campus/
             formacion/sistemas-operativos/
+            formacion/itinerario-integral/
             README.md
             wrangler.jsonc
             .github/workflows/cloudflare.yml
@@ -97,4 +102,34 @@ jobs:
             !**/*.pyc
           include-hidden-files: true
           retention-days: 14
+          if-no-files-found: error
+  public-observation:
+    name: Public observation - not production acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Record seven bounded public GET observations
+        working-directory: campus
+        run: |
+          python3 - <<'PY'
+          from audit_publication import review
+          import json
+          from pathlib import Path
+          result = review()
+          Path('qa').mkdir(exist_ok=True)
+          Path('qa/public-observation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps({'observationRecorded':True,'publicChecksPassed':result['passed']}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-publication-observation
+          path: campus/qa/public-observation.json
+          retention-days: 7
           if-no-files-found: error

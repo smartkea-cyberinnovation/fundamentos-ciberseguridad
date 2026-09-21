@@ -8,7 +8,27 @@
 
 Curso para comprender, administrar, automatizar y proteger sistemas. Conserva **32 módulos, 96 fichas de laboratorio y 480 horas planificadas**: 168 de teoría y 312 de práctica. Español e inglés comparten IDs, prerrequisitos y progreso. Las ocho guías ampliadas y las fichas describen actividades; estas cifras no certifican ejecución ni acreditación.
 
-El campus reúne lectura, presentación, búsqueda, autoevaluación y progreso local exportable. La biblioteca contiene **25 referencias**, incluidas las cuatro nuevas lecturas de control operativo. El [plan maestro](formacion/plan-maestro/README.md) añade una referencia de desarrollo de 18 áreas y 108 unidades propuestas, separada del catálogo activo.
+El campus reúne lectura, presentación, búsqueda, autoevaluación y progreso local exportable. La biblioteca contiene **36 recursos**, incluidas cuatro lecturas de control operativo y once lecturas integrales nuevas. El [plan maestro](formacion/plan-maestro/README.md) mantiene una referencia de desarrollo de 18 áreas y 108 unidades propuestas, separada del catálogo activo; no se suman automáticamente horas.
+
+## Ruta de estudio integral / Integrated study pathway
+
+Empieza por [D26: mapa de informática](https://smartkea.com/introduccion-ciberseguridad/#/recurso/D26), luego historia y hardware, redes y servicios, controles y datos, identidad y profesiones. Las once lecturas tienen texto completo en español e inglés dentro de sus fuentes; el campus selecciona el idioma sin traducir comandos en ejecución.
+
+| Recurso | Contenido desarrollado |
+|---|---|
+| [D26 · Informática](formacion/itinerario-integral/01-computing.md) | Representación, algoritmos, procesos, persistencia, red y evidencia |
+| [D27 · Historia](formacion/itinerario-integral/02-history.md) | Computación, IA, Internet/Web, móvil y siete casos empresariales con fuentes |
+| [D28 · Hardware](formacion/itinerario-integral/03-hardware.md) | Ciudad como analogía y sus límites; arquitectura, servidores, DC, IA y cuántica |
+| [D29 · Redes](formacion/itinerario-integral/04-networks.md) | Capas, equipos, topologías, Wi-Fi6/6E/7, 5G y normalización 6G |
+| [D30 · Arquitecturas web](formacion/itinerario-integral/05-web.md) | De estático/WordPress a aplicaciones empresariales, cloud y contenedores |
+| [D31 · Seguridad y equipos](formacion/itinerario-integral/06-security.md) | CIA, CSF, responsabilidades, procedimientos y evidencia |
+| [D32 · Información](formacion/itinerario-integral/07-information.md) | Clasificación, TLP, DLP, cifrado, ciclo de vida y privacidad |
+| [D33 · Identidades](formacion/itinerario-integral/08-identity.md) | JML, entidad–centro–puesto, SoD, RBAC/ABAC/PAM y acceso efectivo |
+| [D34 · Profesiones](formacion/itinerario-integral/09-careers.md) | Árbol funcional TIC/ciber, fuentes laborales, IA y portfolio |
+| [D35 · Glosario](formacion/itinerario-integral/10-glossary.md) | 36 fichas ES/EN complementarias, capacidades y ejemplos abiertos/comerciales |
+| [D36 · Fuentes](formacion/itinerario-integral/11-sources.md) | Referencias primarias, fechas, límites y método para noticias/profundización |
+
+[Índice y alcance de la ampliación](formacion/itinerario-integral/README.md). INT-L01–INT-L18 son dieciocho diseños de actividades integradoras, no dieciocho ejecuciones acreditadas. Los árboles profesionales y el glosario son ampliables, no una lista de todos los títulos o fabricantes existentes.
 
 ## Sistemas operativos: control verificable
 
@@ -40,7 +60,7 @@ El custom build de Wrangler compila, valida y prepara los activos antes de subir
 
 Consultar el commit servido en [build-info.json](https://smartkea.com/introduccion-ciberseguridad/build-info.json) y compararlo con la versión activa. [Publicación y recuperación](campus/WORKERS-RECOVERY.md) documenta la conexión Git, aceptación y rollback; [configuración de Cloudflare](campus/DEPLOY-CLOUDFLARE.md) incluye la alternativa portable de Pages.
 
-La observación HTTP se puede repetir explícitamente con `python3 campus/audit_publication.py --output campus/qa/publication.json`: siete recursos públicos fijos, sin login ni cambios de cuenta. Una prueba del build no equivale a esa observación en producción.
+La observación HTTP se puede repetir explícitamente con `python3 campus/audit_publication.py --output campus/qa/publication.json`: siete recursos públicos fijos, sin login ni cambios de cuenta. Una prueba del build no equivale a esa observación en producción. La ampliación contiene un [registro de revisión](docs/maintenance/2026-09-21-integral-curriculum.md); un commit integrado no se declara publicado hasta observarlo en el servicio.
 
 ## Compilar y comprobar
 
@@ -57,6 +77,7 @@ Abrir `http://127.0.0.1:8788`. La compilación y el servidor local no necesitan 
 
 ```sh
 python3 -m unittest discover -s campus/tests -p 'test_*.py' -v
+python3 campus/build.py && python3 campus/check_release.py
 node --test campus/tests/*.test.mjs
 python3 formacion/plan-maestro/validar.py
 ```
@@ -69,6 +90,7 @@ Los workflows conservan aceptación Python/JavaScript, Chromium/WebKit, validaci
 |---|---|
 | Empezar y estudiar | [Guía de estudio](formacion/sistemas-operativos/COMO-ESTUDIAR.md) |
 | Temario, prácticas, evaluación y fuentes | [Índice docente](formacion/sistemas-operativos/README.md) |
+| Historia, hardware, redes, datos e identidades | [Itinerario integral D26–D36](formacion/itinerario-integral/README.md) |
 | Control operativo de sistemas | [Lecturas D22–D25](formacion/sistemas-operativos/operacion/README.md) |
 | Ampliación y continuidad | [Plan maestro](formacion/plan-maestro/README.md) |
 | Editar fuentes y traducciones | [Guía de edición](campus/EDICION.md) |
@@ -79,6 +101,7 @@ Los workflows conservan aceptación Python/JavaScript, Chromium/WebKit, validaci
 ```text
 campus/                        Web estática, compilador, ES/EN, pruebas y operación
 formacion/sistemas-operativos/  Temario, lecciones, prácticas, kit y evaluación
+formacion/itinerario-integral/   Once lecturas desarrolladas ES/EN y fuentes
 formacion/plan-maestro/         Referencia curricular y continuidad
 .github/workflows/             Validación y aceptación
 wrangler.jsonc                 Worker y ruta pública

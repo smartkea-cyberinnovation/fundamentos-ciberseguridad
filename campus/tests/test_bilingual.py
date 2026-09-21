@@ -33,8 +33,8 @@ class BilingualTests(unittest.TestCase):
         for m in self.en['modules']:
             self.assertGreater(len(m['html']),600,m['id']);self.assertTrue(m['toc']);self.assertTrue(m['slides'])
     def test_resources_ids_and_text_present(self):
-        self.assertEqual(len(self.en['resources']),25)
-        self.assertEqual(len(self.es['resources']),25)
+        self.assertEqual(len(self.en['resources']),36)
+        self.assertEqual(len(self.es['resources']),36)
         for es,en in zip(self.es['resources'],self.en['resources']):
             self.assertEqual(es['id'],en['id']);self.assertGreater(len(en['html']),300)
     def test_all_eight_extended_guides_translated(self):

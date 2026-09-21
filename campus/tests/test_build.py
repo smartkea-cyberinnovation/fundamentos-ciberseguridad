@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import build
 from content import LESSONS, notes_and_quizzes
 from operations import READINGS
+from integral import READINGS as INTEGRAL_READINGS
 
 class MarkdownTests(unittest.TestCase):
     def test_html_is_escaped(self):
@@ -26,7 +27,7 @@ class MarkdownTests(unittest.TestCase):
         self.assertNotIn('<img',build.inline('`<img>`'))
     def test_table(self):
         out=build.markdown('| A | B |\n|---|---|\n| uno | dos |')['html']
-        self.assertIn('<table>',out); self.assertIn('scope="col"',out); self.assertIn('<td>dos</td>',out)
+        self.assertIn('<table>',out);self.assertIn('scope="col"',out);self.assertIn('<td>dos</td>',out)
     def test_lists(self):
         out=build.markdown('1. Uno\n2. Dos\n\n- Tres')['html']
         self.assertIn('<ol>',out);self.assertIn('<ul>',out)
@@ -62,7 +63,6 @@ class CurriculumTests(unittest.TestCase):
         self.assertEqual(labs[0]['tasks'],'operar.')
     def fixture(self,path):
         (path/'modulos').mkdir();(path/'planificacion').mkdir();(path/'practicas').mkdir();(path/'lecciones').mkdir()
-        # Build a complete synthetic library; production ID validation remains strict.
         for name in build.PUBLIC_DOCS + ['PLAN-DOCENTE.md','COMO-ESTUDIAR.md','DESPLIEGUE-ESTATICO.md']:
             (path/name).write_text('# '+name+'\nSynthetic test reference.\n',encoding='utf-8')
         for n in range(1,9):
@@ -70,6 +70,9 @@ class CurriculumTests(unittest.TestCase):
         (path/'operacion').mkdir()
         for rid,name,_,_ in READINGS:
             (path/'operacion'/name).write_text(f'# {rid} fixture\nSynthetic operational lesson.\n',encoding='utf-8')
+        extension=path.parent/'itinerario-integral';extension.mkdir()
+        for rid,name in INTEGRAL_READINGS:
+            (extension/name).write_text('<!-- ES -->\n# Prueba '+rid+'\n\nDatos sintéticos.\n<!-- EN -->\n# Test '+rid+'\n\nSynthetic data.\n',encoding='utf-8')
         mods=[];parts=[]
         for n in range(1,33):
             mid=f'M{n:02}';mods.append({'id':mid,'titulo':f'Módulo {n}','prerrequisitos':[]})
@@ -81,26 +84,26 @@ class CurriculumTests(unittest.TestCase):
         (path/'planificacion/curriculo.json').write_text(json.dumps(mods),encoding='utf-8')
     def test_collect_counts(self):
         with tempfile.TemporaryDirectory() as temp:
-            path=Path(temp);self.fixture(path);data=build.collect(path)
+            path=Path(temp)/'formacion/sistemas-operativos';path.mkdir(parents=True);self.fixture(path);data=build.collect(path)
             self.assertEqual(len(data['modules']),32);self.assertEqual(data['hours'],480)
             self.assertEqual(sum(len(m['labs']) for m in data['modules']),96)
             self.assertEqual(sum(m['theoryHours'] for m in data['modules']),168)
-            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,26)])
+            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,37)])
     def test_duplicate_catalog_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
-            path=Path(temp);self.fixture(path);p=path/'planificacion/curriculo.json'
+            path=Path(temp)/'formacion/sistemas-operativos';path.mkdir(parents=True);self.fixture(path);p=path/'planificacion/curriculo.json'
             data=json.loads(p.read_text());data.append(data[0]);p.write_text(json.dumps(data))
             with self.assertRaises(ValueError):build.collect(path)
     def test_internal_reference_link(self):
         with tempfile.TemporaryDirectory() as temp:
-            path=Path(temp);self.fixture(path)
+            path=Path(temp)/'formacion/sistemas-operativos';path.mkdir(parents=True);self.fixture(path)
             (path/'FUENTES.md').write_text('# Fuentes\nDocumentación.',encoding='utf-8')
             (path/'LABORATORIO.md').write_text('# Lab\n[Fuentes](FUENTES.md)',encoding='utf-8')
             data=build.collect(path);lab=next(r for r in data['resources'] if r['title']=='Lab')
             self.assertIn('href="#/recurso/',lab['html'])
     def test_collect_missing_fails(self):
         with tempfile.TemporaryDirectory() as temp:
-            path=Path(temp);self.fixture(path);(path/'CAPSTONE.md').write_text('# Sin módulo',encoding='utf-8')
+            path=Path(temp)/'formacion/sistemas-operativos';path.mkdir(parents=True);self.fixture(path);(path/'CAPSTONE.md').write_text('# Sin módulo',encoding='utf-8')
             with self.assertRaises(ValueError):build.collect(path)
     def test_security_policy(self):
         self.assertNotIn('unsafe-inline',build.CSP);self.assertNotIn('unsafe-eval',build.CSP)

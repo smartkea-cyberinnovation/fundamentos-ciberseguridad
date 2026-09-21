@@ -5,12 +5,7 @@ import subprocess
 
 
 def source_commit(root: Path) -> str | None:
-    """Check before producing output. Unknown/dirty Git state is never a clean SHA.
-
-    Ignored build products do not invalidate the source checkout. Untracked files
-    do: the compiler may include a new Markdown or laboratory source file. A CI
-    environment variable alone cannot prove that its checkout is unchanged.
-    """
+    """Unknown, dirty or ignored curricular inputs never receive a clean Git SHA."""
     options = dict(cwd=root, check=True, capture_output=True, text=True, timeout=5)
     try:
         status = subprocess.run(['git', 'status', '--porcelain=v1', '--untracked-files=all'], **options)
@@ -18,15 +13,13 @@ def source_commit(root: Path) -> str | None:
             return None
         ignored = subprocess.run(
             ['git', 'ls-files', '--others', '--ignored', '--exclude-standard', '-z', '--',
-             'formacion/sistemas-operativos', 'campus'], **options)
+             'formacion', 'campus'], **options)
         for name in ignored.stdout.split('\0'):
             path = Path(name)
             parts = path.parts
             if '__pycache__' in parts:
                 continue
-            # Conservative for course data; ignored local inputs must not be
-            # attributed to HEAD. Generated campus output and test logs differ.
-            if (name.startswith('formacion/sistemas-operativos/')
+            if (name.startswith('formacion/')
                     and path.suffix.lower() in {'.md', '.json', '.py', '.yaml', '.bash', '.ps1', '.cmd', '.zsh'}):
                 return None
             if (name.startswith('campus/locales/')
