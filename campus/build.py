@@ -16,6 +16,7 @@ from provenance import source_commit
 from release_inputs import public_kit_files
 from publication import not_found_page
 from operations import add_resources, related_reading
+from os_classroom.build import build_into as build_os_classroom
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -74,7 +75,6 @@ def inline(text: str, source: str = '') -> str:
     text = esc(text)
     text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
     text = re.sub(r'(?<!\*)\*([^*]+)\*(?!\*)', r'<em>\1</em>', text)
-    # Reponer en orden inverso: una etiqueta de enlace puede contener código.
     for index in range(len(tokens)-1, -1, -1):
         text = text.replace(f'\x00{index}\x00', tokens[index])
     return text
@@ -139,7 +139,6 @@ def markdown(text: str, source: str = '', prefix: str = 's') -> dict:
     flush()
     slides: list[dict] = []
     for section in sections:
-        # El contenido largo se desplaza, nunca se recorta; IDs distintos al lector.
         slides.append({**section, 'html': re.sub(r' id="([^"]+)"', r' id="\1-slide"', section['html'])})
     return {'html': '\n'.join(output), 'toc': toc, 'slides': slides}
 
@@ -226,7 +225,6 @@ def collect(course: Path = COURSE) -> dict:
     resources: list[dict] = []
     paths = [course/name for name in PUBLIC_DOCS if (course/name).is_file()]
     paths += sorted((course/'lecciones').glob('[0-9]*.md'))
-    # Append so existing public D01–D18 deep links retain their meaning.
     paths += [course/name for name in ['PLAN-DOCENTE.md','COMO-ESTUDIAR.md','DESPLIEGUE-ESTATICO.md'] if (course/name).is_file()]
     for index, path in enumerate(paths):
         raw = read_text(path); source = path.relative_to(ROOT).as_posix() if path.is_relative_to(ROOT) else path.name
@@ -307,6 +305,7 @@ def build() -> dict:
             for path in public_kit_files(COURSE/'kit'):
                 info=zipfile.ZipInfo('kit/'+path.name,(2026,9,14,0,0,0)); info.compress_type=zipfile.ZIP_DEFLATED
                 archive.writestr(info, path.read_bytes())
+        os_report = build_os_classroom(stage)
         (stage/'.campus-generated').write_text('campus-v2\n')
         if out.exists(): shutil.rmtree(out)
         stage.rename(out)
@@ -321,6 +320,7 @@ def build() -> dict:
     report['englishLabs']=sum(len(m['labs']) for m in english['modules'])
     report['version']=data['version']
     report['sourceCommit']=commit
+    report['osStudy']=os_report
     report['englishCourseSha256']=hashlib.sha256((out/'course.en.json').read_bytes()).hexdigest()
     report['courseSha256']=hashlib.sha256((out/'course.json').read_bytes()).hexdigest()
     (out/'build-info.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

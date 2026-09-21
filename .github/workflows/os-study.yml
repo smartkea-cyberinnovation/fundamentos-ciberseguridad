@@ -1,22 +1,84 @@
-name: OS study - reproducible source
+name: OS study - learning and acceptance
 on:
   push:
-    branches: [feat/os-study-assistant-20260921]
+    branches: [main, feat/os-study-assistant-20260921]
+    paths: ['campus/**', '.github/workflows/os-study.yml', 'docs/ESTUDIAR.md', 'docs/QUALITY.md']
+  pull_request:
+    paths: ['campus/**', '.github/workflows/os-study.yml', 'docs/ESTUDIAR.md', 'docs/QUALITY.md']
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: os-study-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  source:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Export tracked source for review
+      - name: Export source for reproducible review
         run: git archive --format=zip --output=os-study-source.zip HEAD
       - uses: actions/upload-artifact@v4
         with:
           name: os-study-source
           path: os-study-source.zip
           retention-days: 7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build and validate full static release
+        run: |
+          python3 campus/build.py
+          python3 campus/check_release.py
+          python3 campus/stage_worker.py
+      - name: Content and timer tests
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p campus/qa/os-study
+          python3 -m unittest discover -s campus/tests -p 'test_os_study.py' -v 2>&1 | tee campus/qa/os-study/python.log
+          node --test campus/tests/os-study.test.mjs 2>&1 | tee campus/qa/os-study/model.log
+          node --check campus/os_classroom/study.js
+      - name: Browser dependencies
+        run: |
+          python3 -m pip install playwright==1.55.0
+          python3 -m playwright install --with-deps chromium firefox webkit
+      - name: Chromium acceptance
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 campus/tests/browser_os_study.py 2>&1 | tee campus/qa/os-study/chromium.log
+      - name: Firefox acceptance
+        if: ${{ !cancelled() }}
+        shell: bash
+        env:
+          CAMPUS_BROWSER: firefox
+        run: |
+          set -o pipefail
+          python3 campus/tests/browser_os_study.py 2>&1 | tee campus/qa/os-study/firefox.log
+      - name: WebKit acceptance
+        if: ${{ !cancelled() }}
+        shell: bash
+        env:
+          CAMPUS_BROWSER: webkit
+        run: |
+          set -o pipefail
+          python3 campus/tests/browser_os_study.py 2>&1 | tee campus/qa/os-study/webkit.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: os-study-evidence
+          path: campus/qa/os-study/
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: os-study-accepted-site
+          path: campus/pages-ready.zip
+          retention-days: 14
+          if-no-files-found: error
