@@ -1,0 +1,22 @@
+name: OS study - reproducible source
+on:
+  push:
+    branches: [feat/os-study-assistant-20260921]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Export tracked source for review
+        run: git archive --format=zip --output=os-study-source.zip HEAD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: os-study-source
+          path: os-study-source.zip
+          retention-days: 7
