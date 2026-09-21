@@ -1,0 +1,55 @@
+name: OS classroom - source and acceptance
+on:
+  push:
+    branches: [main, feat/os-classroom-redesign-20260921]
+    paths: ['campus/**', 'formacion/sistemas-operativos/**', '.github/workflows/os-classroom.yml']
+  pull_request:
+    paths: ['campus/**', 'formacion/sistemas-operativos/**', '.github/workflows/os-classroom.yml']
+permissions:
+  contents: read
+jobs:
+  classroom:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Preserve exact tracked source for review
+        run: git archive --format=zip --output="${RUNNER_TEMP}/os-classroom-source.zip" HEAD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: os-classroom-source
+          path: ${{ runner.temp }}/os-classroom-source.zip
+          retention-days: 7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build the scoped OS classroom
+        run: python3 campus/os_classroom/build.py
+      - name: OS content and rendering contracts
+        run: python3 -m unittest discover -s campus/os_classroom/tests -p 'test_*.py' -v
+      - name: Install browser test dependencies
+        run: |
+          python3 -m pip install 'playwright==1.55.0'
+          python3 -m playwright install --with-deps chromium firefox webkit
+      - name: Real browser acceptance
+        run: python3 campus/os_classroom/tests/browser.py
+      - name: Preserve diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: os-classroom-diagnostics
+          path: campus/os_classroom/qa/
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Publish accepted classroom bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: os-classroom-ready
+          path: campus/os_classroom/site.zip
+          retention-days: 14
