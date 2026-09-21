@@ -13,13 +13,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from publication import PUBLIC_BASE_PATH, PUBLIC_URL
 from provenance import source_commit
 from operations import READINGS
+from integral import READINGS as INTEGRAL_READINGS
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--origin', default='http://127.0.0.1:8789')
 args = parser.parse_args()
 origin = args.origin.rstrip('/')
 base = origin + PUBLIC_BASE_PATH
-expected_resources=[f'D{i:02}' for i in range(1,22)]+[item[0] for item in READINGS]
+expected_resources=[f'D{i:02}' for i in range(1,22)]+[item[0] for item in READINGS]+[item[0] for item in INTEGRAL_READINGS]
+assert expected_resources == [f'D{i:02}' for i in range(1,37)], 'Keep the complete ordered public resource contract.'
 expected_version=json.loads((Path(__file__).resolve().parents[1]/'package.json').read_text())['version']
 for attempt in range(80):
     try:
