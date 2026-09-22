@@ -19,7 +19,7 @@ class OperationalContentTests(unittest.TestCase):
         return next(r for r in data['resources'] if r['id']==rid)
     def test_append_only_ids(self):
         for data in (self.es,self.en):
-            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,37)])
+            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,41)])
     def test_old_library_tail_is_unchanged(self):
         tail=[r['source'].split('/')[-1] for r in self.es['resources'][18:21]]
         self.assertEqual(tail,['PLAN-DOCENTE.md','COMO-ESTUDIAR.md','DESPLIEGUE-ESTATICO.md'])

@@ -6,6 +6,7 @@ export const messages=Object.fromEntries(pairs);
 export function text(es,language='es'){return language==='en'?(messages[es]??es):es;}
 
 Object.assign(messages, {
+ 'Contenido largo: desplázate dentro de la diapositiva. Flechas o espacio para avanzar; Inicio/Fin para saltar; F para pantalla completa; Esc para cerrar.':'Long content: scroll within the slide. Arrow keys or Space to advance; Home/End to jump; F for full screen; Esc to close.',
  'La copia guardada no es válida. Conserva el archivo de recuperación desde Mi progreso.':'The saved backup is invalid. Save the recovery file from My progress.',
  'Descargar copia original no válida':'Download the invalid original backup'
 });

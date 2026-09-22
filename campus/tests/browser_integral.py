@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Real browser acceptance of D26-D36, distinct from native OS lab execution."""
+"""Real browser acceptance of D26-D40, distinct from native OS lab execution."""
 from functools import partial
 from http.server import ThreadingHTTPServer
 import os
@@ -50,6 +50,17 @@ class IntegralBrowserTests(unittest.TestCase):
             self.go('D26',lang)
             self.page.locator('#main article a[href="#/recurso/D32"]').first.click()
             expect(self.page.locator('#main article')).to_contain_text('TLP')
+    def test_new_outlines_and_explicit_english_summaries(self):
+        for lang in ('es','en'):
+            for n in range(37,41):
+                with self.subTest(language=lang,resource=n):
+                    self.go(f'D{n:02}',lang)
+                    article=self.page.locator('#main article')
+                    if lang=='en':
+                        expect(article).to_contain_text('English summary')
+                        expect(article).to_contain_text('full English teaching edition is pending')
+                    else:
+                        self.assertGreaterEqual(article.locator('h2').count(),4)
     def test_mobile_tablet_desktop(self):
         for width in (320,390,768,820,1024,1440):
             self.page.set_viewport_size({'width':width,'height':1000})
@@ -57,6 +68,18 @@ class IntegralBrowserTests(unittest.TestCase):
                 self.go('D28',lang)
                 self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'))
                 self.page.screenshot(path=str(self.shots/f'hardware-{lang}-{width}.png'),full_page=True)
+    def test_header_tracks_repeated_resizes_without_observer_errors(self):
+        for lang in ('es','en'):
+            self.go('D28',lang)
+            for width in (320,1440,390,1024,768,820,320,1440):
+                self.page.set_viewport_size({'width':width,'height':1000})
+                self.page.wait_for_function("""() => {
+                    const height=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height);
+                    return height > 0 && document.documentElement.style.getPropertyValue('--header-height') === `${height}px`;
+                }""")
+                self.page.evaluate('() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))')
+                self.assertEqual(self.errors,[])
+                self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'))
     def test_glossary_references_and_language(self):
         self.go('D35')
         expect(self.page.locator('#main article')).to_contain_text('INT-G36')
@@ -71,7 +94,7 @@ class IntegralBrowserTests(unittest.TestCase):
             page=context.new_page()
             for path in ('lectura.html','reading.en.html'):
                 page.goto(self.base+path)
-                for n in range(26,37):expect(page.locator(f'article#D{n:02}')).to_have_count(1)
+                for n in range(26,41):expect(page.locator(f'article#D{n:02}')).to_have_count(1)
         finally:context.close()
 
 if __name__=='__main__':unittest.main(verbosity=2)

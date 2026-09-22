@@ -5,7 +5,7 @@ import html
 import re
 from pathlib import Path
 from operations import related_reading
-from integral import IDS as INTEGRAL_IDS, translated_resources
+from integral import IDS as INTEGRAL_IDS, OUTLINE_IDS, translated_resources
 
 BLOCKS_EN = [
  ('Foundations and method','Understand before automating.'),
@@ -90,6 +90,8 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
         body='\n'.join(raw.splitlines()[1:]).strip() if is_operational or original['id'] in INTEGRAL_IDS else raw
         record={**original,'title':raw.splitlines()[0].split(' · ',1)[1],
             'kind':'Extended lesson' if original['kind']=='Lección ampliada' else 'Reference',**render(body,original['id'])}
+        if original['id'] in OUTLINE_IDS:
+            record['kind'] = 'English summary'
         if is_operational:
             record['source']=spanish['repository']+'/blob/main/campus/locales/en/operations-control.md'
         out['resources'].append(record)
