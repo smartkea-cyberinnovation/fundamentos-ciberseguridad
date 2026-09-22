@@ -19,7 +19,7 @@ function tabRoute(){try{return validResumeRoute(safeStore.get(sessionStorage,TAB
 function remember(route){if(!validResumeRoute(route,course))return;state.lastRoute=route;try{safeStore.set(sessionStorage,TAB_ROUTE_KEY,route);}catch{/* In-memory fallback when storage is blocked. */}}
 function toast(message){const box=q('#status');box.textContent=message;box.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>box.hidden=true,6000);}
 function persist(){if(recoveredRaw!==null){toast(t('La copia guardada no es válida. Conserva el archivo de recuperación desde Mi progreso.'));counter();return false;}let saved=true;state.updatedAt=new Date().toISOString();try{if(!safeStore.set(localStorage,KEY,JSON.stringify(state))){saved=false;toast(t('No se pudo guardar. Exporta tu copia antes de cerrar.'));}}catch{saved=false;toast(t('No se pudo guardar. Exporta tu copia antes de cerrar.'));}counter();return saved;}
-function counter(){if(!state||!course)return;const p=progress(course,state);q('#top-progress').textContent=t('Mi progreso')+' · '+p.percent+' %';document.body.classList.toggle('large-text',state.preferences.largeText);}
+function counter(){if(!state||!course)return;const p=progress(course,state);q('#top-progress').textContent=t('Mi progreso')+' · '+p.percent+' %';document.body.classList.toggle('large-text',state.preferences.largeText);measureHeader();}
 function currentRoute(){return validResumeRoute(location.hash,course)||tabRoute()||state.lastRoute;}
 function localizeChrome(){document.documentElement.lang=language;q('#sidebar').setAttribute('aria-label',t('Ruta de aprendizaje'));document.title=t('Fundamentos de ciberseguridad')+' · Wiktor Nykiel';document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));q('#brand-title').textContent=t('Fundamentos de ciberseguridad');q('#global-search').placeholder=t('Buscar teoría, prácticas o referencias…');q('#search-button').setAttribute('aria-label',t('Buscar en el curso'));q('#language').value=language;q('#language').setAttribute('aria-label',t('Idioma'));counter();}
 function sidebar(){const menu=[['#/curso','Inicio'],['#/empezar','Empieza por aquí'],['#/temario','Temario'],['#/laboratorios','Prácticas'],['#/recursos','Biblioteca'],['#/progreso','Mi progreso'],['#/compartir','Continuar en otro dispositivo']];q('#sidebar').innerHTML=`<p class="eyebrow">CAMPUS · ES / EN</p><nav class="primary-nav" aria-label="${e(t('Ruta de aprendizaje'))}">${menu.map(([href,title])=>`<a href="${href}"${location.hash===href?' aria-current="page"':''}>${e(t(title))}</a>`).join('')}</nav><nav class="module-nav" aria-label="${e(t('Módulos'))}">${course.blocks.map(b=>`<details ${activeModule?.block===b.id?'open':''}><summary>${e(b.title)}</summary>${course.modules.filter(m=>m.block===b.id).map(m=>`<a href="${link(m.id)}"${m.id===activeModule?.id?' aria-current="page"':''}><span>${m.id}</span>${e(m.title)}${moduleDone(m,state)?' ✓':''}</a>`).join('')}</details>`).join('')}</nav><label class="text-setting"><input id="text-size" type="checkbox" ${state.preferences.largeText?'checked':''}>${e(t('Texto ampliado'))}</label>`;}
@@ -74,10 +74,10 @@ q('.skip-link').addEventListener('click',event=>{event.preventDefault();main.foc
 let headerFrame=null;
 function measureHeader(){
  if(headerFrame!==null)return;
- // Defer layout writes beyond ResizeObserver delivery, including in WebKit.
+ // Coalesce viewport and localized-header changes without a resize feedback loop.
  headerFrame=requestAnimationFrame(()=>{headerFrame=null;const height=Math.ceil(q('.topbar').getBoundingClientRect().height),style=document.documentElement.style,value=`${height}px`;if(height&&style.getPropertyValue('--header-height')!==value)style.setProperty('--header-height',value);});
 }
-if(globalThis.ResizeObserver)new ResizeObserver(measureHeader).observe(q('.topbar'));
+window.addEventListener('resize',measureHeader);
 q('#language').addEventListener('change',event=>void setLanguage(event.target.value));
 q('#search-form').addEventListener('submit',event=>{event.preventDefault();location.hash='#/buscar?q='+encodeURIComponent(q('#global-search').value.trim());});
 q('#menu-button').addEventListener('click',()=>{const open=document.body.classList.toggle('menu-open');q('#menu-button').setAttribute('aria-expanded',String(open));if(open)q('#sidebar a')?.focus();});
