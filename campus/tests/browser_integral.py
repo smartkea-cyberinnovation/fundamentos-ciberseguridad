@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Real browser acceptance of D26-D36, distinct from native OS lab execution."""
+"""Real browser acceptance of D26-D40, distinct from native OS lab execution."""
 from functools import partial
 from http.server import ThreadingHTTPServer
 import os
@@ -68,6 +68,18 @@ class IntegralBrowserTests(unittest.TestCase):
                 self.go('D28',lang)
                 self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'))
                 self.page.screenshot(path=str(self.shots/f'hardware-{lang}-{width}.png'),full_page=True)
+    def test_header_tracks_repeated_resizes_without_observer_errors(self):
+        for lang in ('es','en'):
+            self.go('D28',lang)
+            for width in (320,1440,390,1024,768,820,320,1440):
+                self.page.set_viewport_size({'width':width,'height':1000})
+                self.page.wait_for_function("""() => {
+                    const height=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height);
+                    return height > 0 && document.documentElement.style.getPropertyValue('--header-height') === `${height}px`;
+                }""")
+                self.page.evaluate('() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))')
+                self.assertEqual(self.errors,[])
+                self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'))
     def test_glossary_references_and_language(self):
         self.go('D35')
         expect(self.page.locator('#main article')).to_contain_text('INT-G36')

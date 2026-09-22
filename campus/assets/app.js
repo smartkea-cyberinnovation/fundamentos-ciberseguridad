@@ -71,7 +71,12 @@ function drawSlide(){const slides=activeModule.slides;slide=Math.max(0,Math.min(
 async function setLanguage(next){if(!['es','en'].includes(next))return;const ticket=++loadSequence;try{if(!catalogs.has(next)){const response=await fetch(next==='en'?'course.en.json':'course.json',{credentials:'omit'});if(!response.ok)throw new Error('LOAD');catalogs.set(next,await response.json());}if(ticket!==loadSequence)return;language=next;course=catalogs.get(next);if(!state){const saved=localGet(KEY);try{state=saved?parseImport(saved,course):emptyState(course);}catch{recoveredRaw=saved;state=emptyState(course);toast(t('La copia guardada no es válida. Conserva el archivo de recuperación desde Mi progreso.'));}state.lastRoute=tabRoute()||state.lastRoute;}else state=validateState(state,course);try{safeStore.set(localStorage,LOCALE_KEY,language);}catch{/* No storage: URL carries language. */}const url=new URL(location.href);url.searchParams.set('lang',language);history.replaceState(null,'',url);localizeChrome();render();}catch{toast(t('No se pudo cargar el idioma. No se ha sustituido por contenido en otro idioma.'));q('#language').value=language;}}
 
 q('.skip-link').addEventListener('click',event=>{event.preventDefault();main.focus();main.scrollIntoView({block:'start'});});
-function measureHeader(){const height=q('.topbar').getBoundingClientRect?.().height;if(height)document.documentElement.style.setProperty('--header-height',`${Math.ceil(height)}px`);}
+let headerFrame=null;
+function measureHeader(){
+ if(headerFrame!==null)return;
+ // Defer layout writes beyond ResizeObserver delivery, including in WebKit.
+ headerFrame=requestAnimationFrame(()=>{headerFrame=null;const height=Math.ceil(q('.topbar').getBoundingClientRect().height),style=document.documentElement.style,value=`${height}px`;if(height&&style.getPropertyValue('--header-height')!==value)style.setProperty('--header-height',value);});
+}
 if(globalThis.ResizeObserver)new ResizeObserver(measureHeader).observe(q('.topbar'));
 q('#language').addEventListener('change',event=>void setLanguage(event.target.value));
 q('#search-form').addEventListener('submit',event=>{event.preventDefault();location.hash='#/buscar?q='+encodeURIComponent(q('#global-search').value.trim());});

@@ -1,10 +1,10 @@
 # Campus ES/EN · Fundamentos de ciberseguridad / Cybersecurity foundations
 
-**Wiktor Nykiel · 2.4.0 · Independent learning · Light interface.**
+**Wiktor Nykiel · 3.0.0 · Independent learning · Light interface.**
 
 ## Español
 
-Campus estático para estudiar, repasar en presentación y seguir prácticas guiadas. La edición activa conserva **32 módulos, 96 fichas, ocho guías ampliadas, 25 referencias y 480 horas planificadas**. Español e inglés son ediciones docentes paralelas con los mismos IDs, prerrequisitos y horas. Las cifras no equivalen a asistencia ni ejecución de laboratorios.
+Campus estático para estudiar, repasar en presentación y seguir prácticas guiadas. La edición activa conserva **32 módulos, 96 fichas, ocho guías ampliadas, 40 recursos y 480 horas planificadas**. Español e inglés conservan los mismos IDs, prerrequisitos y horas. D26-D36 son lecturas desarrolladas en ambos idiomas; D37-D40 son esquemas de estudio en español con resúmenes en inglés, cuya edición docente completa sigue pendiente. Las cifras no equivalen a asistencia ni ejecución de laboratorios.
 
 El selector ES/EN cambia interfaz, contenidos, fichas, autoevaluaciones y referencias sin reiniciar progreso. El índice filtra por texto, bloque y avance; la biblioteca y búsqueda conectan las lecturas. La presentación usa el contenido del módulo, no una segunda copia de diapositivas. Hay lectura continua sin JavaScript en `lectura.html` y `reading.en.html`.
 
@@ -16,7 +16,7 @@ El selector ES/EN cambia interfaz, contenidos, fichas, autoevaluaciones y refere
 
 ## English
 
-A static campus for reading, presentation-based review and guided lab work. The active course has **32 modules, 96 lab briefs, eight extended guides, 25 references and 480 planned hours**. English and Spanish editions retain the same learning IDs, prerequisites and planned hours. These are not attendance or lab-execution records.
+A static campus for reading, presentation-based review and guided lab work. The active course has **32 modules, 96 lab briefs, eight extended guides, 40 resources and 480 planned hours**. English and Spanish editions retain the same learning IDs, prerequisites and planned hours. D26-D36 contain developed readings in both languages; D37-D40 are Spanish study outlines with English summaries, whose full English teaching editions are still pending. These are not attendance or lab-execution records.
 
 The language selector changes the interface and learning material without resetting progress. Use the syllabus filters, internal index, search, library and previous/next navigation. Continuous reading is also available without JavaScript.
 
