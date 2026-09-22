@@ -50,6 +50,17 @@ class IntegralBrowserTests(unittest.TestCase):
             self.go('D26',lang)
             self.page.locator('#main article a[href="#/recurso/D32"]').first.click()
             expect(self.page.locator('#main article')).to_contain_text('TLP')
+    def test_new_outlines_and_explicit_english_summaries(self):
+        for lang in ('es','en'):
+            for n in range(37,41):
+                with self.subTest(language=lang,resource=n):
+                    self.go(f'D{n:02}',lang)
+                    article=self.page.locator('#main article')
+                    if lang=='en':
+                        expect(article).to_contain_text('English summary')
+                        expect(article).to_contain_text('full English teaching edition is pending')
+                    else:
+                        self.assertGreaterEqual(article.locator('h2').count(),4)
     def test_mobile_tablet_desktop(self):
         for width in (320,390,768,820,1024,1440):
             self.page.set_viewport_size({'width':width,'height':1000})
@@ -71,7 +82,7 @@ class IntegralBrowserTests(unittest.TestCase):
             page=context.new_page()
             for path in ('lectura.html','reading.en.html'):
                 page.goto(self.base+path)
-                for n in range(26,37):expect(page.locator(f'article#D{n:02}')).to_have_count(1)
+                for n in range(26,41):expect(page.locator(f'article#D{n:02}')).to_have_count(1)
         finally:context.close()
 
 if __name__=='__main__':unittest.main(verbosity=2)

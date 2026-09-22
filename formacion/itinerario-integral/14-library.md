@@ -110,4 +110,7 @@ Cada referencia: ID, título, autor/organismo, edición/año, tipo, nivel, bloqu
 
 <!-- EN -->
 # Extended library and video collection
+
+**English summary.** The full English teaching edition is pending; the expanded Spanish outline is available in the linked source.
+
 **Reading D39.** Prefer primary sources, then books/manuals, university courses, conference material and finally explanatory videos. Commercial links are acquisition paths, not authority. The Spanish edition contains the complete curated list and the metadata schema that should be preserved for each resource.

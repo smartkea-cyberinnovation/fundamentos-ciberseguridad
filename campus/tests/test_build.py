@@ -88,7 +88,7 @@ class CurriculumTests(unittest.TestCase):
             self.assertEqual(len(data['modules']),32);self.assertEqual(data['hours'],480)
             self.assertEqual(sum(len(m['labs']) for m in data['modules']),96)
             self.assertEqual(sum(m['theoryHours'] for m in data['modules']),168)
-            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,37)])
+            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,41)])
     def test_duplicate_catalog_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             path=Path(temp)/'formacion/sistemas-operativos';path.mkdir(parents=True);self.fixture(path);p=path/'planificacion/curriculo.json'
