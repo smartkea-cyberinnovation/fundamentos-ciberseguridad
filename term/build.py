@@ -323,6 +323,8 @@ def validate(directory: Path = HERE/'dist') -> dict:
 def build(output: Path = HERE/'dist') -> dict:
     data=collect();lab=lab_config()
     if output.is_symlink() or (output.exists() and not (output/MARKER).is_file()):raise ValueError('Refusing to overwrite an unrelated output directory.')
+    # Capture provenance before creating our own untracked staging directory.
+    revision=source_commit();dirty=source_dirty()
     temporary=Path(tempfile.mkdtemp(prefix='.term-build-',dir=output.parent))
     try:
         (temporary/'assets').mkdir();(temporary/'docs').mkdir();(temporary/'downloads').mkdir()
@@ -340,7 +342,7 @@ def build(output: Path = HERE/'dist') -> dict:
             (temporary/'docs'/(Path(name).stem+'.html')).write_text(shell_document(title,markdown_doc(text,name),base='../',doc=True))
         zip_files(temporary/'downloads/labs.zip',public_lab_files())
         lessons=[l for m in data['modules'] for l in m['lessons']]
-        info={'id':COURSE_ID,'version':VERSION,'sourceCommit':source_commit(),'sourceDirty':source_dirty(),
+        info={'id':COURSE_ID,'version':VERSION,'sourceCommit':revision,'sourceDirty':dirty,
               'publicUrl':PUBLIC_URL,'publicBasePath':PUBLIC_PATH,'modules':len(data['modules']),'lessons':len(lessons),
               'questions':sum(len(l['quiz']) for l in lessons),'steps':sum(len(l['steps']) for l in lessons),
               'minutes':data['minutes'],'courseSha256':digest(temporary/'course.json'),

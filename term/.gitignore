@@ -1,5 +1,6 @@
 dist/
 worker-dist/
+.term-build-*
 qa/
 *.zip
 .env

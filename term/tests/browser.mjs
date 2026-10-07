@@ -16,6 +16,14 @@ async function openLesson(page,id,phase='practica',index=0){
  // Hash navigation can leave the previous lesson visible until hashchange renders.
  await page.locator(`.lesson-page[data-lesson-id="${id}"][data-phase="${phase}"][data-index="${index}"]`).waitFor();
 }
+async function assertNoOverflow(page,engine,width,phase){
+ const layout=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
+ if(layout.scroll>layout.width+1){
+  layout.elements=await page.evaluate(()=>[...document.querySelectorAll('body *')].map(el=>({element:el.tagName,id:el.id,className:el.getAttribute('class'),right:el.getBoundingClientRect().right})).filter(el=>el.right>innerWidth+1).slice(0,12));
+  await page.screenshot({path:new URL(`overflow-${engine}-${width}-${phase}.png`,out).pathname,fullPage:true,animations:'disabled'});
+ }
+ assert.ok(layout.scroll<=layout.width+1,`Horizontal overflow in ${engine} at ${width} (${phase}): ${JSON.stringify(layout)}`);
+}
 const engines=(process.env.TERM_TEST_BROWSERS||'chromium').split(',');
 const results=[];
 for(const engine of engines){
@@ -26,7 +34,7 @@ for(const engine of engines){
   await context.route('**/*',route=>{const u=new URL(route.request().url());if(['127.0.0.1','localhost'].includes(u.hostname)||['data:','blob:'].includes(u.protocol))return route.continue();external.push(u.origin);return route.abort();});
   const response=await page.goto(base);assert.equal(response.status(),200);assert.match(response.headers()['content-security-policy'],/frame-src 'none'/);
   await page.getByRole('heading',{name:'Aprende a pensar en terminal.'}).waitFor();assert.equal(await page.locator('.module-card').count(),16);
-  await page.screenshot({path:new URL('desktop-'+engine+'.png',out).pathname,fullPage:false});
+  await page.screenshot({path:new URL('desktop-'+engine+'.png',out).pathname,fullPage:false,animations:'disabled'});
   await page.getByRole('link',{name:'Empezar la primera lección'}).click();await page.locator('.lesson-page[data-lesson-id="m01-l01"]').waitFor();
   const currentHash=new URL(page.url()).hash;
   await page.locator('#skip-content').focus();await page.locator('#skip-content').press('Enter');
@@ -51,10 +59,10 @@ for(const engine of engines){
   for(const module of data.modules){for(const lesson of module.lessons){
     await openLesson(page,lesson.id);assert.equal(await page.locator('.code-box code').textContent(),lesson.steps[0].command);
   }}
-  await openLesson(page,'m12-l01');await page.screenshot({path:new URL('practice-'+engine+'.png',out).pathname,fullPage:false});
+  await openLesson(page,'m12-l01');await page.screenshot({path:new URL('practice-'+engine+'.png',out).pathname,fullPage:false,animations:'disabled'});
   for(const width of [390,320,768]){
     await page.setViewportSize({width,height:844});await openLesson(page,'m01-l01','test');
-    const layout=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(layout.scroll<=layout.width+1,`Horizontal overflow at ${width}: ${layout.scroll}`);
+    await assertNoOverflow(page,engine,width,'test');
     assert.equal(await page.locator('#sidebar').evaluate(sidebar=>sidebar.inert),true);
     assert.equal(await page.locator('#sidebar').getAttribute('aria-hidden'),'true');
     assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'false');
@@ -70,8 +78,8 @@ for(const engine of engines){
     await page.locator('#menu-toggle').click();await page.locator('.sidebar .side-link').first().click();await page.getByRole('heading',{name:'Aprende a pensar en terminal.'}).waitFor();
     assert.equal(await page.locator('#sidebar').evaluate(sidebar=>sidebar.inert),true);
     await openLesson(page,'m01-l01');
-    const check=await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1);assert.equal(check,true);
-    if(width===390)await page.screenshot({path:new URL('mobile-'+engine+'.png',out).pathname,fullPage:false});
+    await assertNoOverflow(page,engine,width,'practica');
+    if(width===390)await page.screenshot({path:new URL('mobile-'+engine+'.png',out).pathname,fullPage:false,animations:'disabled'});
   }
   // Resize alone must synchronize the accessibility state in both directions.
   await page.setViewportSize({width:1440,height:1000});

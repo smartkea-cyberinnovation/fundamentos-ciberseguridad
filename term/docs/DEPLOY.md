@@ -19,6 +19,8 @@ TERM forma parte de `smartkea-cyberinnovation/fundamentos-ciberseguridad`. Conse
 
 Los activos se guardan físicamente bajo el prefijo de URL, según el contrato de Static Assets. La configuración añade la ruta con barra y la entrada exacta sin barra. La redirección de la entrada exacta se genera en `_redirects`. Un registro DNS proxied y una zona activa son requisitos del proveedor para servir la ruta.
 
+El watcher de desarrollo enumera rutas de código y contenido. Excluye salidas de compilación, registros y datos de las prácticas para evitar reconstrucciones provocadas por el propio build. Si añades una nueva fuente fuera de esas rutas, actualiza `WATCH_PATHS` en `campus/cloudflare.py` y el mismo listado de `wrangler.jsonc`.
+
 ## Compilar y comprobar sin publicar
 
 Desde la raíz del repositorio, con Python 3.11+ y Node 22+ para las pruebas JavaScript:

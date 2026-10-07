@@ -15,7 +15,16 @@ class TermIntegrationTests(unittest.TestCase):
             'smartkea.com/introduccion-ciberseguridad/*',
             'smartkea.com/fundamentos-ciberseguridad/term/*',
             'smartkea.com/fundamentos-ciberseguridad/term'])
-        self.assertIn('term',cloudflare.check_config()['build']['watch_dir'])
+        self.assertIn('term/content',cloudflare.check_config()['build']['watch_dir'])
+
+    def test_watcher_excludes_outputs_and_runtime_data(self):
+        watched=[Path(p) for p in cloudflare.check_config()['build']['watch_dir']]
+        for name in ('campus/qa/wrangler-local.log','campus/dist/course.json',
+                     'campus/worker-dist/index.html','term/dist/course.json',
+                     'term/.term-build-example/index.html','term/labs/workspace/note.txt',
+                     'term/labs/secrets/token.json'):
+            with self.subTest(path=name):
+                self.assertFalse(any(Path(name).is_relative_to(root) for root in watched))
 
     def test_redirect_stays_inside_term(self):
         self.assertEqual(redirects(),'/fundamentos-ciberseguridad/term /fundamentos-ciberseguridad/term/ 308\n')

@@ -40,7 +40,14 @@ RUN apt-get update \
        bash dash coreutils findutils grep sed gawk ripgrep less nano vim-tiny man-db \
        procps iproute2 iputils-ping dnsutils curl wget jq file tar gzip zip unzip \
        openssl ca-certificates git openssh-client netcat-openbsd nmap python3 \
-       shellcheck tmux libwebsockets-evlib-uv \
+       shellcheck tmux libcap2-bin libwebsockets-evlib-uv \
+    && for binary in /usr/lib/nmap/nmap /usr/bin/ping; do \
+         test -x "$binary" || exit 1; \
+         file_caps=$(getcap "$binary") || exit 1; \
+         if [ -n "$file_caps" ]; then setcap -r "$binary" || exit 1; fi; \
+         file_caps=$(getcap "$binary") || exit 1; \
+         test -z "$file_caps" || exit 1; \
+       done \
     && groupadd --gid 10001 learner \
     && useradd --uid 10001 --gid 10001 --create-home --shell /bin/bash learner \
     && install -d -m 0750 -o learner -g learner /workspace /home/learner \
@@ -54,7 +61,11 @@ COPY --chmod=0555 scripts/*.sh /opt/lab/bin/
 COPY --chmod=0555 scripts/*.py /opt/lab/bin/
 COPY --chmod=0444 config/bashrc /opt/lab/config/bashrc
 COPY --chmod=0444 fixtures/README.txt /opt/lab/fixtures/README.txt
-RUN ttyd --help > /tmp/ttyd-help.txt 2>&1 \
+# Kali's stock Nmap wrapper assumes raw-socket capabilities. This lab uses TCP
+# connect scans only; neither file capabilities nor a privileged wrapper is needed.
+RUN ln -s /opt/lab/bin/nmap-unprivileged.sh /usr/local/bin/nmap \
+    && nmap --version \
+    && ttyd --help > /tmp/ttyd-help.txt 2>&1 \
     && grep -q -- '--writable' /tmp/ttyd-help.txt \
     && grep -q -- '--check-origin' /tmp/ttyd-help.txt \
     && rm /tmp/ttyd-help.txt
