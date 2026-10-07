@@ -1,0 +1,85 @@
+name: TERM - course and isolated Linux labs
+on:
+  pull_request:
+    paths: ['term/**', 'campus/term_integration.py', 'campus/stage_worker.py', 'wrangler.jsonc', '.github/workflows/term.yml']
+  push:
+    branches: [main]
+    paths: ['term/**', 'campus/term_integration.py', 'campus/stage_worker.py', 'wrangler.jsonc', '.github/workflows/term.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: term-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  course:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build and validate complete teaching edition
+        run: |
+          python3 term/build.py
+          python3 -m unittest discover -s term/tests -p 'test_*.py' -v
+          node --test term/tests/*.test.mjs
+          python3 campus/cloudflare.py build
+          python3 campus/cloudflare.py check
+      - name: Browser acceptance dependencies
+        run: |
+          npm install --prefix /tmp/term-qa --no-audit --no-fund playwright@1.62.1
+          /tmp/term-qa/node_modules/.bin/playwright install --with-deps chromium webkit
+      - name: Desktop and mobile acceptance
+        env:
+          TERM_TEST_NODE_MODULES: /tmp/term-qa/node_modules
+          TERM_TEST_BROWSERS: chromium,webkit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p term/qa
+          python3 term/serve.py --port 8791 >term/qa/preview.log 2>&1 &
+          TERM_PREVIEW_PID=$!
+          trap 'kill "$TERM_PREVIEW_PID" 2>/dev/null || true' EXIT
+          python3 - <<'PY'
+          import time, urllib.request
+          for attempt in range(30):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:8791/fundamentos-ciberseguridad/term/', timeout=2).close()
+                  break
+              except OSError:
+                  if attempt == 29: raise
+                  time.sleep(0.2)
+          PY
+          node term/tests/browser.mjs | tee term/qa/browser.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: term-course-diagnostics
+          path: |
+            term/qa/
+            term/dist/build-info.json
+          retention-days: 7
+  labs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Offline lab acceptance
+        run: |
+          python3 -m pip install -r term/labs/tests/requirements.txt
+          python3 -m unittest discover -s term/labs/tests -p 'test_*.py' -v
+          docker compose -f term/labs/compose.yaml config --quiet
+      - name: Build images and execute synthetic lab
+        run: bash term/labs/scripts/smoke.sh

@@ -1,0 +1,17 @@
+dist/
+worker-dist/
+qa/
+*.zip
+.env
+.env.*
+!.env.example
+.dev.vars*
+.wrangler/
+__pycache__/
+*.pyc
+node_modules/
+labs/evidence/
+labs/workspace/
+labs/secrets/
+labs/*credentials*.json
+labs/*token*

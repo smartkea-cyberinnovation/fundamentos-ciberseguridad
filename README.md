@@ -12,6 +12,14 @@ El campus reúne lectura, presentación a pantalla completa, búsqueda, autoeval
 
 La versión 3.0 conserva los 32 módulos, 96 fichas de laboratorio y las 480 horas de planificación del catálogo previo. La biblioteca tiene 40 recursos. D26–D36 son lecturas desarrolladas en ambos idiomas; D37–D40 son esquemas de estudio en español con resúmenes en inglés identificados como tales. Su traducción completa está pendiente.
 
+## TERM · Terminal Linux y seguridad
+
+[Curso de terminal Linux](https://smartkea.com/fundamentos-ciberseguridad/term/) · [Manual completo](https://smartkea.com/fundamentos-ciberseguridad/term/manual.html) · [Guía del alumno y contenidos](term/README.md).
+
+Itinerario autónomo con **16 módulos, 48 lecciones, 48 retos resueltos y 96 preguntas** sobre Linux, sh, Bash, shellscript, Kali, redes, web, Docker, Compose, Swarm, bastionado y evidencias. Cada práctica explica el comando, su efecto, el entorno, la verificación y la reversión. Incluye progreso local, cuaderno exportable, manual imprimible y conexión opcional a una VM mediante ttyd.
+
+El campus conserva su recorrido general y enlaza a esta nueva especialización. [Preparar el laboratorio](term/docs/LABS.md) · [Conectar ttyd](term/docs/CONEXION-TTYD.md) · [Publicación de TERM](term/docs/DEPLOY.md).
+
 ## Ruta de estudio integral / Integrated study pathway
 
 Empieza por [D26: mapa de informática](https://smartkea.com/introduccion-ciberseguridad/#/recurso/D26), luego historia y hardware, redes y servicios, controles y datos, identidad y profesiones. Las once lecturas tienen texto completo en español e inglés dentro de sus fuentes; el campus selecciona el idioma sin traducir comandos en ejecución.

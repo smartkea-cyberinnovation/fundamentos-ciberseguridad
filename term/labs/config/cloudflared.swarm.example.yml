@@ -1,0 +1,17 @@
+# Create a separate Docker config and secret for each student stack.
+tunnel: REPLACE_WITH_TUNNEL_UUID
+credentials-file: /run/secrets/lab_tunnel_credentials.json
+metrics: 127.0.0.1:2000
+ingress:
+  - hostname: term-a01.smartkea.com
+    service: http://terminal:7681
+    originRequest:
+      httpHostHeader: term-a01.smartkea.com
+      http2Origin: false
+      connectTimeout: 5s
+      access:
+        required: true
+        teamName: REPLACE_WITH_TEAM_NAME
+        audTag:
+          - REPLACE_WITH_ACCESS_APPLICATION_AUD
+  - service: http_status:404

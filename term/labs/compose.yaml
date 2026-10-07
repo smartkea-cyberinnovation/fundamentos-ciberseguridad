@@ -1,0 +1,100 @@
+name: smartkea-term
+
+x-toolbox: &toolbox
+  image: ${LAB_TOOLBOX_IMAGE:-smartkea-term-toolbox:dev}
+  build:
+    context: .
+    dockerfile: toolbox/Dockerfile
+    args:
+      KALI_IMAGE: ${KALI_IMAGE:-kalilinux/kali-rolling:latest}
+  user: "10001:10001"
+  init: true
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 128
+  cpus: 1.0
+  mem_limit: 512m
+  tmpfs:
+    - /tmp:rw,noexec,nosuid,nodev,size=64m,mode=1777
+    - /home/learner:rw,noexec,nosuid,nodev,size=16m,uid=10001,gid=10001,mode=0700
+  volumes:
+    - learner_workspace:/workspace
+  networks: [lab]
+  logging:
+    driver: json-file
+    options: {max-size: "5m", max-file: "2"}
+
+x-web: &web
+  image: ${LAB_WEB_IMAGE:-smartkea-term-web:dev}
+  build:
+    context: .
+    dockerfile: web/Dockerfile
+    args:
+      PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.13-slim-bookworm}
+  user: "10001:10001"
+  init: true
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 32
+  cpus: 0.5
+  mem_limit: 128m
+  tmpfs: ["/tmp:rw,noexec,nosuid,nodev,size=16m,mode=1777"]
+  networks: [lab]
+  logging:
+    driver: json-file
+    options: {max-size: "5m", max-file: "2"}
+
+services:
+  web:
+    <<: *web
+
+  toolbox:
+    <<: *toolbox
+    profiles: [cli]
+    stdin_open: true
+    tty: true
+
+  web-local:
+    <<: *web
+    profiles: [web-local]
+    ports:
+      - "127.0.0.1:8088:8080"
+
+  terminal:
+    <<: *toolbox
+    profiles: [terminal]
+    entrypoint: [/opt/lab/bin/ttyd-start.sh]
+    command: [--read-only]
+    ports:
+      - "127.0.0.1:7681:7681"
+    healthcheck:
+      test: [CMD, python3, -c, "import socket; socket.create_connection(('127.0.0.1',7681),2).close()"]
+      interval: 20s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+
+  terminal-write:
+    <<: *toolbox
+    profiles: [terminal-write]
+    entrypoint: [/opt/lab/bin/ttyd-start.sh]
+    command: [--writable]
+    # Same local port: stop terminal before enabling this explicit opt-in profile.
+    ports:
+      - "127.0.0.1:7681:7681"
+    healthcheck:
+      test: [CMD, python3, -c, "import socket; socket.create_connection(('127.0.0.1',7681),2).close()"]
+      interval: 20s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+
+networks:
+  lab:
+    driver: bridge
+    internal: true
+
+volumes:
+  learner_workspace:

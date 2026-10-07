@@ -23,7 +23,7 @@ ROOT = HERE.parent
 CONFIG = ROOT / 'wrangler.jsonc'
 WRANGLER = '4.132.0'
 BUILD = {'command': 'python3 campus/cloudflare.py build', 'cwd': '.',
-         'watch_dir': ['campus', 'formacion']}
+         'watch_dir': ['campus', 'formacion', 'term']}
 
 
 def check_config(path: Path = CONFIG) -> dict:
@@ -37,7 +37,7 @@ def check_config(path: Path = CONFIG) -> dict:
     if config['assets'] != {'directory': './campus/worker-dist', 'not_found_handling': '404-page'}:
         raise ValueError('Los activos deben ser campus/worker-dist, sin backend ni bindings.')
     if config['routes'] != PRODUCTION_ROUTES:
-        raise ValueError('La única ruta de producción admitida es la subruta pública del campus.')
+        raise ValueError('Sólo se admiten las rutas revisadas del campus y del curso TERM.')
     if config['workers_dev'] is not True or config['preview_urls'] is not True:
         raise ValueError('workers.dev y las URL de preview deben estar habilitados para verificar versiones.')
     if config['build'] != BUILD:

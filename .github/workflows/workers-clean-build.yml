@@ -1,10 +1,10 @@
 name: Workers - clean checkout build contract
 on:
   pull_request:
-    paths: ['wrangler.jsonc', 'campus/**', 'formacion/**', '.github/workflows/workers-clean-build.yml']
+    paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/**', '.github/workflows/workers-clean-build.yml']
   push:
     branches: [main]
-    paths: ['wrangler.jsonc', 'campus/**', 'formacion/**', '.github/workflows/workers-clean-build.yml']
+    paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/**', '.github/workflows/workers-clean-build.yml']
   workflow_dispatch:
 permissions:
   contents: read

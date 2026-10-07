@@ -7,6 +7,10 @@ PUBLIC_ORIGIN = 'https://smartkea.com'
 PUBLIC_BASE_PATH = '/introduccion-ciberseguridad/'
 PUBLIC_URL = PUBLIC_ORIGIN + PUBLIC_BASE_PATH
 PRODUCTION_ROUTES = [{'pattern': PUBLIC_URL.removeprefix('https://') + '*',
+                      'zone_name': 'smartkea.com'},
+                     {'pattern': 'smartkea.com/fundamentos-ciberseguridad/term/*',
+                      'zone_name': 'smartkea.com'},
+                     {'pattern': 'smartkea.com/fundamentos-ciberseguridad/term',
                       'zone_name': 'smartkea.com'}]
 
 

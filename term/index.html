@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Aprende terminal Linux con prácticas explicadas, Bash, Kali, Docker, redes, seguridad y evidencias. Curso de Wiktor Nykiel · SmartKEA.">
+  <meta name="referrer" content="no-referrer">
+  <title>TERM · Terminal Linux y seguridad · SmartKEA</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script type="module" src="assets/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+  <header class="topbar">
+    <button class="icon-button" id="menu-toggle" type="button" aria-label="Expandir menú" aria-controls="sidebar" aria-expanded="true"><span aria-hidden="true">☰</span></button>
+    <a class="brand" href="#/inicio"><span class="brand-glyph" aria-hidden="true">›_</span><span><b>SmartKEA</b><span class="brand-sub">TERM / Linux &amp; seguridad</span></span></a>
+    <form role="search" id="search-form" class="global-search"><label class="sr-only" for="search">Buscar una lección o un comando</label><input id="search" type="search" placeholder="Buscar una lección o un comando" maxlength="120" autocomplete="off"><button type="submit" class="icon-button" aria-label="Buscar">⌕</button></form>
+    <div class="header-actions"><button class="focus-clock" id="clock-open" type="button" aria-label="Temporizador de estudio"><span aria-hidden="true">◷</span> <span id="clock-label">25:00</span></button><button class="icon-button" id="fullscreen" type="button" aria-label="Pantalla completa">⛶</button><a class="top-progress" href="#/progreso"><span id="top-percent">0%</span><span class="optional-label"> mi progreso</span></a></div>
+  </header>
+  <div id="shade" class="shade" hidden></div>
+  <div class="app-shell">
+    <aside id="sidebar" class="sidebar" aria-label="Navegación del curso"></aside>
+    <main id="main" tabindex="-1"><section class="loading"><span class="eyebrow">SMARTKEA / TERM</span><h1>Tu próxima habilidad empieza en la terminal.</h1><p>Cargando el curso…</p><a href="manual.html">Abrir el manual completo</a></section></main>
+  </div>
+  <dialog id="timer-dialog" aria-labelledby="timer-title"><div class="dialog-head"><h2 id="timer-title">Una sesión, un objetivo</h2><button data-close-dialog type="button" class="icon-button" aria-label="Cerrar temporizador">×</button></div><p>Elige qué vas a poder explicar o demostrar al terminar.</p><label for="focus-goal">Objetivo de esta sesión</label><input id="focus-goal" maxlength="160" placeholder="Ej.: entender qué recibe un pipe"><output id="timer-display" class="timer-display">25:00</output><div class="button-row"><button id="timer-toggle" class="button primary" type="button">Iniciar 25 minutos</button><button id="timer-break" class="button" type="button">Pausa de 5 minutos</button><button id="timer-reset" class="button quiet" type="button">Reiniciar</button></div><p class="muted small">Ritmo orientativo. El cronómetro sigue contando al cambiar de pestaña mientras esta página permanezca abierta.</p></dialog>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-head"><h2 id="confirm-title">Revisar cambio</h2><button data-close-dialog class="icon-button" type="button" aria-label="Cerrar">×</button></div><p id="confirm-message"></p><div class="button-row"><button id="confirm-accept" class="button primary" type="button">Confirmar</button><button data-close-dialog class="button" type="button">Cancelar</button></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <input type="file" id="import-file" accept="application/json,.json" hidden>
+  <noscript><p class="notice">Activa JavaScript para las prácticas guiadas y el progreso, o <a href="manual.html">lee el manual completo</a>.</p></noscript>
+</body>
+</html>

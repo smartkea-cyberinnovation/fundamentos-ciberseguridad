@@ -1,0 +1,9 @@
+# Read-only image configuration; changes belong in /workspace.
+export HISTFILE=/workspace/.bash_history
+export HISTSIZE=1000
+export HISTFILESIZE=2000
+export HISTCONTROL=ignorespace:ignoredups
+export PS1='\[\e[34m\]learner@smartkea-lab\[\e[0m\]:\w\$ '
+umask 077
+printf '\nSmartKEA · Kali terminal · UID %s · objetivo HTTP: http://web:8080\n' "$(id -u)"
+printf 'Trabajo persistente: /workspace. Administracion de Docker/sudo: VM dedicada via SSH.\n\n'

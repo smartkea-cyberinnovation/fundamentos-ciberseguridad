@@ -1,0 +1,18 @@
+# Local-managed Tunnel on the same dedicated VM as Docker Compose.
+# Replace placeholders privately, outside the repository. Create Access first.
+tunnel: REPLACE_WITH_TUNNEL_UUID
+credentials-file: /etc/cloudflared/REPLACE_WITH_TUNNEL_UUID.json
+metrics: 127.0.0.1:2000
+ingress:
+  - hostname: term-a01.smartkea.com
+    service: http://127.0.0.1:7681
+    originRequest:
+      httpHostHeader: term-a01.smartkea.com
+      http2Origin: false
+      connectTimeout: 5s
+      access:
+        required: true
+        teamName: REPLACE_WITH_TEAM_NAME
+        audTag:
+          - REPLACE_WITH_ACCESS_APPLICATION_AUD
+  - service: http_status:404

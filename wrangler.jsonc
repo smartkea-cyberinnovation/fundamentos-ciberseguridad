@@ -7,12 +7,20 @@
     {
       "pattern": "smartkea.com/introduccion-ciberseguridad/*",
       "zone_name": "smartkea.com"
+    },
+    {
+      "pattern": "smartkea.com/fundamentos-ciberseguridad/term/*",
+      "zone_name": "smartkea.com"
+    },
+    {
+      "pattern": "smartkea.com/fundamentos-ciberseguridad/term",
+      "zone_name": "smartkea.com"
     }
   ],
   "build": {
     "command": "python3 campus/cloudflare.py build",
     "cwd": ".",
-    "watch_dir": ["campus", "formacion"]
+    "watch_dir": ["campus", "formacion", "term"]
   },
   "assets": {
     "directory": "./campus/worker-dist",
