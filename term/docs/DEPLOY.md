@@ -17,9 +17,9 @@ TERM forma parte de `smartkea-cyberinnovation/fundamentos-ciberseguridad`. Conse
 | Activos | `campus/worker-dist` |
 | Runtime | Static Assets; sin API de ejecución |
 
-Los activos se guardan físicamente bajo el prefijo de URL, según el contrato de Static Assets. La configuración añade la ruta con barra y la entrada exacta sin barra. La redirección de la entrada exacta se genera en `_redirects`. Un registro DNS proxied y una zona activa son requisitos del proveedor para servir la ruta.
+Los activos se guardan físicamente bajo el prefijo de URL, según el contrato de Static Assets. La configuración reserva el prefijo `/fundamentos-ciberseguridad/term*` en ambos hosts. Cloudflare compara la URL completa, incluidos sus parámetros: el comodín final permite que la entrada sin barra, como `/term?ref=curso`, también llegue al Worker. Una ruta exacta `/term` no cubre ese caso. La redirección de la entrada a `/term/` se genera en `_redirects` y conserva los parámetros. Un registro DNS proxied y una zona activa son requisitos del proveedor para servir la ruta.
 
-La web corporativa redirige la nueva ruta del dominio raíz a `www.smartkea.com`. Por eso TERM declara su prefijo exacto en ambos hosts y usa `www` como URL pública canónica. Estas rutas cubren únicamente el curso; no capturan el resto de la web corporativa.
+La web corporativa redirige la nueva ruta del dominio raíz a `www.smartkea.com`. Por eso TERM declara el prefijo reservado en ambos hosts y usa `www` como URL pública canónica. Los activos publicados se limitan a `/fundamentos-ciberseguridad/term/`; las rutas ajenas al prefijo reservado siguen en la web corporativa. No asignes otros productos a rutas que empiecen por `/fundamentos-ciberseguridad/term`.
 
 El watcher de desarrollo enumera rutas de código y contenido. Excluye salidas de compilación, registros y datos de las prácticas para evitar reconstrucciones provocadas por el propio build. Si añades una nueva fuente fuera de esas rutas, actualiza `WATCH_PATHS` en `campus/cloudflare.py` y el mismo listado de `wrangler.jsonc`.
 
@@ -73,7 +73,7 @@ El segundo comando modifica producción. La credencial se suministra por el meca
 
 Tras publicar, comprobar:
 
-1. Entrada con y sin barra, index, CSS, JavaScript, `course.json` y `config.json`.
+1. Entrada con y sin barra y con parámetros en ambos hosts, index, CSS, JavaScript, `course.json` y `config.json`.
 2. `build-info.json`: commit servido, hash de contenido, 16 módulos, 48 lecciones y 96 preguntas.
 3. Una lección, sus cuatro vistas, copia de comandos, test y persistencia.
 4. Manual, descargas, enlaces y una ruta inexistente con respuesta 404.

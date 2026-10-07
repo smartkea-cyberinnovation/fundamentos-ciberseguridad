@@ -1,5 +1,6 @@
 """The new course must not weaken campus policy or capture unrelated routes."""
 from pathlib import Path
+from fnmatch import fnmatchcase
 import sys
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
@@ -13,11 +14,20 @@ class TermIntegrationTests(unittest.TestCase):
         routes=cloudflare.check_config()['routes']
         self.assertEqual([r['pattern'] for r in routes],[
             'smartkea.com/introduccion-ciberseguridad/*',
-            'smartkea.com/fundamentos-ciberseguridad/term/*',
-            'smartkea.com/fundamentos-ciberseguridad/term',
-            'www.smartkea.com/fundamentos-ciberseguridad/term/*',
-            'www.smartkea.com/fundamentos-ciberseguridad/term'])
+            'smartkea.com/fundamentos-ciberseguridad/term*',
+            'www.smartkea.com/fundamentos-ciberseguridad/term*'])
         self.assertIn('term/content',cloudflare.check_config()['build']['watch_dir'])
+
+    def test_routes_match_query_strings_on_the_entry_without_a_slash(self):
+        # Cloudflare matches the whole request URL, including its query string.
+        patterns=[r['pattern'] for r in cloudflare.check_config()['routes']]
+        for host in ('smartkea.com','www.smartkea.com'):
+            for suffix in ('','?ref=course','/','/?ref=course','/manual.html'):
+                url=host+'/fundamentos-ciberseguridad/term'+suffix
+                with self.subTest(url=url):
+                    self.assertTrue(any(fnmatchcase(url,p) for p in patterns))
+            for path in ('/','/contacto','/fundamentos-ciberseguridad/otro'):
+                self.assertFalse(any(fnmatchcase(host+path,p) for p in patterns))
 
     def test_watcher_excludes_outputs_and_runtime_data(self):
         watched=[Path(p) for p in cloudflare.check_config()['build']['watch_dir']]
