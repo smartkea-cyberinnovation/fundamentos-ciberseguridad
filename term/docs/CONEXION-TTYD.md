@@ -2,7 +2,7 @@
 
 ## 1. Arquitectura y decisiones
 
-El sitio del curso se publica en `https://smartkea.com/fundamentos-ciberseguridad/term/`. La ejecución ocurre en una **VM dedicada al alumno**, accesible mediante un hostname separado, por ejemplo `https://term-a01.smartkea.com/`. El Worker entrega contenido y configuración pública; no ejecuta Bash ni recibe comandos para una shell.
+El sitio del curso se publica en `https://www.smartkea.com/fundamentos-ciberseguridad/term/`, accesible también desde el enlace sin `www`. La ejecución ocurre en una **VM dedicada al alumno**, accesible mediante un hostname separado, por ejemplo `https://term-a01.smartkea.com/`. El Worker entrega contenido y configuración pública; no ejecuta Bash ni recibe comandos para una shell.
 
 ```mermaid
 flowchart TD
@@ -23,7 +23,7 @@ Para cada alumno asigna una VM, un usuario Linux, un hostname de terminal y una 
 
 | Dato | Ejemplo de estructura | Dónde se configura |
 | --- | --- | --- |
-| Curso | `smartkea.com/fundamentos-ciberseguridad/term/` | Worker estático del campus |
+| Curso | `www.smartkea.com/fundamentos-ciberseguridad/term/` | Worker estático del campus |
 | Terminal | `term-a01.smartkea.com` | DNS, Tunnel y Access |
 | Origen local | `http://127.0.0.1:7681` | Configuración de cloudflared |
 | Equipo Access | Nombre del equipo, sin `.cloudflareaccess.com` | `teamName` |
@@ -129,7 +129,7 @@ TERM_LAB_EMBED=0
 
 Estos valores no son secretos y no sustituyen Access. Una URL fija en una página pública debe servir únicamente al grupo autorizado de ese laboratorio; para grupos con VMs individuales entrega enlaces específicos por el canal docente o crea una asignación autenticada antes de ampliar el modelo. No publiques una lista de correos y máquinas dentro del HTML.
 
-Si habilitas `TERM_LAB_EMBED=1`, el curso debe permitir exclusivamente ese origen en `frame-src`, y el origen debe permitir `https://smartkea.com` en `frame-ancestors`. `labs/config/nginx-terminal.example.conf` muestra un proxy local opcional en 7683 que añade ese permiso; dirige el Tunnel a ese puerto cuando uses el proxy. Mantén la pestaña nueva si Access o el navegador impiden el acceso dentro del iframe. No elimines controles del proveedor para forzar la incrustación.
+Si habilitas `TERM_LAB_EMBED=1`, el curso debe permitir exclusivamente ese origen en `frame-src`, y el origen debe permitir los dos hosts del curso, `https://www.smartkea.com` y `https://smartkea.com`, en `frame-ancestors`. `labs/config/nginx-terminal.example.conf` muestra un proxy local opcional en 7683 que añade esos permisos exactos; dirige el Tunnel a ese puerto cuando uses el proxy. Mantén la pestaña nueva si Access o el navegador impiden el acceso dentro del iframe. No elimines controles del proveedor para forzar la incrustación.
 
 ## 8. Practicar el sistema operativo de la VM con ttyd nativo
 
