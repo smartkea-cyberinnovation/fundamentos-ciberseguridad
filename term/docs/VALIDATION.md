@@ -28,9 +28,15 @@ Las pruebas ejecutadas cubren:
 
 También se comprobaron la compilación sintáctica Python y los enlaces relativos de la documentación. Las pruebas no necesitan objetivos externos: utilizan loopback y datos generados.
 
-## Lo que necesita ejecutarse en la VM de despliegue
+## Evidencia de GitHub Actions
 
-En este entorno **no hay Docker Engine/CLI, ShellCheck, cloudflared ni ttyd instalados**. Por tanto no se ha ejecutado el build de imágenes, `docker compose config`, el smoke con contenedores, la conversión real de `docker stack config`, un servicio Swarm ni el recorrido Access/WebSocket. La revisión YAML no sustituye esos parsers y controles operativos.
+El [run 37644072310](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/actions/runs/37644072310), sobre el commit `e2c3f53c25b26003cd5791c3bc0ea7629e393a31`, completó el build de ambas imágenes, `docker compose config` y el smoke real. El [job de laboratorio](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/actions/runs/37644072310/job/112870134650) confirmó HTTP saludable, Nmap contra el único objetivo sintético, integridad de evidencias y `NoNewPrivs: 1`.
+
+También confirmó ttyd en lectura y escritura: HTTP, rechazo de un Origin incorrecto, WebSocket válido, PTY y comprobaciones de entrada/ejecución. La suite consideró 23 pruebas: 22 correctas y una omisión esperada del rechazo de root en el runner sin privilegios. Las pruebas de navegador del mismo run superaron Chromium y WebKit en 1440, 768, 390 y 320 px, con las 48 lecciones y sin solicitudes externas.
+
+## Verificación de la VM de despliegue
+
+El entorno local de desarrollo no disponía de Docker Engine/CLI, ShellCheck, cloudflared ni ttyd. El build y el smoke con contenedores se ejecutaron después en GitHub Actions, como se documenta arriba. Quedan por comprobar sobre la infraestructura elegida el servicio Swarm, ShellCheck y el recorrido público con Cloudflare Access/Tunnel. La revisión YAML no sustituye esos parsers y controles operativos.
 
 Para completar la verificación en una VM Linux con Docker:
 
@@ -42,7 +48,7 @@ docker compose -f labs/compose.yaml run --rm --no-deps -T toolbox bash -c 'shell
 
 `smoke.sh` crea un proyecto temporal propio y elimina únicamente sus contenedores y volúmenes al terminar. Además de HTTP, herramientas y evidencias, arranca de verdad los servicios Compose `terminal` y `terminal-write` mediante `compose run`, sin publicar sus puertos en el host. Un cliente Python de biblioteca estándar conecta a `127.0.0.1:7681` dentro de cada contenedor. Comprueba el índice HTTP, rechaza un `Origin` distinto, completa un handshake WebSocket válido e inicia un PTY usando el protocolo de ttyd 1.7.7. En lectura comprueba UID 10001, ausencia de eco al enviar entrada y continuidad del monitor; en escritura ejecuta una comprobación inocua de UID, `NoNewPrivs`, `/workspace` escribible, `/etc` protegido y ausencia del socket Docker. La salida esperada se construye en dos partes para distinguir ejecución de un simple eco del comando.
 
-Esta prueba queda preparada para CI y la VM; no se afirma haberla ejecutado en el entorno de desarrollo sin Docker. No verifica el proveedor de identidad, una sesión Access, nginx ni el recorrido público del túnel, que requieren las comprobaciones de despliegue de `CONEXION-TTYD.md`.
+La prueba está verificada en CI y se debe repetir en la VM de destino. No verifica el proveedor de identidad, una sesión Access, nginx ni el recorrido público del túnel, que requieren las comprobaciones de despliegue de `CONEXION-TTYD.md`.
 
 Para ejecutar pruebas fuera de la imagen Kali, prepara un entorno Python local:
 

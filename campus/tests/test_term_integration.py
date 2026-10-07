@@ -14,7 +14,9 @@ class TermIntegrationTests(unittest.TestCase):
         self.assertEqual([r['pattern'] for r in routes],[
             'smartkea.com/introduccion-ciberseguridad/*',
             'smartkea.com/fundamentos-ciberseguridad/term/*',
-            'smartkea.com/fundamentos-ciberseguridad/term'])
+            'smartkea.com/fundamentos-ciberseguridad/term',
+            'www.smartkea.com/fundamentos-ciberseguridad/term/*',
+            'www.smartkea.com/fundamentos-ciberseguridad/term'])
         self.assertIn('term/content',cloudflare.check_config()['build']['watch_dir'])
 
     def test_watcher_excludes_outputs_and_runtime_data(self):

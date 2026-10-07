@@ -15,6 +15,14 @@
     {
       "pattern": "smartkea.com/fundamentos-ciberseguridad/term",
       "zone_name": "smartkea.com"
+    },
+    {
+      "pattern": "www.smartkea.com/fundamentos-ciberseguridad/term/*",
+      "zone_name": "smartkea.com"
+    },
+    {
+      "pattern": "www.smartkea.com/fundamentos-ciberseguridad/term",
+      "zone_name": "smartkea.com"
     }
   ],
   "build": {

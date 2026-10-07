@@ -11,6 +11,10 @@ PRODUCTION_ROUTES = [{'pattern': PUBLIC_URL.removeprefix('https://') + '*',
                      {'pattern': 'smartkea.com/fundamentos-ciberseguridad/term/*',
                       'zone_name': 'smartkea.com'},
                      {'pattern': 'smartkea.com/fundamentos-ciberseguridad/term',
+                      'zone_name': 'smartkea.com'},
+                     {'pattern': 'www.smartkea.com/fundamentos-ciberseguridad/term/*',
+                      'zone_name': 'smartkea.com'},
+                     {'pattern': 'www.smartkea.com/fundamentos-ciberseguridad/term',
                       'zone_name': 'smartkea.com'}]
 
 

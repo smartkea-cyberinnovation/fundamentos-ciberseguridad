@@ -12,12 +12,14 @@ TERM forma parte de `smartkea-cyberinnovation/fundamentos-ciberseguridad`. Conse
 | Build hook de Wrangler | `python3 campus/cloudflare.py build` |
 | Deploy de producción | `python3 campus/cloudflare.py deploy` |
 | Preview de rama | `python3 campus/cloudflare.py preview` |
-| Curso Linux | `https://smartkea.com/fundamentos-ciberseguridad/term/` |
+| Curso Linux | `https://www.smartkea.com/fundamentos-ciberseguridad/term/` (accesible también desde el enlace sin `www`) |
 | Campus general | `https://smartkea.com/introduccion-ciberseguridad/` |
 | Activos | `campus/worker-dist` |
 | Runtime | Static Assets; sin API de ejecución |
 
 Los activos se guardan físicamente bajo el prefijo de URL, según el contrato de Static Assets. La configuración añade la ruta con barra y la entrada exacta sin barra. La redirección de la entrada exacta se genera en `_redirects`. Un registro DNS proxied y una zona activa son requisitos del proveedor para servir la ruta.
+
+La web corporativa redirige la nueva ruta del dominio raíz a `www.smartkea.com`. Por eso TERM declara su prefijo exacto en ambos hosts y usa `www` como URL pública canónica. Estas rutas cubren únicamente el curso; no capturan el resto de la web corporativa.
 
 El watcher de desarrollo enumera rutas de código y contenido. Excluye salidas de compilación, registros y datos de las prácticas para evitar reconstrucciones provocadas por el propio build. Si añades una nueva fuente fuera de esas rutas, actualiza `WATCH_PATHS` en `campus/cloudflare.py` y el mismo listado de `wrangler.jsonc`.
 
