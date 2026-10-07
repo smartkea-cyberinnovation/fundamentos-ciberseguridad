@@ -7,7 +7,7 @@ if (( $# > 1 )); then printf 'Usage: ttyd-host-start.sh [--read-only|--writable|
 mode=${1:---read-only}
 case "$mode" in --read-only|--writable|--observe) ;; *) printf 'Unsupported mode.\n' >&2; exit 64 ;; esac
 command -v ttyd >/dev/null 2>&1 || { printf 'Install a supported ttyd version first.\n' >&2; exit 69; }
-help_text=$(ttyd --help)
+help_text=$(ttyd --help 2>&1)
 if [[ "$help_text" != *'--writable'* || "$help_text" != *'--check-origin'* ]]; then
   printf 'This launcher requires ttyd --writable and --check-origin.\n' >&2; exit 78
 fi

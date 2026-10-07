@@ -3,7 +3,7 @@ on:
   pull_request:
     paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/**', '.github/workflows/workers-clean-build.yml']
   push:
-    branches: [main]
+    branches: [main, 'feat/**']
     paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/**', '.github/workflows/workers-clean-build.yml']
   workflow_dispatch:
 permissions:

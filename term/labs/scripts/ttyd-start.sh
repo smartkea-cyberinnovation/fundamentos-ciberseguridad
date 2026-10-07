@@ -14,7 +14,7 @@ fi
 mode=${1:---read-only}
 case "$mode" in --read-only|--writable) ;; *) printf 'Unsupported terminal mode.\n' >&2; exit 64 ;; esac
 
-help_text=$(ttyd --help)
+help_text=$(ttyd --help 2>&1)
 if [[ "$help_text" != *'--check-origin'* || "$help_text" != *'--writable'* ]]; then
   printf 'ttyd must support --check-origin and --writable (verified upstream 1.7.7).\n' >&2
   exit 78

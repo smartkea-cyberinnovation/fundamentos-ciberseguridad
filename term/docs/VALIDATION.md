@@ -40,6 +40,10 @@ labs/scripts/smoke.sh
 docker compose -f labs/compose.yaml run --rm --no-deps -T toolbox bash -c 'shellcheck /opt/lab/bin/*.sh'
 ```
 
+`smoke.sh` crea un proyecto temporal propio y elimina únicamente sus contenedores y volúmenes al terminar. Además de HTTP, herramientas y evidencias, arranca de verdad los servicios Compose `terminal` y `terminal-write` mediante `compose run`, sin publicar sus puertos en el host. Un cliente Python de biblioteca estándar conecta a `127.0.0.1:7681` dentro de cada contenedor. Comprueba el índice HTTP, rechaza un `Origin` distinto, completa un handshake WebSocket válido e inicia un PTY usando el protocolo de ttyd 1.7.7. En lectura comprueba UID 10001, ausencia de eco al enviar entrada y continuidad del monitor; en escritura ejecuta una comprobación inocua de UID, `NoNewPrivs`, `/workspace` escribible, `/etc` protegido y ausencia del socket Docker. La salida esperada se construye en dos partes para distinguir ejecución de un simple eco del comando.
+
+Esta prueba queda preparada para CI y la VM; no se afirma haberla ejecutado en el entorno de desarrollo sin Docker. No verifica el proveedor de identidad, una sesión Access, nginx ni el recorrido público del túnel, que requieren las comprobaciones de despliegue de `CONEXION-TTYD.md`.
+
 Para ejecutar pruebas fuera de la imagen Kali, prepara un entorno Python local:
 
 ```bash

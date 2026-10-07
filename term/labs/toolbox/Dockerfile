@@ -19,11 +19,11 @@ RUN git init /src/ttyd && cd /src/ttyd \
 # Let dpkg discover ABI package names instead of guessing libwebsockets versions.
 RUN cd /src/ttyd && mkdir -p debian \
     && printf 'Source: smartkea-ttyd\nSection: misc\nPriority: optional\nMaintainer: SmartKEA\n\nPackage: smartkea-ttyd\nArchitecture: any\nDescription: Terminal training binary\n' > debian/control \
-    && dpkg-shlibdeps -O -e /usr/local/bin/ttyd \
+    && dpkg-shlibdeps -O -e/usr/local/bin/ttyd \
        | sed -n 's/^shlibs:Depends=//p' \
        | sed 's/ ([^)]*)//g;s/,//g' > /tmp/ttyd-runtime-packages.txt \
     && test -s /tmp/ttyd-runtime-packages.txt \
-    && ttyd --help > /tmp/ttyd-help.txt \
+    && ttyd --help > /tmp/ttyd-help.txt 2>&1 \
     && grep -q -- '--writable' /tmp/ttyd-help.txt \
     && grep -q -- '--check-origin' /tmp/ttyd-help.txt
 
@@ -54,7 +54,7 @@ COPY --chmod=0555 scripts/*.sh /opt/lab/bin/
 COPY --chmod=0555 scripts/*.py /opt/lab/bin/
 COPY --chmod=0444 config/bashrc /opt/lab/config/bashrc
 COPY --chmod=0444 fixtures/README.txt /opt/lab/fixtures/README.txt
-RUN ttyd --help > /tmp/ttyd-help.txt \
+RUN ttyd --help > /tmp/ttyd-help.txt 2>&1 \
     && grep -q -- '--writable' /tmp/ttyd-help.txt \
     && grep -q -- '--check-origin' /tmp/ttyd-help.txt \
     && rm /tmp/ttyd-help.txt

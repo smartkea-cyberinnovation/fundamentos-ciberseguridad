@@ -1,7 +1,7 @@
 name: Cloudflare - static deployment acceptance
 on:
   push:
-    branches: [main]
+    branches: [main, 'feat/**']
     paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', '.github/workflows/cloudflare.yml']
   pull_request:
     paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', '.github/workflows/cloudflare.yml']

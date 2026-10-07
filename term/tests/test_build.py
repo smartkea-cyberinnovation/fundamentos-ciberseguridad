@@ -27,9 +27,11 @@ class CourseTests(unittest.TestCase):
         self.assertEqual(builder.lab_config({}),{'url':'','allowedOrigins':[],'embed':False})
         valid={'TERM_LAB_URL':'https://term.example.org/','TERM_LAB_ALLOWED_ORIGINS':'https://term.example.org','TERM_LAB_EMBED':'1'}
         lab=builder.lab_config(valid);self.assertIn('frame-src https://term.example.org',builder.headers(lab))
+        canonical=builder.lab_config(dict(valid,TERM_LAB_URL='https://TERM.example.org:443/',TERM_LAB_ALLOWED_ORIGINS='https://TERM.example.org:443'))
+        self.assertEqual(canonical,lab)
         for url in ['http://term.example.org/','https://term.example.org.evil.test/','https://user:secret@term.example.org/','https://term.example.org/?args=sh','https://term.example.org/#x']:
             with self.subTest(url=url),self.assertRaises(ValueError):builder.lab_config(dict(valid,TERM_LAB_URL=url))
-        for origin in ['https://*.example.org','https://smartkea.com','https://term.example.org/','https://term.example.org\nframe-src *']:
+        for origin in ['https://*.example.org','https://smartkea.com','https://term.example.org/','https://term.example.org\nframe-src *','https://term.example.org:0','https://term.example.org:65536']:
             with self.subTest(origin=origin),self.assertRaises(ValueError):builder.lab_config(dict(valid,TERM_LAB_ALLOWED_ORIGINS=origin))
 
     def test_public_lab_inventory_excludes_local_data(self):
@@ -37,6 +39,10 @@ class CourseTests(unittest.TestCase):
         self.assertGreater(len(files),15)
         for name,path in files:
             self.assertNotIn('/secrets/',name);self.assertNotEqual(path.name,'.env');self.assertFalse(path.is_symlink())
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);real=root/'real';real.mkdir();(real/'file.txt').write_text('content')
+            linked=root/'linked';linked.symlink_to(real,target_is_directory=True)
+            with self.assertRaises(ValueError):builder.read_public(linked/'file.txt')
 
     def test_renderer_escapes_content(self):
         source='# Demo\n\n<script>alert(1)</script>\n\n```sh\nprintf x\n```\n'

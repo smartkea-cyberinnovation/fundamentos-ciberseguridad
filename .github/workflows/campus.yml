@@ -1,7 +1,7 @@
 name: Campus - build and acceptance
 on:
   push:
-    branches: [main]
+    branches: [main, 'feat/**']
     paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   pull_request:
     paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', '.github/workflows/campus.yml', 'wrangler.jsonc']

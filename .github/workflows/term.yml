@@ -3,7 +3,7 @@ on:
   pull_request:
     paths: ['term/**', 'campus/term_integration.py', 'campus/stage_worker.py', 'wrangler.jsonc', '.github/workflows/term.yml']
   push:
-    branches: [main]
+    branches: [main, 'feat/**']
     paths: ['term/**', 'campus/term_integration.py', 'campus/stage_worker.py', 'wrangler.jsonc', '.github/workflows/term.yml']
   workflow_dispatch:
 permissions:

@@ -62,7 +62,7 @@ Empieza por [D26: mapa de informática](https://smartkea.com/introduccion-cibers
 | URL del campus | `https://smartkea.com/introduccion-ciberseguridad/` |
 | Entrada sin barra | `https://smartkea.com/introduccion-ciberseguridad` → redirección a la URL con barra, conservando parámetros |
 | Worker | `fundamentos-ciberseguridad` |
-| Ruta del Worker | `smartkea.com/introduccion-ciberseguridad/*` |
+| Rutas del Worker | `smartkea.com/introduccion-ciberseguridad/*` y `smartkea.com/fundamentos-ciberseguridad/term/*` (también la entrada de TERM sin barra) |
 | Repositorio / rama de producción | `smartkea-cyberinnovation/fundamentos-ciberseguridad` / `main` |
 | Workers Builds: raíz / build command | Raíz del repositorio / vacío |
 | Deploy de producción | `python3 campus/cloudflare.py deploy` |

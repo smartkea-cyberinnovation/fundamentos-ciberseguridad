@@ -26,6 +26,7 @@
   "scripts/swarm-limits.sh",
   "scripts/lock-images.sh",
   "scripts/smoke.sh",
+  "scripts/ttyd-smoke.py",
   "scripts/ttyd-host-start.sh",
   "scripts/host-observe.sh",
   "tests/requirements.txt",

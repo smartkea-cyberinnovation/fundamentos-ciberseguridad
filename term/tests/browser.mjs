@@ -11,6 +11,11 @@ const parsed=new URL(base);
 if(!['127.0.0.1','localhost'].includes(parsed.hostname))throw new Error('Browser acceptance is limited to a local preview.');
 const out=new URL('../qa/',import.meta.url);await mkdir(out,{recursive:true});
 const data=JSON.parse(await readFile(new URL('../dist/course.json',import.meta.url),'utf8'));
+async function openLesson(page,id,phase='practica',index=0){
+ await page.goto(base+`#/leccion/${id}/${phase}/${index}`);
+ // Hash navigation can leave the previous lesson visible until hashchange renders.
+ await page.locator(`.lesson-page[data-lesson-id="${id}"][data-phase="${phase}"][data-index="${index}"]`).waitFor();
+}
 const engines=(process.env.TERM_TEST_BROWSERS||'chromium').split(',');
 const results=[];
 for(const engine of engines){
@@ -22,7 +27,12 @@ for(const engine of engines){
   const response=await page.goto(base);assert.equal(response.status(),200);assert.match(response.headers()['content-security-policy'],/frame-src 'none'/);
   await page.getByRole('heading',{name:'Aprende a pensar en terminal.'}).waitFor();assert.equal(await page.locator('.module-card').count(),16);
   await page.screenshot({path:new URL('desktop-'+engine+'.png',out).pathname,fullPage:false});
-  await page.getByRole('link',{name:'Empezar la primera lección'}).click();await page.locator('.lesson-article h2').waitFor();
+  await page.getByRole('link',{name:'Empezar la primera lección'}).click();await page.locator('.lesson-page[data-lesson-id="m01-l01"]').waitFor();
+  const currentHash=new URL(page.url()).hash;
+  await page.locator('#skip-content').focus();await page.locator('#skip-content').press('Enter');
+  assert.equal(new URL(page.url()).hash,currentHash,'Skip link must preserve the current lesson route.');
+  assert.equal(await page.locator('.lesson-page').getAttribute('data-lesson-id'),'m01-l01');
+  assert.equal(await page.evaluate(()=>document.activeElement?.id),'main');
   await page.getByRole('link',{name:/Practicar$/}).click();await page.locator('.code-box').waitFor();
   assert.match(await page.locator('.demo-label').textContent(),/no ejecuta comandos/);
   await page.locator('.copy-button').click();await page.locator('#toast').waitFor({state:'visible'});
@@ -39,17 +49,37 @@ for(const engine of engines){
   await page.goto(base+'#/buscar/permisos');await page.locator('.search-result').first().waitFor();
   // Rendering every lesson catches schema drift across independently authored modules.
   for(const module of data.modules){for(const lesson of module.lessons){
-    await page.goto(base+`#/leccion/${lesson.id}/practica/0`);await page.locator('.code-box').waitFor();assert.equal(await page.locator('.code-box code').textContent(),lesson.steps[0].command);
+    await openLesson(page,lesson.id);assert.equal(await page.locator('.code-box code').textContent(),lesson.steps[0].command);
   }}
-  await page.goto(base+'#/leccion/m12-l01/practica/0');await page.locator('.code-box').waitFor();await page.screenshot({path:new URL('practice-'+engine+'.png',out).pathname,fullPage:false});
+  await openLesson(page,'m12-l01');await page.screenshot({path:new URL('practice-'+engine+'.png',out).pathname,fullPage:false});
   for(const width of [390,320,768]){
-    await page.setViewportSize({width,height:844});await page.goto(base+'#/leccion/m01-l01/test/0');await page.locator('.quiz-options').waitFor();
+    await page.setViewportSize({width,height:844});await openLesson(page,'m01-l01','test');
     const layout=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(layout.scroll<=layout.width+1,`Horizontal overflow at ${width}: ${layout.scroll}`);
+    assert.equal(await page.locator('#sidebar').evaluate(sidebar=>sidebar.inert),true);
+    assert.equal(await page.locator('#sidebar').getAttribute('aria-hidden'),'true');
+    assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'false');
+    await page.locator('.top-progress').focus();await page.keyboard.press('Tab');
+    assert.equal(await page.locator('#sidebar').evaluate(sidebar=>sidebar.contains(document.activeElement)),false,'Closed mobile navigation must not receive keyboard focus.');
+    await page.locator('#menu-toggle').click();
+    assert.equal(await page.locator('#sidebar').evaluate(sidebar=>sidebar.inert),false);
+    assert.equal(await page.locator('#sidebar').getAttribute('aria-hidden'),null);
+    assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'true');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#sidebar').evaluate(sidebar=>sidebar.inert),true);
+    assert.equal(await page.evaluate(()=>document.activeElement?.id),'menu-toggle');
     await page.locator('#menu-toggle').click();await page.locator('.sidebar .side-link').first().click();await page.getByRole('heading',{name:'Aprende a pensar en terminal.'}).waitFor();
-    await page.goto(base+'#/leccion/m01-l01/practica/0');await page.locator('.code-box').waitFor();
+    assert.equal(await page.locator('#sidebar').evaluate(sidebar=>sidebar.inert),true);
+    await openLesson(page,'m01-l01');
     const check=await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1);assert.equal(check,true);
     if(width===390)await page.screenshot({path:new URL('mobile-'+engine+'.png',out).pathname,fullPage:false});
   }
+  // Resize alone must synchronize the accessibility state in both directions.
+  await page.setViewportSize({width:1440,height:1000});
+  await page.waitForFunction(()=>!document.querySelector('#sidebar').inert&&document.querySelector('#menu-toggle').getAttribute('aria-expanded')==='true');
+  assert.equal(await page.locator('#menu-toggle').getAttribute('aria-label'),'Contraer menú');
+  await page.setViewportSize({width:390,height:844});
+  await page.waitForFunction(()=>document.querySelector('#sidebar').inert&&document.querySelector('#menu-toggle').getAttribute('aria-expanded')==='false');
+  assert.equal(await page.locator('#menu-toggle').getAttribute('aria-label'),'Expandir menú');
   await page.locator('#clock-open').click();await page.locator('#timer-toggle').click();assert.equal(await page.locator('#timer-toggle').textContent(),'Pausar');await page.locator('#timer-reset').click();assert.equal(await page.locator('#timer-display').textContent(),'25:00');await page.locator('#timer-dialog [data-close-dialog]').click();
   await page.goto(base+'manual.html');await page.locator('.manual-module').first().waitFor();assert.equal(await page.locator('.manual-lesson').count(),48);assert.equal(await page.locator('.manual-quiz').count(),96);
   const bad=await page.request.get(base+'missing-asset.js');assert.equal(bad.status(),404);
