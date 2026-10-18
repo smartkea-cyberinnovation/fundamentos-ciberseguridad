@@ -43,3 +43,15 @@ La base de producción observada el 18 de octubre servía `b2429fd…`; el aula 
 La aceptación final se registra en el PR y en las ejecuciones de GitHub Actions de la versión integrada. Tras fusionar, el check de Workers y los `build-info.json` públicos deben identificar el commit definitivo. El manifiesto y el SHA-256 del banco permiten contrastar lo servido con las fuentes. Una compilación local, una preview o un check de otro commit no se presentan como producción actualizada.
 
 Pruebas necesarias: compilador, contratos, modelo de examen, conservación de progreso, navegadores de campus/aula/test, runtime local de Workers y comprobación HTTP de la publicación. La ejecución de las interfaces no acredita que se hayan realizado las prácticas nativas del alumno en Windows, macOS o Linux.
+
+## Revisión posterior a la integración
+
+La revisión de [PR #10](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/pull/10) identificó cinco casos adicionales que se verifican con regresiones específicas:
+
+- Dos pestañas del mismo intento conservan las respuestas ya registradas, y una pestaña antigua no puede recuperar un intento sustituido o volver a abrirlo tras finalizar.
+- Reiniciar el registro del aula OS propaga el reinicio a otras pestañas; sus marcas y sesiones anteriores no reaparecen al guardar.
+- Las fechas futuras de una copia del aula no pueden impedir una edición posterior.
+- Un fallo de carga inicial del aula ofrece reintento y lectura continua; un cambio de idioma fallido conserva el selector del idioma que sigue visible.
+- Las siete referencias compartidas de D46 se conservan también en inglés, incluidos sus enlaces internos a D27–D29 y los de las diapositivas. La navegación mantiene el idioma elegido.
+
+La aceptación definitiva utiliza el último commit de main, incluidos estos ajustes, y vuelve a contrastarlo con los archivos públicos de Cloudflare.

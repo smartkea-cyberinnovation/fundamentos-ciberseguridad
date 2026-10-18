@@ -1,7 +1,7 @@
-import {KEY,empty,parse,merge,totals,completion,createTimer,start,tick,pause,format,remainingEstimate} from './model.js';
+import {KEY,empty,resetRecord,parse,merge,totals,completion,createTimer,start,tick,pause,format,remainingEstimate} from './model.js';
 import {HOSTS,TARGETS,guidance} from './environment.js';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let lang=new URL(location.href).searchParams.get('lang')==='en'?'en':'es',course,state=empty(),current,index=0,persistent=false,recoveryRaw=null,loading=0;
+let lang=new URL(location.href).searchParams.get('lang')==='en'?'en':'es',course,state=empty(),current,index=0,persistent=false,storedOnce=false,recoveryRaw=null,loading=0;
 let timer=createTimer(),session=null,releaseLock=null,lockPending=false,lastSave=0,idleAt=performance.now(),noticeId;
 let hints=0,pendingImport=null,host='unknown',quizPassed=false;
 const tr=(es,en)=>lang==='es'?es:en;
@@ -13,14 +13,22 @@ const kindName=k=>({goal:tr('Objetivo','Goal'),concept:tr('Un concepto','One con
 function toast(text){clearTimeout(noticeId);$('#status').textContent=text;$('#status').hidden=false;noticeId=setTimeout(()=>$('#status').hidden=true,6000);}
 function download(name,text,type='application/json'){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([text],{type}));a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 function readSaved(){try{return localStorage.getItem(KEY);}catch{return null;}}
+function discardActivity(){session=null;timer=createTimer();pendingImport=null;lockPending=false;unlock();paintTimer();}
+function recordWasReset(){
+ discardActivity();recoveryRaw=null;if($('#panel').open)$('#panel').close();
+ if(course)queueMicrotask(()=>render(false));
+ toast(tr('El registro se ha reiniciado en este navegador. El temporizador anterior se ha detenido.','The record was reset in this browser. The previous timer was stopped.'));
+}
+function acceptRecord(other){const generation=state.generation;state=merge(state,other);if(state.generation!==generation)recordWasReset();}
+function savedRecordRemoved(){persistent=false;storedOnce=false;state=resetRecord(state);recordWasReset();}
 function save(){
  if(!persistent||recoveryRaw||!course)return;
- try{const old=readSaved();if(old)state=merge(state,parse(old,course));const valid=parse(JSON.stringify(state),course);localStorage.setItem(KEY,JSON.stringify(valid));}
+ try{const old=localStorage.getItem(KEY);if(old===null&&storedOnce){savedRecordRemoved();return;}if(old)acceptRecord(parse(old,course));state=parse(JSON.stringify(state),course);localStorage.setItem(KEY,JSON.stringify(state));storedOnce=true;}
  catch{persistent=false;toast(tr('No se pudo guardar. Exporta tu copia; no se ha borrado la anterior.','Could not save. Export your record; the previous copy was not deleted.'));}
 }
 function route(){const raw=location.hash.slice(1);const match=/^(OS-[CLWA]\d{2})\/(\d+)$/.exec(raw||state.last);let l=course.lessons.find(l=>l.id===match?.[1]);if(!l)l=course.lessons[0];return [l,Math.min(match?Number(match[2]):0,l.views.length-1)];}
 function go(id,n=0){halt('navigation');location.hash=id+'/'+n;}
-function noteRoute(){state.last=current.id+'/'+index;try{sessionStorage.setItem(KEY+'.route',state.last);}catch{}save();}
+function noteRoute(persistRoute=true){state.last=current.id+'/'+index;try{sessionStorage.setItem(KEY+'.route',state.last);}catch{}if(persistRoute)save();}
 function chrome(){
  document.documentElement.lang=lang;document.title=tr('Sistemas operativos · SmartKEA','Operating systems · SmartKEA');$('#language').value=lang;
  const labels={'brand-text':tr('Sistemas operativos','Operating systems'),menu:tr('Índice','Outline'),help:tr('Mi entorno','My environment'),dashboard:tr('Mi estudio','My study'),present:document.body.classList.contains('presentation')?tr('Salir de presentación','Exit presentation'):tr('Presentar','Present'),fullscreen:tr('Pantalla completa','Fullscreen'),share:tr('Compartir lección','Share lesson'),prev:tr('Anterior','Previous'),next:tr('Siguiente','Next'),pause:tr('Pausar','Pause'),break:tr('Descanso 5 min','5-minute break'),problem:tr('Me he atascado','I am stuck'),'coach-title':tr('Resolver un problema','Solve a problem'),'coach-prompt':tr('Tras 10 minutos sin información nueva, cambia de estrategia: describe el síntoma, formula dos hipótesis y consulta la ayuda. El cronómetro no mide tu capacidad.','After 10 minutes without new information, change strategy: describe the symptom, form two hypotheses and consult help. The timer does not measure ability.'),'note-label':tr('Esperado → observado → hipótesis → una prueba → resultado → siguiente acción. Solo datos ficticios.','Expected → observed → hypothesis → one check → result → next action. Fictitious data only.'),hint:tr('Pista progresiva','Progressive hint'),'download-note':tr('Descargar nota','Download note'),'close-panel':tr('Cerrar','Close'),privacy:tr('Registro local y autodeclarado. Sin cuenta ni sincronización. No guardar secretos.','Local self-reported record. No account or synchronization. Do not store secrets.'),reading:tr('Lectura continua','Continuous reading')};
@@ -47,7 +55,7 @@ function viewBody(v){
  if(document.body.classList.contains('presentation')&&v.kind==='concept')return '<p class="lead">'+esc(v.takeaway)+'</p><details><summary>'+tr('Abrir explicación completa','Open full explanation')+'</summary>'+p(v.body)+'</details>';
  return out;
 }
-function render(){
+function render(persistRoute=true){
  if(!course)return;
  [current,index]=route();quizPassed=false;hints=0;$('#hint-text').textContent='';
  const v=current.views[index],c=completion(state,current),mark=state.marks[v.id]?.status;
@@ -59,7 +67,7 @@ function render(){
  $('#prev').disabled=index===0&&course.lessons[0].id===current.id;
  $('#next').disabled=index===current.views.length-1&&course.lessons.at(-1).id===current.id;
  $('#step-progress').value=(index+1)/current.views.length*100;
- outline();chrome();noteRoute();$('#content').scrollTop=0;
+ outline();chrome();noteRoute(persistRoute);$('#content').scrollTop=0;
 }
 function mark(status){
  const v=current.views[index];
@@ -86,9 +94,9 @@ function halt(reason='manual'){
  pause(timer,performance.now(),reason);sessionRecord();save();unlock();paintTimer();
 }
 async function begin(kind=null){
- if(timer.running||lockPending)return;
+ if(!current||timer.running||lockPending)return;
  if(Object.keys(state.sessions).length>=1000){toast(tr('Exporta el registro y comienza uno nuevo: límite de sesiones alcanzado.','Export the record and begin a new one: session limit reached.'));return;}
- const requested=kind||(['environment','lab','evidence','recovery'].includes(current.views[index].kind)?'practice':'study');
+ const requested=kind||(['environment','lab','evidence','recovery'].includes(current.views[index].kind)?'practice':'study'),generation=state.generation;
  const activate=()=>{
   if(kind||!session||timer.remaining===0||session.lesson!==current.id){timer=createTimer(requested,requested==='break'?300000:1500000);session={id:crypto.randomUUID(),lesson:current.id,at:Date.now()};}
   idleAt=performance.now();start(timer,idleAt);paintTimer();
@@ -97,6 +105,7 @@ async function begin(kind=null){
   lockPending=true;paintTimer();
   try{await navigator.locks.request(KEY+'.timer',{ifAvailable:true},async lock=>{
    lockPending=false;
+   if(state.generation!==generation){paintTimer();return;}
    if(!lock){toast(tr('Hay un temporizador activo en otra pestaña. Páusalo primero.','A timer is active in another tab. Pause it first.'));paintTimer();return;}
    activate();await new Promise(resolve=>releaseLock=resolve);
   });}catch{lockPending=false;toast(tr('No se pudo reservar el temporizador. No se ha iniciado.','Could not reserve the timer. It was not started.'));paintTimer();}
@@ -127,21 +136,43 @@ function dashboard(){
  (recoveryRaw?'<div class="callout">'+tr('La copia anterior no es válida; se conserva sin sobrescribir.','The previous copy is invalid; it remains untouched.')+button('recover',tr('Descargar copia original','Download original copy'))+'</div>':'')+
  '<div id="import-preview"></div>');
  $('#goal').addEventListener('change',e=>{state.goal=Number(e.target.value);save();});
- $('#remember').addEventListener('change',e=>{persistent=e.target.checked;if(persistent)save();else try{localStorage.removeItem(KEY);}catch{};});
+ $('#remember').addEventListener('change',e=>{persistent=e.target.checked;if(persistent)save();else{storedOnce=false;try{localStorage.removeItem(KEY);}catch{}}});
  $('#export').onclick=()=>download('smartkea-os-study.json',JSON.stringify(state,null,2));
- $('#reset').onclick=()=>{if(confirm(tr('¿Reiniciar solo el registro de esta aula? Exporta primero para conservarlo.','Reset only this classroom record? Export first to retain it.'))){state=empty();recoveryRaw=null;session=null;timer=createTimer();try{localStorage.removeItem(KEY);}catch{}$('#panel').close();go('OS-C01',0);render();}};
+ $('#reset').onclick=()=>{if(confirm(tr('¿Reiniciar solo el registro de esta aula? Exporta primero para conservarlo.','Reset only this classroom record? Export first to retain it.'))){
+  try{const raw=readSaved();if(raw)state=merge(state,parse(raw,course));}catch{}
+  state=resetRecord(state);recoveryRaw=null;discardActivity();
+  try{if(persistent){localStorage.setItem(KEY,JSON.stringify(state));storedOnce=true;}else{localStorage.removeItem(KEY);storedOnce=false;}}
+  catch{persistent=false;toast(tr('No se pudo actualizar la copia del navegador. Comprueba el almacenamiento antes de cerrar.','Could not update the browser copy. Check storage before closing.'));}
+  $('#panel').close();go('OS-C01',0);render();
+ }};
  $('#external-add').onclick=()=>{const n=Number($('#external-min').value);if(!Number.isInteger(n)||n<1||n>240||Object.keys(state.sessions).length>=1000){toast(tr('Valor no válido.','Invalid value.'));return;}state.sessions[crypto.randomUUID()]={lesson:current.id,kind:'declared',ms:n*60000,problemMs:0,at:Date.now()};save();dashboard();};
  $('#recover')?.addEventListener('click',()=>download('os-record-recovery.txt',recoveryRaw,'text/plain'));
- $('#import').addEventListener('change',async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>1048576)throw Error('SIZE');pendingImport=parse(await f.text(),course);$('#import-preview').innerHTML=p(tr('Copia validada. Las marcas se combinan por fecha y las sesiones duplicadas por identificador.','Validated record. Marks merge by timestamp and duplicate sessions by ID.'))+button('confirm-import',tr('Combinar esta copia','Merge this copy'));$('#confirm-import').onclick=()=>{try{state=parse(JSON.stringify(merge(state,pendingImport)),course);pendingImport=null;save();$('#panel').close();render();toast(tr('Copia combinada.','Record merged.'));}catch{toast(tr('La combinación excede los límites; conserva ambas copias.','The merge exceeds limits; keep both records.'));}};}catch{pendingImport=null;$('#import-preview').textContent=tr('Copia rechazada; no se han cambiado tus datos.','Record rejected; your data was not changed.');}});
+ $('#import').addEventListener('change',async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>1048576)throw Error('SIZE');pendingImport=parse(await f.text(),course);$('#import-preview').innerHTML=p(tr('Copia validada. Las marcas se combinan por fecha y las sesiones duplicadas por identificador. Las fechas futuras no dan prioridad a una marca.','Validated record. Marks merge by timestamp and duplicate sessions by ID. Future dates do not give a mark priority.'))+button('confirm-import',tr('Combinar esta copia','Merge this copy'));$('#confirm-import').onclick=()=>{try{state=parse(JSON.stringify(merge(state,{...pendingImport,generation:state.generation})),course);pendingImport=null;save();$('#panel').close();render();toast(tr('Copia combinada.','Record merged.'));}catch{toast(tr('La combinación excede los límites; conserva ambas copias.','The merge exceeds limits; keep both records.'));}};}catch{pendingImport=null;$('#import-preview').textContent=tr('Copia rechazada; no se han cambiado tus datos.','Record rejected; your data was not changed.');}});
+}
+function courseControls(available){
+ for(const id of ['menu','help','dashboard','present','fullscreen','share','prev','next','start','pause','break','problem','hint','download-note'])$('#'+id).disabled=!available;
+ $('#assistant').inert=!available;
+}
+function loadError(next){
+ if(!course)$('#content').innerHTML='<h1>'+tr('El aula no se ha podido cargar','The classroom could not be loaded')+'</h1>';
+ const error=$('#load-error')||document.createElement('div');error.id='load-error';error.className='callout';error.setAttribute('role','alert');
+ error.innerHTML=p(tr('No se pudo cargar el idioma solicitado. Tu registro se conserva. Puedes reintentarlo o abrir la lectura continua.','The requested language could not be loaded. Your record is preserved. Retry or open the continuous reading.'))+'<div class="actions">'+button('retry-load',tr('Reintentar','Retry'))+link('reading.'+next+'.html',next==='es'?'Lectura continua en español':'Continuous reading in English')+'</div>';
+ if(!error.isConnected)$('#content').before(error);
+ $('#retry-load').onclick=()=>load(next);
 }
 async function load(next){
- halt('language');const seq=++loading;
- try{const response=await fetch('course.'+next+'.json',{credentials:'omit'});if(!response.ok)throw Error('LOAD');const data=await response.json();if(seq!==loading)return;course=data;lang=next;
-  if(!current){const raw=readSaved();if(raw)try{state=parse(raw,course);persistent=true;}catch{recoveryRaw=raw;}
+ halt('language');const seq=++loading,controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);
+ if(!course){chrome();courseControls(false);$('#content').innerHTML='<h1>'+tr('Cargando…','Loading…')+'</h1>';}
+ $('#language').value=next;$('#language').setAttribute('aria-busy','true');if($('#retry-load'))$('#retry-load').disabled=true;
+ try{const response=await fetch('course.'+next+'.json',{credentials:'omit',signal:controller.signal});if(!response.ok)throw Error('LOAD');const data=await response.json();if(seq!==loading)return;
+  if(data.language!==next||!Array.isArray(data.lessons)||!data.lessons.length||data.lessons.some(l=>!l||!Array.isArray(l.views)||!l.views.length))throw Error('CATALOG');
+  course=data;lang=next;
+  if(!current){const raw=readSaved();if(raw)try{state=parse(raw,course);persistent=true;storedOnce=true;}catch{recoveryRaw=raw;}
    try{const localRoute=sessionStorage.getItem(KEY+'.route');if(localRoute&&/^OS-[CLWA]\d{2}\/\d+$/.test(localRoute))state.last=localRoute;}catch{}
   }
-  const url=new URL(location.href);url.searchParams.set('lang',lang);history.replaceState(null,'',url);render();
- }catch{toast(tr('No se pudo cargar el aula. Usa la lectura continua; no se ha borrado el registro.','Could not load the classroom. Use continuous reading; the record was not deleted.'));}
+  const url=new URL(location.href);url.searchParams.set('lang',lang);history.replaceState(null,'',url);$('#load-error')?.remove();courseControls(true);render();
+ }catch{if(seq!==loading)return;$('#language').value=lang;loadError(next);}
+ finally{clearTimeout(timeout);if(seq===loading)$('#language').removeAttribute('aria-busy');}
 }
 function presentation(on){
  halt('presentation');document.body.classList.toggle('presentation',on);$('#outline').inert=on;$('#assistant').inert=on;$('.top').inert=on;
@@ -174,7 +205,18 @@ $('#content').addEventListener('click',async e=>{
 $('#marks').addEventListener('click',e=>{if(['done','review','blocked'].includes(e.target.id))mark(e.target.id);});
 $('#share').onclick=async()=>{const u=new URL(location.href);u.search='';u.searchParams.set('lang',lang);u.hash=current.id+'/'+index;try{if(navigator.share)await navigator.share({title:current.title,url:u.href});else{await navigator.clipboard.writeText(u.href);toast(tr('Enlace copiado; no incluye progreso.','Link copied; it does not include progress.'));}}catch{toast(tr('Comparte la dirección del navegador. El registro se traslada con JSON.','Share the browser address. Transfer the record with JSON.'));}};
 window.addEventListener('hashchange',()=>{halt('navigation');document.body.classList.remove('menu-open');$('#menu').setAttribute('aria-expanded','false');render();});
-window.addEventListener('storage',e=>{if(e.key!==KEY||!e.newValue||!course)return;try{state=merge(state,parse(e.newValue,course));if(!timer.running&&!$('#panel').open)render();}catch{/* Preserve the local record. */}});
+window.addEventListener('storage',e=>{
+ if((e.key!==KEY&&e.key!==null)||!course||!persistent)return;
+ try{
+  if(e.newValue===null){savedRecordRemoved();return;}
+  acceptRecord(parse(e.newValue,course));
+  const raw=localStorage.getItem(KEY);if(raw===null){savedRecordRemoved();return;}
+  const latest=parse(raw,course);acceptRecord(latest);
+  // Repair a stale writer only; ordinary remote renders must not echo tab routes.
+  if(latest.generation<state.generation)save();
+  if(!timer.running&&!$('#panel').open)render(false);
+ }catch{/* Preserve the local record. */}
+});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)halt('hidden');});
 window.addEventListener('pagehide',()=>halt('pagehide'));
 for(const name of ['pointerdown','keydown','scroll','touchstart'])document.addEventListener(name,()=>idleAt=performance.now(),{passive:true,capture:true});

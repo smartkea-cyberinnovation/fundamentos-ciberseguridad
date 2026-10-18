@@ -172,5 +172,13 @@ class BrowserAcceptance(unittest.TestCase):
     def test_20_larger_text_preserves_reading(self):
         self.go('#/modulo/M05','en');self.page.locator('#text-size').check();self.page.reload()
         expect(self.page.locator('body')).to_have_class('large-text')
+    def test_21_coverage_sources_stay_in_english_course(self):
+        self.go('#/recurso/D46','en')
+        for rid in ('D27','D28','D29'):
+            expect(self.page.locator(f'#main a[href="#/recurso/{rid}"]')).to_have_count(1)
+        self.page.locator('#main a[href="#/recurso/D27"]').click()
+        title=next(r['title'] for r in self.catalogs['en']['resources'] if r['id']=='D27')
+        expect(self.page.locator('#main h1')).to_have_text(title)
+        expect(self.page.locator('html')).to_have_attribute('lang','en')
 
 if __name__=='__main__':unittest.main(verbosity=2)

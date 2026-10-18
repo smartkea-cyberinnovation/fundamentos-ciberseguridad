@@ -3,16 +3,19 @@ export const KEY='smartkea.os.study.v1';
 export const MAX_BYTES=1024*1024;
 export const STATUSES=['done','review','blocked'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
-export function empty(){return {schema:1,course:'smartkea-os-study',marks:{},sessions:{},last:'OS-C01/0',goal:2};}
-export function parse(raw,course){
+export function empty(){return {schema:1,course:'smartkea-os-study',generation:0,marks:{},sessions:{},last:'OS-C01/0',goal:2};}
+export function resetRecord(state){return {...empty(),generation:(state.generation??0)+1};}
+export function parse(raw,course,now=Date.now()){
   if(typeof raw!=='string'||new TextEncoder().encode(raw).length>MAX_BYTES)throw Error('SIZE');
   const x=JSON.parse(raw);if(!object(x)||x.schema!==1||x.course!=='smartkea-os-study'||!object(x.marks)||!object(x.sessions))throw Error('SCHEMA');
   const ids=new Set(course.lessons.flatMap(l=>l.views.map(v=>v.id))),lessons=new Set(course.lessons.map(l=>l.id));
   const clean=empty();
+  if(x.generation!==undefined){if(!Number.isSafeInteger(x.generation)||x.generation<0)throw Error('GENERATION');clean.generation=x.generation;}
   if(Object.keys(x.marks).length>ids.size||Object.keys(x.sessions).length>1000)throw Error('LIMIT');
   for(const [k,v] of Object.entries(x.marks)){
     if(!ids.has(k)||!object(v)||!STATUSES.includes(v.status)||!Number.isSafeInteger(v.at)||v.at<0)throw Error('MARK');
-    clean.marks[k]={status:v.status,at:v.at};
+    // A future clock must never keep raising this mark's merge priority on reads.
+    clean.marks[k]={status:v.status,at:v.at>now?0:v.at};
   }
   for(const [k,v] of Object.entries(x.sessions)){
     if(!/^[a-zA-Z0-9-]{8,80}$/.test(k)||!object(v)||!lessons.has(v.lesson)||!['study','practice','break','declared'].includes(v.kind))throw Error('SESSION');
@@ -28,6 +31,7 @@ export function parse(raw,course){
   return clean;
 }
 export function merge(a,b){
+  if((a.generation??0)!==(b.generation??0))return structuredClone((a.generation??0)>(b.generation??0)?a:b);
   const out=structuredClone(a);
   for(const [k,v] of Object.entries(b.marks))if(!out.marks[k]||v.at>out.marks[k].at)out.marks[k]=structuredClone(v);
   for(const [k,v] of Object.entries(b.sessions)){
