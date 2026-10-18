@@ -1,0 +1,20 @@
+{
+  "schema": "c99.public-ioc/1",
+  "case_id": "C99-20261018",
+  "review_date": "2026-10-18",
+  "basis": "Dossier recibido y revisión estática; no telemetría de víctima",
+  "network_contacted": false,
+  "new_live_dns": false,
+  "records": [
+    {"type": "sha256", "value": "1e07598c2e41b7827840ba6c8611912abd88c0344a5d1eff364eaabeccdc6420", "role": "muestra canónica sin LF final", "specificity": "exacta", "bytes": 395291},
+    {"type": "sha256", "value": "2e89c9c01290c9b2d6979d778fed1868d43aacaad1bd9df1dcc60bf11542b338", "role": "muestra normalizada con LF final", "specificity": "exacta", "bytes": 395292},
+    {"type": "domain", "value_defanged": "svgflow[.]digital", "role": "receptor hardcodeado en callback", "specificity": "alta en el contexto del código", "action": "investigar y valorar bloqueo FQDN; no visitar", "caveat": "presencia no demuestra comunicación exitosa"},
+    {"type": "url", "value_defanged": "hxxps://svgflow[.]digital/sz/log.php", "role": "destino del POST url=", "specificity": "alta", "caveat": "POST, ruta y query no visibles sólo con DNS/SNI"},
+    {"type": "code-marker", "value": "c99shcook", "role": "entrada de extract", "specificity": "contextual", "caveat": "también aparece en documentación y muestras históricas"},
+    {"type": "cookie-name", "value": "c99shvars", "role": "estado deserializado", "specificity": "contextual", "caveat": "no demuestra explotación por sí sola"}
+  ],
+  "excluded_from_blocklist": ["IP compartidas de CDN", "servidores de nombres del proveedor", "valores de ejemplo"],
+  "full_dossier_records": 22,
+  "attribution": "No acreditada",
+  "incident_status": "No demostrado"
+}
