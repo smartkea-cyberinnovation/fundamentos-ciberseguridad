@@ -26,6 +26,7 @@ WRANGLER = '4.132.0'
 # watching campus/ or term/ would rebuild when logs or generated assets change.
 WATCH_PATHS = [
     'formacion', 'campus/assets', 'campus/locales', 'campus/index.html', 'campus/package.json',
+    'campus/os_classroom', 'campus/exam', 'campus/exam_build.py',
     'campus/build.py', 'campus/bilingual.py', 'campus/check_release.py', 'campus/cloudflare.py',
     'campus/content.py', 'campus/integral.py', 'campus/operations.py', 'campus/provenance.py',
     'campus/publication.py', 'campus/release_inputs.py', 'campus/stage_worker.py', 'campus/term_integration.py',

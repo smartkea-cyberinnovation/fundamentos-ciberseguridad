@@ -79,3 +79,22 @@ Una ejecución de CI, un build correcto o un merge no demuestran por sí solos q
 ## Recuperación
 
 Ante una regresión, priorizar recuperación del servicio y del progreso del alumno. Seguir [campus/WORKERS-RECOVERY.md](campus/WORKERS-RECOVERY.md), documentar el incidente y convertir la causa en una prueba de regresión.
+
+## Aula de sistemas y simulador de examen · 3.1
+
+El mismo build publica `sistemas/` (28 lecciones ES/EN) y `examen/` (100 preguntas en español, intentos de 20) dentro del prefijo existente del campus. No requieren nuevas rutas de proveedor. Las nuevas fuentes D41–D46 y el banco residen en `formacion/introduccion-informatica/`.
+
+`build-info.json` registra `osStudy`, `exam`, la versión y `sourceCommit`. El bloque `exam` incluye el SHA-256 del banco realmente empaquetado. La aceptación del ZIP y el staging comprueba los enlaces relativos, los índices de directorio, las referencias de estudio y la integridad de los activos.
+
+Pruebas de las nuevas aplicaciones, después de compilar y con Playwright instalado según CI:
+
+```sh
+python3 campus/tests/browser_os_study.py
+python3 campus/tests/browser_exam.py
+CAMPUS_BROWSER=webkit python3 campus/tests/browser_os_study.py
+CAMPUS_BROWSER=webkit python3 campus/tests/browser_exam.py
+```
+
+Workers Builds está conectado a `main`. Después de integrar, inspecciona el check **Workers Builds: fundamentos-ciberseguridad** del commit final y contrasta el `sourceCommit` público. Un check de una rama de preview no acredita la versión activa. Comprueba también `/introduccion-ciberseguridad/examen/questions.json` y el `build-info.json` de TERM en su dominio canónico.
+
+Los archivos de diagnóstico de CI se guardan en directorios de salida o en `RUNNER_TEMP`; nunca deben ensuciar el checkout antes de calcular la procedencia. Conserva el estado del alumno al recuperar una versión anterior.

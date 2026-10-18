@@ -1,6 +1,6 @@
 {
   "name": "fundamentos-ciberseguridad-campus",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": true,
   "type": "module",
   "description": "Campus estático, sin dependencias de producción",
@@ -12,5 +12,7 @@
     "cloudflare:dry-run": "python3 cloudflare.py dry-run",
     "test:browser": "python3 tests/browser_bilingual.py"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  }
 }

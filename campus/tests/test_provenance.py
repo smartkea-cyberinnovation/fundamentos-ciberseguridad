@@ -59,5 +59,16 @@ class ProvenanceTests(unittest.TestCase):
             with patch.object(build,'collect',side_effect=lambda:(_ for _ in ()).throw(ValueError('stop before output'))):
                 with self.assertRaises(ValueError):build.build()
         self.assertEqual(order,['provenance'])
+    def test_ignored_exam_and_classroom_sources_are_not_attributed(self):
+        for directory in ('exam', 'os_classroom'):
+            with self.subTest(directory=directory):
+                campus=self.root/'campus';campus.mkdir(exist_ok=True)
+                (campus/'.gitignore').write_text(directory+'/local.js\n')
+                self.git('add','.');self.git('-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','source ignores')
+                source=campus/directory;source.mkdir(exist_ok=True)
+                (source/'local.js').write_text('export const fixture=true;')
+                self.assertEqual(self.git('status','--porcelain'),'')
+                self.assertIsNone(source_commit(self.root))
+                (source/'local.js').unlink()
 
 if __name__=='__main__':unittest.main()

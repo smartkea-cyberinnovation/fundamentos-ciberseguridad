@@ -10,7 +10,38 @@ Curso integral y progresivo para comprender cómo hemos llegado a la informátic
 
 El campus reúne lectura, presentación a pantalla completa, búsqueda, autoevaluación y progreso local exportable. El plan maestro y el itinerario integral se mantienen como fuentes curriculares versionadas; las referencias externas deben verificarse antes de cada edición.
 
-La versión 3.0 conserva los 32 módulos, 96 fichas de laboratorio y las 480 horas de planificación del catálogo previo. La biblioteca tiene 40 recursos. D26–D36 son lecturas desarrolladas en ambos idiomas; D37–D40 son esquemas de estudio en español con resúmenes en inglés identificados como tales. Su traducción completa está pendiente.
+La versión 3.1 conserva los 32 módulos, 96 fichas de laboratorio y las 480 horas de planificación del catálogo previo. La biblioteca tiene 46 recursos. D26–D36 son lecturas desarrolladas en ambos idiomas; D37–D40 son esquemas de estudio en español con resúmenes en inglés identificados como tales. Su traducción completa está pendiente. D41–D46 añaden fundamentos de informática y una guía de cobertura de doce temas, con edición completa en español e inglés.
+
+## Introducción a la informática · doce temas y práctica guiada
+
+[Guía de la asignatura y cobertura](https://smartkea.com/introduccion-ciberseguridad/#/recurso/D46) · [Apuntes y resultados de aprendizaje](formacion/introduccion-informatica/README.md) · [Practicar el test](https://smartkea.com/introduccion-ciberseguridad/examen/)
+
+La ruta relaciona los doce temas de la propuesta docente revisada en octubre de 2026 con contenido desarrollado, ejemplos resueltos y evidencias. Puedes empezar por Linux y trabajar la teoría cuando la práctica la necesite. La asignatura de referencia tiene **6 ECTS**; las **480 horas del catálogo general** corresponden a un itinerario de ampliación diferente y no se atribuyen a esa asignatura.
+
+| Lectura | Qué aprenderás |
+|---|---|
+| D41 · Representación y codificación | Decimal, binario, octal y hexadecimal; aritmética, desbordamiento, bytes, texto, imagen, audio, vídeo y compresión |
+| D42 · Lógica digital | Puertas, tablas de verdad, álgebra de Boole, De Morgan, circuitos combinacionales y secuenciales |
+| D43 · Arquitectura, memoria y entrada/salida | CPU, ISA, ciclo de instrucción, jerarquía de memoria, buses, interrupciones, DMA, almacenamiento e integridad |
+| D44 · Sistemas y software | Procesos, hilos, planificación, memoria virtual, archivos, permisos, licencias, dependencias y mantenimiento |
+| D45 · Redes y cloud | Direcciones, puertos, DNS/DHCP, TCP/UDP, TLS, virtualización, contenedores y modelos de servicio |
+| D46 · Guía de cobertura | Los doce temas, resultados esperados, prácticas, proyecto y evidencias para demostrar el aprendizaje |
+
+### Ensaya con 100 preguntas
+
+Abre el **[test de autoevaluación](https://smartkea.com/introduccion-ciberseguridad/examen/)**. Cada intento selecciona **20 preguntas distintas al azar** de un banco de **100** y baraja sus cuatro respuestas. Solo una es válida. Al seleccionar se corrige inmediatamente, se explica el concepto y se ofrece un enlace de repaso. La primera respuesta queda registrada para que la puntuación refleje el intento.
+
+Puedes volver a las preguntas contestadas, reanudar un intento guardado en el navegador y consultar al terminar la puntuación y los resultados por tema. Un intento nuevo puede volver a incluir preguntas de intentos anteriores. El banco y sus soluciones son públicos para estudiar: se trata de práctica formativa y no de un examen acreditativo. El test está en español; las nuevas lecturas tienen también edición inglesa.
+
+[Banco editable con las 100 preguntas](formacion/introduccion-informatica/banco-preguntas.json) · [Cómo editar y verificar](campus/EXAMEN.md)
+
+## Aula de sistemas · una idea por vista
+
+[Abrir en español](https://smartkea.com/introduccion-ciberseguridad/sistemas/?lang=es) · [Open in English](https://smartkea.com/introduccion-ciberseguridad/sistemas/?lang=en) · [Cómo estudiar](docs/ESTUDIAR.md)
+
+El aula recupera e integra **28 lecciones bilingües y 84 conceptos**: cuatro lecciones comunes y ocho por Linux, Windows y macOS. Alterna concepto, micropráctica, ejemplo, laboratorio, autoevaluación, evidencia y recuperación. Incluye orientación de entorno, presentación y temporizador opcional de **25 minutos de foco y 5 de pausa**.
+
+Empieza por fundamentos comunes y elige tu sistema. El progreso del aula, el del campus y los intentos del test se conservan por separado en el navegador. Las marcas de práctica son declaraciones del alumno: para demostrar ejecución, conserva el resultado observado y explica cómo lo comprobaste.
 
 ## TERM · Terminal Linux y seguridad
 
@@ -92,18 +123,7 @@ Cada concepto importante debería acabar en una acción observable: explicar, co
 
 Para sistemas operativos existe una ruta operativa específica:
 
-| Recurso | Práctica conceptual |
-|---|---|
-| URL del campus | `https://smartkea.com/introduccion-ciberseguridad/` |
-| Entrada sin barra | `https://smartkea.com/introduccion-ciberseguridad` → redirección a la URL con barra, conservando parámetros |
-| Worker | `fundamentos-ciberseguridad` |
-| Rutas del Worker | Campus en `smartkea.com/introduccion-ciberseguridad/*`; TERM en `/fundamentos-ciberseguridad/term*` para `smartkea.com` y `www.smartkea.com`, incluida la entrada sin barra final y con parámetros |
-| Repositorio / rama de producción | `smartkea-cyberinnovation/fundamentos-ciberseguridad` / `main` |
-| Workers Builds: raíz / build command | Raíz del repositorio / vacío |
-| Deploy de producción | `python3 campus/cloudflare.py deploy` |
-| Preview de otras ramas | `python3 campus/cloudflare.py preview` |
-| Variables de build | `SKIP_DEPENDENCY_INSTALL=1`, `PYTHON_VERSION=3.13.3`, `NODE_VERSION=22.23.2` |
-| Wrangler fijado | `4.132.0` |
+Las instrucciones para compilar, publicar y recuperar el servicio están en [DEPLOY.md](DEPLOY.md). Para aprender, utiliza la ruta de contenido y prepara el laboratorio adecuado a tu sistema.
 
 Antes de una práctica, identifica siempre **objetivo, entorno, riesgo, rollback y evidencia esperada**.
 
@@ -151,11 +171,16 @@ El campus conserva progreso local exportable. Antes de cambiar de dispositivo u 
 campus/                        Web estática, compilador, ES/EN, pruebas y operación
 formacion/sistemas-operativos/  Temario, lecciones, prácticas, kit y evaluación
 formacion/itinerario-integral/   Once lecturas ES/EN y cuatro esquemas ES con resumen EN
+formacion/introduccion-informatica/  Fundamentos, cobertura de 12 temas y banco de 100 preguntas
 formacion/plan-maestro/         Referencia curricular y continuidad
 .github/workflows/             Validación y aceptación
 wrangler.jsonc                 Worker y ruta pública
 docs/MIGRATION.md              Origen del snapshot y alcance del traslado
 ```
+
+## Caso de análisis defensivo
+
+[C99 · Interpretar código ofuscado y conservar evidencia](docs/casos/c99-20261018/README.md) conecta el aprendizaje de procesos, archivos y registros con un caso de análisis estático y triage offline. Incluye contexto, IOC y pruebas sintéticas; distingue capacidades del código de un incidente real demostrado.
 
 ## Seguridad y límites
 

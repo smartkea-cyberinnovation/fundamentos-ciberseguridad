@@ -1,0 +1,3057 @@
+{
+  "schemaVersion": 1,
+  "version": "2026.10",
+  "title": "Introducción a la informática · 100 preguntas para practicar",
+  "topics": [
+    {
+      "id": "T01",
+      "title": "Informática, evolución y aplicaciones"
+    },
+    {
+      "id": "T02",
+      "title": "Representación y aritmética binaria"
+    },
+    {
+      "id": "T03",
+      "title": "Codificación y compresión multimedia"
+    },
+    {
+      "id": "T04",
+      "title": "Lógica digital y álgebra de Boole"
+    },
+    {
+      "id": "T05",
+      "title": "Arquitectura, CPU e instrucciones"
+    },
+    {
+      "id": "T06",
+      "title": "Memoria, almacenamiento e integridad"
+    },
+    {
+      "id": "T07",
+      "title": "Buses, periféricos y entrada/salida"
+    },
+    {
+      "id": "T08",
+      "title": "Sistemas operativos y procesos"
+    },
+    {
+      "id": "T09",
+      "title": "Memoria virtual, archivos y permisos"
+    },
+    {
+      "id": "T10",
+      "title": "Software, licencias y mantenimiento"
+    },
+    {
+      "id": "T11",
+      "title": "Redes, protocolos y protección"
+    },
+    {
+      "id": "T12",
+      "title": "Virtualización, cloud y tecnologías actuales"
+    }
+  ],
+  "questions": [
+    {
+      "id": "INF-001",
+      "topic": "T01",
+      "difficulty": "basico",
+      "prompt": "¿Qué descripción se ajusta mejor a la informática?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El estudio del tratamiento automático de información mediante sistemas computacionales."
+        },
+        {
+          "id": "b",
+          "text": "La fabricación de componentes electrónicos, excluyendo programas y datos."
+        },
+        {
+          "id": "c",
+          "text": "El uso de navegadores y aplicaciones de oficina, sin estudiar sus fundamentos."
+        },
+        {
+          "id": "d",
+          "text": "La conexión de ordenadores a Internet como único campo de estudio."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "La informática comprende representación, algoritmos, procesamiento, almacenamiento y comunicación. El uso de aplicaciones es una parte de sus aplicaciones, no toda la disciplina.",
+      "study": {
+        "label": "D26 · Informática: mapa de conceptos",
+        "url": "../#/recurso/D26"
+      }
+    },
+    {
+      "id": "INF-002",
+      "topic": "T01",
+      "difficulty": "basico",
+      "prompt": "¿Cuál es la diferencia entre un algoritmo y un programa?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Un algoritmo solo existe cuando está conectado a Internet."
+        },
+        {
+          "id": "b",
+          "text": "Un algoritmo describe un procedimiento; un programa lo expresa en instrucciones de un lenguaje para ejecutarlo."
+        },
+        {
+          "id": "c",
+          "text": "Un algoritmo siempre es hardware y un programa siempre es un archivo de texto."
+        },
+        {
+          "id": "d",
+          "text": "Un programa no puede implementar más de un algoritmo."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "El algoritmo se razona independientemente de una implementación concreta. El programa concreta instrucciones, tipos, entradas, errores y recursos en un entorno de ejecución.",
+      "study": {
+        "label": "D26 · Informática: mapa de conceptos",
+        "url": "../#/recurso/D26"
+      }
+    },
+    {
+      "id": "INF-003",
+      "topic": "T01",
+      "difficulty": "intermedio",
+      "prompt": "Un archivo contiene el byte hexadecimal 41. ¿Qué puedes afirmar sin conocer su formato?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que necesariamente es una contraseña cifrada."
+        },
+        {
+          "id": "b",
+          "text": "Que necesariamente representa el número decimal 41."
+        },
+        {
+          "id": "c",
+          "text": "Que contiene un valor de ocho bits; su significado depende de la interpretación."
+        },
+        {
+          "id": "d",
+          "text": "Que necesariamente representa una fotografía."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "0x41 tiene valor numérico 65, y en ASCII representa A. También podría formar parte de una imagen o instrucción. Los bytes necesitan un formato y un contexto para adquirir significado.",
+      "study": {
+        "label": "D26 · Informática: mapa de conceptos",
+        "url": "../#/recurso/D26"
+      }
+    },
+    {
+      "id": "INF-004",
+      "topic": "T01",
+      "difficulty": "basico",
+      "prompt": "¿Qué cambio caracteriza el concepto de programa almacenado?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Los programas deben estar cableados físicamente y no pueden modificarse."
+        },
+        {
+          "id": "b",
+          "text": "Todos los datos se almacenan exclusivamente en Internet."
+        },
+        {
+          "id": "c",
+          "text": "Cada operación requiere que una persona mueva un cable."
+        },
+        {
+          "id": "d",
+          "text": "Las instrucciones pueden mantenerse en memoria y ser recuperadas por el procesador."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "El programa almacenado permite representar instrucciones en memoria. Esta idea ayuda a explicar la flexibilidad de los ordenadores de propósito general; no implica depender de Internet.",
+      "study": {
+        "label": "D27 · Historia de la informática",
+        "url": "../#/recurso/D27"
+      }
+    },
+    {
+      "id": "INF-005",
+      "topic": "T01",
+      "difficulty": "basico",
+      "prompt": "¿Qué relación entre Internet y la Web es correcta?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La Web es un servicio que utiliza Internet; Internet también transporta otros servicios."
+        },
+        {
+          "id": "b",
+          "text": "Son dos nombres exactos para el mismo protocolo."
+        },
+        {
+          "id": "c",
+          "text": "Internet solo existe cuando se utiliza un navegador."
+        },
+        {
+          "id": "d",
+          "text": "El correo electrónico es obligatoriamente una página web."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Internet interconecta redes; la Web utiliza tecnologías como URLs, HTTP y HTML. Correo, resolución DNS y muchos otros servicios no se reducen a páginas web.",
+      "study": {
+        "label": "D27 · Historia de la informática",
+        "url": "../#/recurso/D27"
+      }
+    },
+    {
+      "id": "INF-006",
+      "topic": "T01",
+      "difficulty": "aplicacion",
+      "prompt": "En una práctica, la web no responde. ¿Qué forma de proceder permite obtener una conclusión respaldada por evidencia?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Atribuir el fallo al país de una IP sin examinar el servicio."
+        },
+        {
+          "id": "b",
+          "text": "Registrar el error, las condiciones y las comprobaciones antes de atribuir una causa."
+        },
+        {
+          "id": "c",
+          "text": "Afirmar que existe un ataque porque el navegador mostró un error."
+        },
+        {
+          "id": "d",
+          "text": "Reinstalar el sistema y declarar resuelto el incidente sin comprobar nada."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Un síntoma puede tener varias causas. El diagnóstico separa observación, hipótesis y prueba; documenta versión, fecha, comandos y límites antes de atribuir el fallo.",
+      "study": {
+        "label": "D26 · Informática: mapa de conceptos",
+        "url": "../#/recurso/D26"
+      }
+    },
+    {
+      "id": "INF-007",
+      "topic": "T02",
+      "difficulty": "aplicacion",
+      "prompt": "¿A qué número decimal equivale 101101 en binario?",
+      "options": [
+        {
+          "id": "a",
+          "text": "46"
+        },
+        {
+          "id": "b",
+          "text": "53"
+        },
+        {
+          "id": "c",
+          "text": "45"
+        },
+        {
+          "id": "d",
+          "text": "41"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Los bits activos representan 32 + 8 + 4 + 1 = 45. La posición, desde la derecha, indica potencias de dos empezando por 2 elevado a 0.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-008",
+      "topic": "T02",
+      "difficulty": "aplicacion",
+      "prompt": "¿Cuál es la representación binaria del número decimal 13?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1011"
+        },
+        {
+          "id": "b",
+          "text": "1110"
+        },
+        {
+          "id": "c",
+          "text": "1001"
+        },
+        {
+          "id": "d",
+          "text": "1101"
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "13 = 8 + 4 + 1, por lo que los bits de pesos 8, 4 y 1 están activos: 1101. Añadir ceros a la izquierda no cambia el valor.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-009",
+      "topic": "T02",
+      "difficulty": "aplicacion",
+      "prompt": "¿A qué valor decimal equivale 2F en hexadecimal?",
+      "options": [
+        {
+          "id": "a",
+          "text": "47"
+        },
+        {
+          "id": "b",
+          "text": "32"
+        },
+        {
+          "id": "c",
+          "text": "215"
+        },
+        {
+          "id": "d",
+          "text": "31"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "En hexadecimal, F vale 15. Por tanto, 0x2F = 2 × 16 + 15 = 47. El prefijo 0x indica la base, no forma parte del valor.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-010",
+      "topic": "T02",
+      "difficulty": "aplicacion",
+      "prompt": "¿A qué valor decimal equivale el número octal 17?",
+      "options": [
+        {
+          "id": "a",
+          "text": "9"
+        },
+        {
+          "id": "b",
+          "text": "15"
+        },
+        {
+          "id": "c",
+          "text": "17"
+        },
+        {
+          "id": "d",
+          "text": "23"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "En base ocho, 17 representa 1 × 8 + 7 = 15. Cada posición utiliza una potencia de ocho y los dígitos válidos van de 0 a 7.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-011",
+      "topic": "T02",
+      "difficulty": "basico",
+      "prompt": "¿Cuántos bits contiene un byte en los sistemas estudiados?",
+      "options": [
+        {
+          "id": "a",
+          "text": "16"
+        },
+        {
+          "id": "b",
+          "text": "1024"
+        },
+        {
+          "id": "c",
+          "text": "8"
+        },
+        {
+          "id": "d",
+          "text": "2"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Un byte tiene ocho bits. Un bit admite dos valores, de modo que ocho bits permiten representar 256 combinaciones distintas.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-012",
+      "topic": "T02",
+      "difficulty": "basico",
+      "prompt": "¿Cuántos bytes contiene exactamente 1 KiB?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1000"
+        },
+        {
+          "id": "b",
+          "text": "1000000"
+        },
+        {
+          "id": "c",
+          "text": "8192"
+        },
+        {
+          "id": "d",
+          "text": "1024"
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "KiB utiliza el prefijo binario kibi: 2 elevado a 10 bytes, es decir, 1024. kB utiliza el prefijo decimal kilo: 1000 bytes.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-013",
+      "topic": "T02",
+      "difficulty": "intermedio",
+      "prompt": "¿Cuál es el máximo entero sin signo representable con 8 bits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "255"
+        },
+        {
+          "id": "b",
+          "text": "256"
+        },
+        {
+          "id": "c",
+          "text": "127"
+        },
+        {
+          "id": "d",
+          "text": "128"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Hay 2 elevado a 8 combinaciones. Al reservar una para cero, el intervalo sin signo es de 0 a 255 inclusive.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-014",
+      "topic": "T02",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué intervalo representa un entero de 8 bits en complemento a dos?",
+      "options": [
+        {
+          "id": "a",
+          "text": "De −256 a 255."
+        },
+        {
+          "id": "b",
+          "text": "De −128 a 127."
+        },
+        {
+          "id": "c",
+          "text": "De −127 a 127."
+        },
+        {
+          "id": "d",
+          "text": "De 0 a 255."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Para n bits en complemento a dos, el intervalo es de −2^(n−1) a 2^(n−1)−1. Con ocho bits incluye −128 y 127, y existe una sola representación de cero.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-015",
+      "topic": "T02",
+      "difficulty": "aplicacion",
+      "prompt": "¿Qué resultado da 1011 + 0110 en binario, conservando todos los bits necesarios?",
+      "options": [
+        {
+          "id": "a",
+          "text": "10101"
+        },
+        {
+          "id": "b",
+          "text": "10010"
+        },
+        {
+          "id": "c",
+          "text": "10001"
+        },
+        {
+          "id": "d",
+          "text": "1111"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "1011 equivale a 11 y 0110 a 6. Su suma es 17, representada por 10001; hacen falta cinco bits. No debe descartarse el acarreo sin indicarlo.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-016",
+      "topic": "T02",
+      "difficulty": "aplicacion",
+      "prompt": "En aritmética sin signo de 8 bits que descarta el acarreo, ¿qué sucede al sumar 255 + 1?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Se almacena 256 sin necesitar un bit adicional."
+        },
+        {
+          "id": "b",
+          "text": "Se almacena −1 como resultado sin signo."
+        },
+        {
+          "id": "c",
+          "text": "Se conservan automáticamente nueve bits dentro del mismo byte."
+        },
+        {
+          "id": "d",
+          "text": "Se almacena 0 y se produce un acarreo fuera de los ocho bits."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "El resultado completo es 256 (100000000 en binario). Al conservar solo los ocho bits inferiores queda cero. Esta pregunta define aritmética modular; otros lenguajes o tipos pueden detectar el desbordamiento o ampliar precisión.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-017",
+      "topic": "T02",
+      "difficulty": "basico",
+      "prompt": "¿Cuántos dígitos hexadecimales bastan para representar exactamente un byte?",
+      "options": [
+        {
+          "id": "a",
+          "text": "2"
+        },
+        {
+          "id": "b",
+          "text": "1"
+        },
+        {
+          "id": "c",
+          "text": "4"
+        },
+        {
+          "id": "d",
+          "text": "8"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Un dígito hexadecimal representa cuatro bits. Dos dígitos cubren los ocho bits de un byte, desde 00 hasta FF.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-018",
+      "topic": "T02",
+      "difficulty": "aplicacion",
+      "prompt": "Un enlace entrega 80 Mbit/s. Sin sobrecargas y usando prefijos decimales, ¿cuál es su caudal en MB/s?",
+      "options": [
+        {
+          "id": "a",
+          "text": "8 MB/s."
+        },
+        {
+          "id": "b",
+          "text": "10 MB/s."
+        },
+        {
+          "id": "c",
+          "text": "80 MB/s."
+        },
+        {
+          "id": "d",
+          "text": "640 MB/s."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Se divide entre ocho bits por byte: 80 millones de bits por segundo equivalen a 10 millones de bytes por segundo. Protocolos y otras limitaciones reducen el caudal útil real.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-019",
+      "topic": "T03",
+      "difficulty": "basico",
+      "prompt": "¿Cuántos bits utiliza el código ASCII original para representar un carácter?",
+      "options": [
+        {
+          "id": "a",
+          "text": "16"
+        },
+        {
+          "id": "b",
+          "text": "32"
+        },
+        {
+          "id": "c",
+          "text": "7"
+        },
+        {
+          "id": "d",
+          "text": "8 obligatoriamente, con 256 caracteres originales."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "ASCII original define 128 valores, representables con siete bits. Suele almacenarse en bytes; las extensiones de ocho bits no son todas una única tabla universal.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-020",
+      "topic": "T03",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué diferencia a Unicode de UTF-8?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Unicode es un sistema operativo y UTF-8 una aplicación."
+        },
+        {
+          "id": "b",
+          "text": "UTF-8 asigna exactamente ocho bytes a cada carácter."
+        },
+        {
+          "id": "c",
+          "text": "Unicode solo incluye letras latinas sin acentos."
+        },
+        {
+          "id": "d",
+          "text": "Unicode define caracteres y puntos de código; UTF-8 define una manera de codificarlos en bytes."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Unicode establece un repertorio y propiedades de caracteres. UTF-8 representa sus puntos de código mediante secuencias de uno a cuatro bytes; carácter visible, punto de código y byte no son equivalentes.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-021",
+      "topic": "T03",
+      "difficulty": "aplicacion",
+      "prompt": "¿Cuántos bytes ocupa el texto literal A€ en UTF-8, sin BOM ni salto de línea?",
+      "options": [
+        {
+          "id": "a",
+          "text": "4"
+        },
+        {
+          "id": "b",
+          "text": "2"
+        },
+        {
+          "id": "c",
+          "text": "3"
+        },
+        {
+          "id": "d",
+          "text": "8"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "A utiliza un byte en UTF-8 y el símbolo € utiliza tres (E2 82 AC). La secuencia ocupa cuatro bytes, aunque contenga dos puntos de código.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-022",
+      "topic": "T03",
+      "difficulty": "aplicacion",
+      "prompt": "Una imagen RGB sin comprimir mide 640 × 480 píxeles y utiliza 8 bits por canal, sin alfa ni cabeceras. ¿Cuántos bytes ocupa?",
+      "options": [
+        {
+          "id": "a",
+          "text": "7372800"
+        },
+        {
+          "id": "b",
+          "text": "921600"
+        },
+        {
+          "id": "c",
+          "text": "307200"
+        },
+        {
+          "id": "d",
+          "text": "2457600"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Cada píxel tiene tres canales de un byte: 640 × 480 × 3 = 921600 bytes. Las cabeceras, alineación, metadatos o compresión pueden cambiar el tamaño de un archivo real.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-023",
+      "topic": "T03",
+      "difficulty": "basico",
+      "prompt": "¿Qué expresa la profundidad de color de una imagen?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El número de segundos del archivo de imagen."
+        },
+        {
+          "id": "b",
+          "text": "La contraseña necesaria para abrir la fotografía."
+        },
+        {
+          "id": "c",
+          "text": "Cuántos bits se utilizan para representar el color de sus muestras o píxeles, según el formato."
+        },
+        {
+          "id": "d",
+          "text": "La longitud física del cable de pantalla."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Más bits permiten más niveles representables, pero no garantizan por sí solos más resolución espacial ni mejor captura. Hay que precisar si la profundidad se da por canal o por píxel.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-024",
+      "topic": "T03",
+      "difficulty": "basico",
+      "prompt": "En audio PCM, ¿qué indica una frecuencia de muestreo de 48000 Hz?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cada muestra ocupa 48000 bytes."
+        },
+        {
+          "id": "b",
+          "text": "El archivo dura necesariamente 48000 segundos."
+        },
+        {
+          "id": "c",
+          "text": "El sonido tiene exactamente 48000 canales."
+        },
+        {
+          "id": "d",
+          "text": "Se toman 48000 muestras por segundo y por canal."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "La frecuencia de muestreo es el número de muestras temporales por segundo. La profundidad de bits y el número de canales son parámetros diferentes que también afectan al tamaño.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-025",
+      "topic": "T03",
+      "difficulty": "aplicacion",
+      "prompt": "¿Qué tamaño tiene un segundo de audio PCM estéreo a 44100 muestras/s y 16 bits por muestra, sin cabeceras?",
+      "options": [
+        {
+          "id": "a",
+          "text": "176400 bytes."
+        },
+        {
+          "id": "b",
+          "text": "88200 bytes."
+        },
+        {
+          "id": "c",
+          "text": "1411200 bytes."
+        },
+        {
+          "id": "d",
+          "text": "44100 bytes."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "El cálculo es 44100 × 2 canales × 16 bits ÷ 8 = 176400 bytes por segundo. 1411200 sería el número de bits, no de bytes.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-026",
+      "topic": "T03",
+      "difficulty": "basico",
+      "prompt": "¿Qué propiedad define una compresión sin pérdida?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Oculta necesariamente los datos mediante una clave secreta."
+        },
+        {
+          "id": "b",
+          "text": "Permite recuperar exactamente los datos originales al descomprimir."
+        },
+        {
+          "id": "c",
+          "text": "Garantiza que cualquier archivo ocupe menos que antes."
+        },
+        {
+          "id": "d",
+          "text": "Elimina detalles que se consideran poco perceptibles."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "La compresión sin pérdida es reversible. No todos los datos se comprimen bien: algunos pueden aumentar ligeramente por las cabeceras. Comprimir y cifrar resuelven problemas diferentes.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-027",
+      "topic": "T03",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué sucede normalmente al guardar repetidamente una imagen con un método de compresión con pérdida?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El archivo se convierte automáticamente en una copia de seguridad completa."
+        },
+        {
+          "id": "b",
+          "text": "La imagen queda cifrada sin necesidad de clave."
+        },
+        {
+          "id": "c",
+          "text": "Las recodificaciones pueden acumular pérdida de información respecto al original."
+        },
+        {
+          "id": "d",
+          "text": "Se recuperan de forma garantizada los detalles descartados en el primer guardado."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Un método con pérdida descarta información. Una nueva recodificación puede añadir degradación; conservar el original y evitar recodificaciones innecesarias facilita el control de calidad.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-028",
+      "topic": "T03",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué diferencia existe entre un contenedor multimedia y un códec?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El contenedor siempre es un dispositivo físico y el códec siempre es un cable."
+        },
+        {
+          "id": "b",
+          "text": "Ambos términos significan necesariamente cifrado de vídeo."
+        },
+        {
+          "id": "c",
+          "text": "La extensión del contenedor garantiza un único códec en todos los archivos."
+        },
+        {
+          "id": "d",
+          "text": "El contenedor organiza pistas y metadatos; el códec codifica y decodifica el contenido."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Un contenedor como MP4 puede incluir pistas codificadas mediante diferentes códecs compatibles. Contenedor, códec, resolución y tasa de bits son dimensiones distintas.",
+      "study": {
+        "label": "D41 · Representación y codificación",
+        "url": "../#/recurso/D41"
+      }
+    },
+    {
+      "id": "INF-029",
+      "topic": "T04",
+      "difficulty": "basico",
+      "prompt": "¿Cuándo devuelve 1 la operación lógica A AND B?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Solo cuando A y B valen 1."
+        },
+        {
+          "id": "b",
+          "text": "Cuando al menos una entrada vale 1."
+        },
+        {
+          "id": "c",
+          "text": "Solo cuando ambas entradas valen 0."
+        },
+        {
+          "id": "d",
+          "text": "Siempre que las entradas sean distintas."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "AND representa conjunción. Para las entradas 00, 01, 10 y 11 sus salidas son 0, 0, 0 y 1.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-030",
+      "topic": "T04",
+      "difficulty": "basico",
+      "prompt": "¿Cuándo devuelve 1 la operación lógica A OR B?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Solo cuando A vale 1 y B vale 0."
+        },
+        {
+          "id": "b",
+          "text": "Cuando al menos una de las dos entradas vale 1."
+        },
+        {
+          "id": "c",
+          "text": "Solo cuando ambas entradas valen 0."
+        },
+        {
+          "id": "d",
+          "text": "Solo cuando las entradas son diferentes."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "OR inclusiva acepta una o ambas entradas verdaderas. En particular, 1 OR 1 también es 1; eso la distingue de XOR.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-031",
+      "topic": "T04",
+      "difficulty": "basico",
+      "prompt": "¿Qué resultado produce NOT 0?",
+      "options": [
+        {
+          "id": "a",
+          "text": "2"
+        },
+        {
+          "id": "b",
+          "text": "Depende del nombre de la variable."
+        },
+        {
+          "id": "c",
+          "text": "1"
+        },
+        {
+          "id": "d",
+          "text": "0"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "La negación lógica invierte el valor booleano: NOT 0 = 1 y NOT 1 = 0. Aquí trabajamos con valores booleanos, no con complementos de enteros de varios bits.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-032",
+      "topic": "T04",
+      "difficulty": "basico",
+      "prompt": "¿Qué resultado produce 1 XOR 1?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1"
+        },
+        {
+          "id": "b",
+          "text": "2"
+        },
+        {
+          "id": "c",
+          "text": "No está definido."
+        },
+        {
+          "id": "d",
+          "text": "0"
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "XOR devuelve 1 cuando sus dos entradas son diferentes. Con dos unos devuelve cero; OR inclusiva devolvería uno.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-033",
+      "topic": "T04",
+      "difficulty": "intermedio",
+      "prompt": "Según una ley de De Morgan, ¿a qué equivale NOT (A AND B)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "(NOT A) OR (NOT B)."
+        },
+        {
+          "id": "b",
+          "text": "(NOT A) AND (NOT B)."
+        },
+        {
+          "id": "c",
+          "text": "A OR B."
+        },
+        {
+          "id": "d",
+          "text": "A AND (NOT B)."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Negar una conjunción equivale a disyuntar las negaciones. Puede comprobarse en las cuatro filas de la tabla de verdad, sin asumir que un único ejemplo demuestra equivalencia.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-034",
+      "topic": "T04",
+      "difficulty": "aplicacion",
+      "prompt": "¿Cuántas filas tiene una tabla de verdad completa de tres entradas booleanas?",
+      "options": [
+        {
+          "id": "a",
+          "text": "9"
+        },
+        {
+          "id": "b",
+          "text": "8"
+        },
+        {
+          "id": "c",
+          "text": "3"
+        },
+        {
+          "id": "d",
+          "text": "6"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Cada entrada admite dos valores independientes, por lo que hay 2 × 2 × 2 = 8 combinaciones. En general, n entradas requieren 2^n filas.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-035",
+      "topic": "T04",
+      "difficulty": "basico",
+      "prompt": "¿Qué caracteriza a un circuito combinacional?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Solo puede construirse con dispositivos mecánicos."
+        },
+        {
+          "id": "b",
+          "text": "Debe tener un sistema operativo para funcionar."
+        },
+        {
+          "id": "c",
+          "text": "Su salida lógica depende de las entradas actuales, sin estado interno almacenado."
+        },
+        {
+          "id": "d",
+          "text": "Su salida depende necesariamente de un historial guardado en memoria."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "El modelo combinacional calcula salidas a partir de entradas presentes. Un circuito secuencial incorpora estado; en circuitos reales también se consideran retardos de propagación.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-036",
+      "topic": "T04",
+      "difficulty": "basico",
+      "prompt": "¿Cuál es la función básica de un biestable o flip-flop?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Convertir siempre cuatro bits en un carácter Unicode."
+        },
+        {
+          "id": "b",
+          "text": "Resolver nombres DNS."
+        },
+        {
+          "id": "c",
+          "text": "Comprimir archivos de cualquier tamaño sin pérdida."
+        },
+        {
+          "id": "d",
+          "text": "Almacenar un bit de estado."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Un biestable mantiene uno de dos estados. Es un elemento básico de circuitos secuenciales y registros; la forma de actualizarlo depende del diseño y de sus señales de control.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-037",
+      "topic": "T04",
+      "difficulty": "intermedio",
+      "prompt": "¿Por qué NAND se denomina puerta universal?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque combinando puertas NAND se pueden construir las demás funciones booleanas."
+        },
+        {
+          "id": "b",
+          "text": "Porque siempre devuelve 1, independientemente de las entradas."
+        },
+        {
+          "id": "c",
+          "text": "Porque reemplaza físicamente toda la memoria de un ordenador."
+        },
+        {
+          "id": "d",
+          "text": "Porque cifra automáticamente cualquier dato que la atraviese."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "NAND permite construir NOT, AND y OR mediante composiciones, y con ellas cualquier función booleana finita. Universal no significa que una sola puerta sustituya un sistema completo.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-038",
+      "topic": "T04",
+      "difficulty": "aplicacion",
+      "prompt": "Una regla permite acceso si (credencial válida AND MFA válido) AND NOT bloqueado. Con valores 1, 1 y 1 respectivamente, ¿se permite?",
+      "options": [
+        {
+          "id": "a",
+          "text": "No se puede evaluar una expresión con tres variables."
+        },
+        {
+          "id": "b",
+          "text": "No: NOT bloqueado vale 0 y la conjunción final es falsa."
+        },
+        {
+          "id": "c",
+          "text": "Sí: basta con que la credencial sea válida."
+        },
+        {
+          "id": "d",
+          "text": "Sí: MFA ignora cualquier otra condición."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Primero 1 AND 1 = 1. Como bloqueado vale 1, NOT bloqueado = 0. Finalmente 1 AND 0 = 0. Una regla booleana simplificada ayuda a revisar políticas, aunque un sistema real tenga más condiciones.",
+      "study": {
+        "label": "D42 · Lógica digital y Boole",
+        "url": "../#/recurso/D42"
+      }
+    },
+    {
+      "id": "INF-039",
+      "topic": "T05",
+      "difficulty": "basico",
+      "prompt": "¿Qué distingue al modelo clásico de von Neumann del modelo Harvard clásico?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Harvard exige que el programa llegue siempre por Internet."
+        },
+        {
+          "id": "b",
+          "text": "Ambos modelos se distinguen únicamente por la marca comercial de la CPU."
+        },
+        {
+          "id": "c",
+          "text": "Von Neumann comparte memoria para instrucciones y datos; Harvard los separa."
+        },
+        {
+          "id": "d",
+          "text": "Von Neumann no puede ejecutar programas almacenados."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "La distinción clásica se refiere a memoria y caminos de acceso de instrucciones y datos. Procesadores reales pueden combinar aspectos de ambos, por ejemplo mediante cachés separadas.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-040",
+      "topic": "T05",
+      "difficulty": "basico",
+      "prompt": "¿Qué secuencia resume el ciclo básico de una instrucción?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cifrar el disco, resolver DNS y apagar."
+        },
+        {
+          "id": "b",
+          "text": "Ejecutar antes de conocer la instrucción y después almacenarla siempre en ROM."
+        },
+        {
+          "id": "c",
+          "text": "Compilar cada instrucción desde código fuente en todas las CPUs."
+        },
+        {
+          "id": "d",
+          "text": "Buscar la instrucción, decodificarla y ejecutarla."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Fetch, decode y execute describen el modelo básico. Una CPU moderna puede solapar etapas y ejecutar fuera de orden, manteniendo el comportamiento exigido por su arquitectura.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-041",
+      "topic": "T05",
+      "difficulty": "basico",
+      "prompt": "¿Qué guarda normalmente el contador de programa (PC) en el modelo básico?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La dirección de la siguiente instrucción que debe buscarse, según la arquitectura."
+        },
+        {
+          "id": "b",
+          "text": "El número de personas conectadas al ordenador."
+        },
+        {
+          "id": "c",
+          "text": "La contraseña del administrador."
+        },
+        {
+          "id": "d",
+          "text": "La capacidad total del disco en gigabytes."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "El PC participa en el control del flujo de instrucciones. Saltos, llamadas e interrupciones alteran ese flujo de acuerdo con la arquitectura; no debe confundirse con un contador de usuarios.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-042",
+      "topic": "T05",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué es la ISA de un procesador?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El sistema de facturación del proveedor cloud."
+        },
+        {
+          "id": "b",
+          "text": "El conjunto y comportamiento de las instrucciones visibles para el software."
+        },
+        {
+          "id": "c",
+          "text": "La interfaz gráfica del sistema operativo."
+        },
+        {
+          "id": "d",
+          "text": "El tamaño físico de la placa base."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "La arquitectura del conjunto de instrucciones define la interfaz de máquina que utiliza el software. No es lo mismo que la microarquitectura interna que implementa esa ISA.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-043",
+      "topic": "T05",
+      "difficulty": "basico",
+      "prompt": "¿Qué función corresponde principalmente a la ALU?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Asignar direcciones DNS a páginas web."
+        },
+        {
+          "id": "b",
+          "text": "Sustituir todos los dispositivos de entrada/salida."
+        },
+        {
+          "id": "c",
+          "text": "Realizar operaciones aritméticas y lógicas."
+        },
+        {
+          "id": "d",
+          "text": "Guardar archivos de usuario de forma permanente."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "La unidad aritmético-lógica opera sobre datos de acuerdo con las instrucciones. Otras unidades controlan el flujo, acceden a memoria o realizan funciones especializadas.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-044",
+      "topic": "T05",
+      "difficulty": "aplicacion",
+      "prompt": "Dos CPUs distintas anuncian 3 GHz. ¿Qué conclusión es válida sobre su rendimiento?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tendrán necesariamente el mismo rendimiento en todas las tareas."
+        },
+        {
+          "id": "b",
+          "text": "La que tenga menos memoria será siempre más rápida."
+        },
+        {
+          "id": "c",
+          "text": "La igualdad de frecuencia garantiza compatibilidad de todos los binarios."
+        },
+        {
+          "id": "d",
+          "text": "La frecuencia por sí sola no determina cuál ejecutará más rápido una carga concreta."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Intervienen instrucciones por ciclo, núcleos, memoria, caché, límites térmicos, arquitectura y carga. La compatibilidad binaria tampoco se deduce solo de los GHz.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-045",
+      "topic": "T05",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué afirma correctamente la relación entre un núcleo físico y un hilo de software?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Un núcleo puede ejecutar distintos hilos en el tiempo; un hilo no es necesariamente un núcleo físico."
+        },
+        {
+          "id": "b",
+          "text": "Crear un hilo nuevo añade un núcleo físico a la CPU."
+        },
+        {
+          "id": "c",
+          "text": "Todo proceso tiene exactamente tantos hilos como núcleos físicos."
+        },
+        {
+          "id": "d",
+          "text": "Un hilo solo puede existir en un programa conectado a Internet."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Los hilos son unidades de ejecución de software que el sistema planifica. Paralelismo físico, concurrencia y multihilo de hardware están relacionados, pero son conceptos diferentes.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-046",
+      "topic": "T05",
+      "difficulty": "aplicacion",
+      "prompt": "¿Por qué un binario para una ISA puede no ejecutarse directamente en otra?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque una extensión .exe obliga siempre a usar el mismo tipo de CPU."
+        },
+        {
+          "id": "b",
+          "text": "Porque las instrucciones de máquina y convenciones de ejecución pueden ser diferentes."
+        },
+        {
+          "id": "c",
+          "text": "Porque todos los binarios tienen una fecha de caducidad universal."
+        },
+        {
+          "id": "d",
+          "text": "Porque cambiar el nombre del archivo cambia automáticamente su ISA."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "ISA, formato de ejecutable, ABI y sistema operativo condicionan compatibilidad. Puede necesitarse recompilación, traducción o emulación; renombrar el archivo no transforma sus instrucciones.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-047",
+      "topic": "T06",
+      "difficulty": "basico",
+      "prompt": "¿Qué orden representa normalmente una jerarquía de menor a mayor latencia de acceso?",
+      "options": [
+        {
+          "id": "a",
+          "text": "RAM, almacenamiento secundario, registros, caché."
+        },
+        {
+          "id": "b",
+          "text": "Registros, almacenamiento secundario, RAM, caché."
+        },
+        {
+          "id": "c",
+          "text": "Registros, caché, RAM, almacenamiento secundario."
+        },
+        {
+          "id": "d",
+          "text": "Almacenamiento secundario, RAM, caché, registros."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Registros y cachés acercan datos a la CPU. La jerarquía equilibra capacidad, coste y latencia; los valores exactos dependen del sistema y del patrón de acceso.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-048",
+      "topic": "T06",
+      "difficulty": "basico",
+      "prompt": "¿Qué implica que la RAM convencional sea volátil?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que solo puede almacenar números, nunca programas."
+        },
+        {
+          "id": "b",
+          "text": "Que conserva todos los datos indefinidamente al apagar."
+        },
+        {
+          "id": "c",
+          "text": "Que no admite lecturas simultáneas de distintos procesos."
+        },
+        {
+          "id": "d",
+          "text": "Que necesita alimentación para mantener sus datos."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "La RAM convencional pierde su contenido al cesar la alimentación. La persistencia exige otros medios; suspender, hibernar y apagar no tienen el mismo comportamiento.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-049",
+      "topic": "T06",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué afirmación sobre ROM y memorias usadas para firmware es adecuada?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La ROM es no volátil; mucho firmware actual reside en memoria flash reprogramable."
+        },
+        {
+          "id": "b",
+          "text": "Todo firmware actual está grabado en una ROM imposible de actualizar."
+        },
+        {
+          "id": "c",
+          "text": "ROM es otro nombre para la memoria RAM de los procesos."
+        },
+        {
+          "id": "d",
+          "text": "Actualizar firmware solo modifica un archivo temporal del navegador."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "La distinción importante es volatilidad y capacidad de escritura. ROM tiene variantes históricas y la flash permite actualizar firmware bajo mecanismos concretos; no debe afirmarse que todo firmware es inmutable.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-050",
+      "topic": "T06",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué aprovecha principalmente una caché de CPU?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que cada dato se utiliza exactamente una vez."
+        },
+        {
+          "id": "b",
+          "text": "La localidad temporal y espacial de los accesos."
+        },
+        {
+          "id": "c",
+          "text": "Que todos los archivos de usuario están cifrados."
+        },
+        {
+          "id": "d",
+          "text": "Que la red siempre es más rápida que los registros."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Los datos e instrucciones usados recientemente pueden volver a usarse, y los cercanos pueden solicitarse después. La caché reduce accesos a niveles más lentos cuando existe esa localidad.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-051",
+      "topic": "T06",
+      "difficulty": "basico",
+      "prompt": "¿Qué distingue principalmente a un SSD de un HDD?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Todo SSD necesita un disco giratorio para funcionar."
+        },
+        {
+          "id": "b",
+          "text": "Un HDD siempre es más rápido en cualquier carga que cualquier SSD."
+        },
+        {
+          "id": "c",
+          "text": "El SSD almacena en memoria de estado sólido; el HDD utiliza platos magnéticos y mecanismos móviles."
+        },
+        {
+          "id": "d",
+          "text": "SSD y HDD describen dos versiones del mismo protocolo de red."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Los mecanismos físicos explican diferencias de latencia, ruido y resistencia a movimiento. El rendimiento concreto depende del dispositivo, interfaz y carga, no solo de su categoría.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-052",
+      "topic": "T06",
+      "difficulty": "basico",
+      "prompt": "¿Qué describe NVMe?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Un tipo de archivo de texto."
+        },
+        {
+          "id": "b",
+          "text": "El nombre de toda memoria RAM instalada en el sistema."
+        },
+        {
+          "id": "c",
+          "text": "Una garantía de copia de seguridad automática."
+        },
+        {
+          "id": "d",
+          "text": "Un protocolo de acceso a almacenamiento no volátil, habitualmente sobre PCIe."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "SSD describe una tecnología de almacenamiento; NVMe describe un protocolo. Forma física, protocolo, capacidad y rendimiento deben identificarse por separado.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-053",
+      "topic": "T06",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué diferencia típica existe entre un NAS y una SAN?",
+      "options": [
+        {
+          "id": "a",
+          "text": "NAS ofrece acceso a archivos; una SAN proporciona acceso a almacenamiento por bloques."
+        },
+        {
+          "id": "b",
+          "text": "NAS cifra siempre y SAN nunca puede cifrar."
+        },
+        {
+          "id": "c",
+          "text": "Una SAN es necesariamente un único archivo compartido por HTTP."
+        },
+        {
+          "id": "d",
+          "text": "NAS y SAN son dos nombres del mismo puerto físico."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "NAS suele exponer sistemas de archivos mediante protocolos como SMB o NFS. Una SAN entrega volúmenes de bloques a hosts. El diseño concreto puede combinar capacidades.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-054",
+      "topic": "T06",
+      "difficulty": "aplicacion",
+      "prompt": "Descargas una imagen y comparas su SHA-256 con el publicado por una fuente auténtica. ¿Qué estás comprobando?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que el archivo está cifrado y nadie puede leerlo."
+        },
+        {
+          "id": "b",
+          "text": "Que los bytes descargados coinciden con los asociados al resumen de referencia."
+        },
+        {
+          "id": "c",
+          "text": "Que el programa es necesariamente seguro y no contiene vulnerabilidades."
+        },
+        {
+          "id": "d",
+          "text": "Que el fabricante nunca ha sufrido un incidente."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Un hash permite comprobar integridad frente a una referencia confiable. No demuestra por sí solo que el contenido sea benigno; si un atacante puede sustituir archivo y hash en la misma fuente, la comprobación pierde esa confianza.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-055",
+      "topic": "T06",
+      "difficulty": "aplicacion",
+      "prompt": "¿Por qué disponer de RAID no sustituye a una copia de seguridad?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque una copia de seguridad solo sirve para mejorar la frecuencia de CPU."
+        },
+        {
+          "id": "b",
+          "text": "Porque RAID convierte los datos en instrucciones de máquina."
+        },
+        {
+          "id": "c",
+          "text": "Porque una eliminación o corrupción puede afectar a todos los miembros y RAID no conserva necesariamente versiones recuperables."
+        },
+        {
+          "id": "d",
+          "text": "Porque RAID impide leer cualquier archivo del sistema."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "RAID puede mejorar tolerancia a fallos de dispositivos, según su nivel. Una copia añade una vía de recuperación frente a otros fallos y debe protegerse y probarse; disponibilidad e historial recuperable son distintos.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-056",
+      "topic": "T06",
+      "difficulty": "aplicacion",
+      "prompt": "¿Qué evidencia demuestra mejor que una estrategia de copias permite recuperar un servicio?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La existencia de una carpeta llamada backup."
+        },
+        {
+          "id": "b",
+          "text": "Que una tarea se ejecute sin revisar su resultado."
+        },
+        {
+          "id": "c",
+          "text": "Que el servidor disponga de mucha memoria RAM."
+        },
+        {
+          "id": "d",
+          "text": "Una restauración probada y documentada con verificación de datos y funcionamiento."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Crear una copia no demuestra que pueda restaurarse. Deben comprobarse contenido, acceso, integridad, claves necesarias y recuperación del servicio dentro de los objetivos acordados.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-057",
+      "topic": "T07",
+      "difficulty": "basico",
+      "prompt": "En el modelo clásico, ¿para qué sirve el bus de direcciones?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Para indicar qué posición o destino se quiere acceder."
+        },
+        {
+          "id": "b",
+          "text": "Para transportar exclusivamente datos de audio."
+        },
+        {
+          "id": "c",
+          "text": "Para almacenar permanentemente todas las contraseñas."
+        },
+        {
+          "id": "d",
+          "text": "Para decidir el nombre comercial del procesador."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "El modelo separa direcciones, datos y señales de control. En buses modernos las funciones pueden multiplexarse, pero la separación conceptual ayuda a explicar una transferencia.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-058",
+      "topic": "T07",
+      "difficulty": "basico",
+      "prompt": "¿Qué función corresponde al bus de control en el modelo básico?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Asignar licencias de software a la organización."
+        },
+        {
+          "id": "b",
+          "text": "Transportar señales que coordinan operaciones como lectura, escritura y sincronización."
+        },
+        {
+          "id": "c",
+          "text": "Almacenar la colección completa de archivos del usuario."
+        },
+        {
+          "id": "d",
+          "text": "Convertir automáticamente imágenes en texto."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Las señales de control coordinan cómo y cuándo ocurre una operación. Datos, dirección y control cumplen funciones distintas aunque el soporte físico no siempre sean tres buses separados.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-059",
+      "topic": "T07",
+      "difficulty": "basico",
+      "prompt": "¿Qué diferencia hay entre sondeo e interrupciones para atender un dispositivo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una interrupción implica necesariamente un ataque."
+        },
+        {
+          "id": "b",
+          "text": "El sondeo solo existe en redes y nunca en hardware."
+        },
+        {
+          "id": "c",
+          "text": "El sondeo consulta su estado repetidamente; una interrupción avisa al procesador de un evento."
+        },
+        {
+          "id": "d",
+          "text": "El sondeo elimina todos los controladores y la interrupción elimina la CPU."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "El sondeo o polling comprueba disponibilidad mediante consultas. Las interrupciones notifican eventos; ambos mecanismos tienen costes y usos, y pueden combinarse.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-060",
+      "topic": "T07",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué permite DMA?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Transferir datos sin ninguna memoria ni dispositivo."
+        },
+        {
+          "id": "b",
+          "text": "Evitar siempre toda intervención inicial o final de la CPU."
+        },
+        {
+          "id": "c",
+          "text": "Sustituir las copias de seguridad por una interrupción."
+        },
+        {
+          "id": "d",
+          "text": "Transferencias entre un dispositivo y memoria sin que la CPU copie explícitamente cada unidad de datos."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "La CPU y el controlador preparan la operación, pero no es necesario que la CPU copie cada byte. El acceso DMA exige aislamiento y control adecuados; una IOMMU puede restringirlo.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-061",
+      "topic": "T07",
+      "difficulty": "basico",
+      "prompt": "¿Cuál es la función de un controlador de dispositivo o driver?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permitir que el sistema operativo gestione un dispositivo mediante la interfaz correspondiente."
+        },
+        {
+          "id": "b",
+          "text": "Sustituir la licencia de cualquier aplicación."
+        },
+        {
+          "id": "c",
+          "text": "Almacenar obligatoriamente todos los documentos del usuario."
+        },
+        {
+          "id": "d",
+          "text": "Convertir todo puerto físico en un servidor web público."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "El driver traduce operaciones del sistema al dispositivo y gestiona sus eventos. Su compatibilidad y privilegios lo convierten en un componente importante de estabilidad y seguridad.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-062",
+      "topic": "T07",
+      "difficulty": "aplicacion",
+      "prompt": "Dos equipos tienen un conector USB-C. ¿Qué se puede concluir únicamente por su forma?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que el cable ofrece cualquier potencia sin límite."
+        },
+        {
+          "id": "b",
+          "text": "Que comparten forma de conector; hay que comprobar las funciones, velocidad y potencia soportadas."
+        },
+        {
+          "id": "c",
+          "text": "Que admiten obligatoriamente la misma velocidad máxima y vídeo."
+        },
+        {
+          "id": "d",
+          "text": "Que ambos ejecutan el mismo sistema operativo."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "USB-C identifica un conector. El protocolo, las funciones alternativas, las capacidades de carga y el cable condicionan qué se puede hacer realmente.",
+      "study": {
+        "label": "D43 · Arquitectura, memoria y entrada/salida",
+        "url": "../#/recurso/D43"
+      }
+    },
+    {
+      "id": "INF-063",
+      "topic": "T08",
+      "difficulty": "basico",
+      "prompt": "¿Cuál es una función esencial de un sistema operativo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reemplazar físicamente la CPU cuando está ocupada."
+        },
+        {
+          "id": "b",
+          "text": "Garantizar que ningún programa pueda contener errores."
+        },
+        {
+          "id": "c",
+          "text": "Gestionar recursos y ofrecer servicios y abstracciones a los programas."
+        },
+        {
+          "id": "d",
+          "text": "Convertir cualquier aplicación en una página web."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "El SO administra procesos, memoria, archivos, dispositivos y permisos. Ofrece abstracciones y aislamiento, pero no elimina automáticamente los fallos de aplicaciones o configuración.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-064",
+      "topic": "T08",
+      "difficulty": "basico",
+      "prompt": "¿Qué diferencia hay entre kernel y shell?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Kernel y shell son obligatoriamente el mismo proceso."
+        },
+        {
+          "id": "b",
+          "text": "La shell sustituye a la memoria física del ordenador."
+        },
+        {
+          "id": "c",
+          "text": "El kernel solo sirve para escribir scripts de usuario."
+        },
+        {
+          "id": "d",
+          "text": "El kernel gestiona funciones centrales del sistema; la shell interpreta órdenes e inicia programas."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Una shell como Bash, zsh o PowerShell proporciona una interfaz de órdenes. El kernel controla recursos y operaciones privilegiadas; una terminal y una shell tampoco son exactamente lo mismo.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-065",
+      "topic": "T08",
+      "difficulty": "basico",
+      "prompt": "¿Qué es un proceso?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una instancia de ejecución de un programa con estado y recursos asociados."
+        },
+        {
+          "id": "b",
+          "text": "Cualquier archivo de texto guardado en un disco, aunque no se ejecute."
+        },
+        {
+          "id": "c",
+          "text": "Un núcleo físico de CPU."
+        },
+        {
+          "id": "d",
+          "text": "Un dispositivo conectado por USB."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "El programa describe instrucciones; el proceso es su ejecución con identidad, memoria, recursos y estado. El mismo programa puede dar lugar a varios procesos.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-066",
+      "topic": "T08",
+      "difficulty": "aplicacion",
+      "prompt": "Un proceso está esperando que termine una operación de disco. ¿Qué estado describe normalmente esa situación?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Convertido en memoria ROM."
+        },
+        {
+          "id": "b",
+          "text": "Bloqueado o en espera."
+        },
+        {
+          "id": "c",
+          "text": "Ejecutando necesariamente instrucciones de CPU de forma continua."
+        },
+        {
+          "id": "d",
+          "text": "Terminado de forma definitiva."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Un proceso bloqueado espera un evento y no necesita ocupar la CPU mientras tanto. Cuando el evento llega puede pasar a preparado; preparado no significa que ya esté ejecutándose.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-067",
+      "topic": "T08",
+      "difficulty": "basico",
+      "prompt": "¿Qué decide un planificador de CPU?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Qué archivo constituye una licencia de software."
+        },
+        {
+          "id": "b",
+          "text": "Qué host de Internet es legal visitar."
+        },
+        {
+          "id": "c",
+          "text": "Qué tarea preparada obtiene tiempo de CPU de acuerdo con la política de planificación."
+        },
+        {
+          "id": "d",
+          "text": "Qué contraseña debe tener cada alumno."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "El planificador distribuye tiempo de ejecución y equilibra objetivos como respuesta, equidad y rendimiento. No todas las políticas garantizan las mismas propiedades.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-068",
+      "topic": "T08",
+      "difficulty": "aplicacion",
+      "prompt": "En Linux, ¿qué comando permite listar procesos con columnas detalladas?",
+      "options": [
+        {
+          "id": "a",
+          "text": "pwd"
+        },
+        {
+          "id": "b",
+          "text": "chmod 600 informe.txt"
+        },
+        {
+          "id": "c",
+          "text": "mkdir procesos"
+        },
+        {
+          "id": "d",
+          "text": "ps -ef"
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "ps -ef muestra procesos con un formato completo en los sistemas Linux del laboratorio. pwd muestra el directorio, chmod cambia permisos y mkdir crea directorios.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-069",
+      "topic": "T08",
+      "difficulty": "intermedio",
+      "prompt": "¿Cuál es una distinción correcta entre PowerShell y una shell centrada en texto?",
+      "options": [
+        {
+          "id": "a",
+          "text": "PowerShell puede encadenar objetos con propiedades entre sus cmdlets."
+        },
+        {
+          "id": "b",
+          "text": "PowerShell solo puede abrir archivos y nunca administrar procesos."
+        },
+        {
+          "id": "c",
+          "text": "PowerShell es el kernel de Windows."
+        },
+        {
+          "id": "d",
+          "text": "Toda salida de cualquier comando externo se convierte automáticamente en objetos con el mismo esquema."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Los cmdlets de PowerShell trabajan habitualmente con objetos. Los programas externos pueden seguir produciendo texto; no debe confundirse la shell con el kernel ni asumir que todos los comandos tienen el mismo modelo.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-070",
+      "topic": "T08",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué significa que un sistema embebido sea de tiempo real?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que necesita conexión permanente a una nube pública."
+        },
+        {
+          "id": "b",
+          "text": "Que la corrección incluye cumplir restricciones temporales especificadas."
+        },
+        {
+          "id": "c",
+          "text": "Que siempre es más rápido en promedio que un servidor de propósito general."
+        },
+        {
+          "id": "d",
+          "text": "Que debe usar una pantalla con reloj visible."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Tiempo real trata de plazos y previsibilidad. Un sistema puede ser rápido en promedio y aun así incumplir una fecha límite; embebido y tiempo real son características relacionadas pero no equivalentes.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-071",
+      "topic": "T09",
+      "difficulty": "basico",
+      "prompt": "¿Qué aporta la memoria virtual?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La eliminación de todos los fallos de memoria del programa."
+        },
+        {
+          "id": "b",
+          "text": "La obligación de almacenar todos los datos en Internet."
+        },
+        {
+          "id": "c",
+          "text": "Un espacio de direcciones abstracto por proceso y mecanismos de traducción y protección."
+        },
+        {
+          "id": "d",
+          "text": "Capacidad infinita de RAM física sin coste."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "La memoria virtual separa direcciones usadas por procesos de ubicaciones físicas y aplica protección. Puede apoyarse en almacenamiento, pero no convierte el disco en RAM de igual velocidad ni crea recursos ilimitados.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-072",
+      "topic": "T09",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué describe la paginación de memoria?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Numerar exclusivamente las páginas de un PDF."
+        },
+        {
+          "id": "b",
+          "text": "Duplicar cada archivo de usuario en todas las particiones."
+        },
+        {
+          "id": "c",
+          "text": "Asignar una CPU física diferente a cada byte."
+        },
+        {
+          "id": "d",
+          "text": "Dividir el espacio virtual en páginas y mapearlas a marcos de memoria física mediante tablas."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Las tablas de páginas relacionan direcciones virtuales y físicas y contienen atributos de acceso. El tamaño y organización dependen de la arquitectura y del sistema operativo.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-073",
+      "topic": "T09",
+      "difficulty": "aplicacion",
+      "prompt": "¿Un fallo de página demuestra siempre que el programa está averiado?",
+      "options": [
+        {
+          "id": "a",
+          "text": "No; puede activar un mecanismo normal para cargar o mapear una página válida."
+        },
+        {
+          "id": "b",
+          "text": "Sí; cualquier fallo de página destruye inmediatamente todos los archivos."
+        },
+        {
+          "id": "c",
+          "text": "Sí; significa que se ha producido necesariamente un ataque remoto."
+        },
+        {
+          "id": "d",
+          "text": "No; significa únicamente que el navegador no encontró una URL."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Algunos fallos de página son parte normal de la memoria virtual. Otros reflejan un acceso inválido o no permitido. Hay que interpretar causa y contexto antes de concluir que existe un error de aplicación.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-074",
+      "topic": "T09",
+      "difficulty": "basico",
+      "prompt": "¿Qué representa una ruta absoluta en un sistema Unix?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una ruta que concede automáticamente permisos de administrador."
+        },
+        {
+          "id": "b",
+          "text": "Una ruta que parte de la raíz del sistema de archivos, como /var/log."
+        },
+        {
+          "id": "c",
+          "text": "Una ruta que siempre depende del directorio actual, como ../datos."
+        },
+        {
+          "id": "d",
+          "text": "Una dirección que solo puede pertenecer a Internet."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Las rutas absolutas parten de /. Las relativas se interpretan desde un directorio de referencia. Conocer una ruta no concede autorización para leerla o modificarla.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-075",
+      "topic": "T09",
+      "difficulty": "intermedio",
+      "prompt": "En un sistema Unix típico, ¿qué relación hay entre un nombre de archivo y un inodo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cada nombre distinto obliga a almacenar una copia distinta de todos los datos."
+        },
+        {
+          "id": "b",
+          "text": "El inodo es una contraseña necesaria para abrir el archivo."
+        },
+        {
+          "id": "c",
+          "text": "Una entrada de directorio asocia el nombre con un inodo que describe el objeto y sus metadatos."
+        },
+        {
+          "id": "d",
+          "text": "El nombre del archivo es siempre su contenido completo."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Un directorio relaciona nombres con objetos del sistema de archivos. Varios enlaces duros pueden referirse al mismo inodo dentro de las condiciones del sistema; nombre, metadatos y contenido no son lo mismo.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-076",
+      "topic": "T09",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué objetivo tiene el journaling de un sistema de archivos?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Conservar indefinidamente todas las versiones de cada documento."
+        },
+        {
+          "id": "b",
+          "text": "Sustituir cualquier copia de seguridad externa."
+        },
+        {
+          "id": "c",
+          "text": "Cifrar automáticamente todos los nombres de usuario."
+        },
+        {
+          "id": "d",
+          "text": "Ayudar a recuperar coherencia tras interrupciones registrando operaciones según el modo utilizado."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "El journal facilita recuperación de coherencia de operaciones o metadatos según diseño y modo. No equivale a un historial de versiones ni garantiza recuperar cualquier dato eliminado.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-077",
+      "topic": "T09",
+      "difficulty": "aplicacion",
+      "prompt": "En Linux, con permisos POSIX clásicos y sin ACL adicional, ¿qué significa chmod 640 informe.txt?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Propietario: lectura y escritura; grupo: lectura; otros: sin permisos."
+        },
+        {
+          "id": "b",
+          "text": "Propietario: ejecución; grupo: lectura y escritura; otros: lectura."
+        },
+        {
+          "id": "c",
+          "text": "Todos pueden leer, escribir y ejecutar."
+        },
+        {
+          "id": "d",
+          "text": "Solo el grupo puede borrar cualquier archivo del sistema."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Los pesos son lectura 4, escritura 2 y ejecución 1. Así, 6 = 4 + 2, 4 = lectura y 0 = ningún permiso. El acceso efectivo puede depender además de directorios, ACL y controles adicionales.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-078",
+      "topic": "T09",
+      "difficulty": "aplicacion",
+      "prompt": "Para acceder a un archivo por su ruta en Unix, ¿qué permiso de directorio permite atravesar cada directorio del camino?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ninguno: conocer el nombre elimina los controles de acceso."
+        },
+        {
+          "id": "b",
+          "text": "Ejecución o búsqueda (x) en cada directorio necesario."
+        },
+        {
+          "id": "c",
+          "text": "Solo lectura (r) en el archivo final, aunque no pueda atravesarse ningún directorio."
+        },
+        {
+          "id": "d",
+          "text": "Escritura obligatoria en todos los archivos vecinos."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "En un directorio, x permite buscar o atravesar nombres. Leer la lista (r), modificar entradas (w) y atravesar (x) son capacidades distintas; también se necesitan los permisos aplicables al archivo final.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-079",
+      "topic": "T10",
+      "difficulty": "basico",
+      "prompt": "¿Qué distingue al software de sistema de una aplicación de usuario?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El software de sistema no puede contener errores."
+        },
+        {
+          "id": "b",
+          "text": "Toda aplicación funciona sin necesitar servicios del sistema."
+        },
+        {
+          "id": "c",
+          "text": "El software de sistema sostiene la operación del entorno; la aplicación realiza tareas para sus usuarios."
+        },
+        {
+          "id": "d",
+          "text": "La aplicación debe estar siempre escrita en binario y el software de sistema nunca."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Sistemas operativos, drivers y utilidades sostienen el entorno, mientras aplicaciones resuelven tareas de usuario. La frontera puede tener matices, pero no implica ausencia de fallos o dependencias.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-080",
+      "topic": "T10",
+      "difficulty": "basico",
+      "prompt": "¿Por qué software libre no equivale a software gratuito?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque el software libre no puede venderse en ninguna circunstancia."
+        },
+        {
+          "id": "b",
+          "text": "Porque cualquier programa descargable gratis permite modificar y redistribuir su código."
+        },
+        {
+          "id": "c",
+          "text": "Porque el software gratuito siempre publica todo su código fuente."
+        },
+        {
+          "id": "d",
+          "text": "Libre se refiere a libertades de uso, estudio, modificación y redistribución; el precio es otra cuestión."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Precio y permisos son dimensiones diferentes. Un programa puede cobrarse y conceder libertades, o ser gratuito y propietario; deben revisarse las condiciones de licencia.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-081",
+      "topic": "T10",
+      "difficulty": "aplicacion",
+      "prompt": "Encuentras un repositorio público sin una licencia de reutilización indicada. ¿Qué debes hacer antes de redistribuirlo en tu proyecto?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Revisar los derechos aplicables y obtener la autorización o licencia necesaria."
+        },
+        {
+          "id": "b",
+          "text": "Asumir que público significa automáticamente MIT."
+        },
+        {
+          "id": "c",
+          "text": "Eliminar el nombre del autor para convertirlo en software propio."
+        },
+        {
+          "id": "d",
+          "text": "Añadir por tu cuenta una licencia que conceda derechos sobre todo el contenido ajeno."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Poder consultar código no equivale a recibir permiso general de redistribución o explotación. Las condiciones del autor y de componentes de terceros deben verificarse; no se inventa una licencia por visibilidad pública.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-082",
+      "topic": "T10",
+      "difficulty": "basico",
+      "prompt": "¿Qué función cumple un gestor de paquetes?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sustituir todos los controles de copia y recuperación."
+        },
+        {
+          "id": "b",
+          "text": "Instalar, actualizar y resolver dependencias utilizando fuentes y metadatos configurados."
+        },
+        {
+          "id": "c",
+          "text": "Garantizar que cualquier paquete de cualquier origen es seguro."
+        },
+        {
+          "id": "d",
+          "text": "Eliminar la necesidad de revisar permisos y procedencia."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "El gestor automatiza dependencias y mantenimiento. Repositorios confiables, firmas cuando existan, versiones y revisión de cambios siguen siendo necesarios; automatización no es confianza absoluta.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-083",
+      "topic": "T10",
+      "difficulty": "aplicacion",
+      "prompt": "¿Qué enfoque es adecuado para aplicar un parche a un servicio del laboratorio?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Desactivar permanentemente todas las actualizaciones para evitar comprobarlas."
+        },
+        {
+          "id": "b",
+          "text": "Borrar las copias previas antes de validar la versión nueva."
+        },
+        {
+          "id": "c",
+          "text": "Revisar el cambio, preparar recuperación, aplicarlo en el entorno previsto y verificar el comportamiento."
+        },
+        {
+          "id": "d",
+          "text": "Aplicarlo y asumir éxito solo porque terminó la descarga."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Una actualización puede corregir fallos y también cambiar dependencias o comportamiento. Se documentan versión, resultado, comprobaciones y recuperación proporcionada al riesgo.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-084",
+      "topic": "T10",
+      "difficulty": "aplicacion",
+      "prompt": "¿Qué consigue un commit de Git en un repositorio local?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Publica necesariamente esos cambios en GitHub y en producción al mismo tiempo."
+        },
+        {
+          "id": "b",
+          "text": "Garantiza que el programa supera todas sus pruebas."
+        },
+        {
+          "id": "c",
+          "text": "Crea una copia externa aunque no exista ningún remoto configurado."
+        },
+        {
+          "id": "d",
+          "text": "Registra una instantánea versionada de los cambios preparados y su relación con el historial."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Un commit es una operación local de historial. Push, integración, pruebas y despliegue son pasos distintos; registrar código no demuestra que esté publicado ni funcionando.",
+      "study": {
+        "label": "D44 · Sistemas operativos y software",
+        "url": "../#/recurso/D44"
+      }
+    },
+    {
+      "id": "INF-085",
+      "topic": "T11",
+      "difficulty": "basico",
+      "prompt": "¿Qué diferencia general existe entre una dirección IP y un puerto de transporte?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La IP identifica una interfaz o destino lógico en una red; el puerto ayuda a distinguir servicios o comunicaciones de transporte."
+        },
+        {
+          "id": "b",
+          "text": "La IP es siempre el nombre de una persona y el puerto su contraseña."
+        },
+        {
+          "id": "c",
+          "text": "El puerto físico USB y un puerto TCP son necesariamente la misma cosa."
+        },
+        {
+          "id": "d",
+          "text": "Una dirección IP permite identificar de forma infalible a un usuario concreto."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "IP y puertos pertenecen a funciones distintas. NAT, direcciones dinámicas y sistemas compartidos impiden atribuir una persona solo por una IP; puerto lógico y conector físico tampoco son equivalentes.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-086",
+      "topic": "T11",
+      "difficulty": "basico",
+      "prompt": "¿Qué servicio suele proporcionar automáticamente dirección IP y otros parámetros de red a un equipo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "SSH."
+        },
+        {
+          "id": "b",
+          "text": "DHCP."
+        },
+        {
+          "id": "c",
+          "text": "DNS."
+        },
+        {
+          "id": "d",
+          "text": "HTTP."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "DHCP entrega parámetros de configuración, como dirección, puerta de enlace y resolutores, según el entorno. DNS resuelve nombres; son funciones distintas aunque la configuración DHCP pueda indicar servidores DNS.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-087",
+      "topic": "T11",
+      "difficulty": "aplicacion",
+      "prompt": "Una IP de servicio responde, pero su nombre de dominio no se resuelve. ¿Qué dependencia conviene comprobar primero?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El formato de compresión de las fotografías locales."
+        },
+        {
+          "id": "b",
+          "text": "La licencia del editor de texto."
+        },
+        {
+          "id": "c",
+          "text": "La resolución DNS y los resolutores configurados."
+        },
+        {
+          "id": "d",
+          "text": "El número de píxeles del monitor."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "La diferencia entre acceso por IP y fallo por nombre apunta a resolución, caché o configuración DNS. Es una hipótesis inicial que debe verificarse; no demuestra por sí sola que el servidor DNS sea malicioso.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-088",
+      "topic": "T11",
+      "difficulty": "basico",
+      "prompt": "¿Qué comparación entre TCP y UDP es correcta?",
+      "options": [
+        {
+          "id": "a",
+          "text": "UDP garantiza siempre que todos los mensajes lleguen ordenados."
+        },
+        {
+          "id": "b",
+          "text": "TCP cifra obligatoriamente toda la información que transporta."
+        },
+        {
+          "id": "c",
+          "text": "Las aplicaciones sobre UDP no pueden implementar mecanismos propios de fiabilidad."
+        },
+        {
+          "id": "d",
+          "text": "TCP ofrece un flujo ordenado con mecanismos de fiabilidad; UDP proporciona datagramas sin esas garantías de transporte."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Las garantías son de la capa de transporte. TCP no cifra por sí solo; una aplicación sobre UDP puede añadir fiabilidad o cifrado, como sucede en otros protocolos de nivel superior.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-089",
+      "topic": "T11",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué aporta HTTPS frente a HTTP cuando TLS se valida correctamente?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Protección de la conexión mediante cifrado, integridad y autenticación del servidor según el certificado."
+        },
+        {
+          "id": "b",
+          "text": "La garantía de que todos los contenidos y ofertas de la web son legítimos."
+        },
+        {
+          "id": "c",
+          "text": "La eliminación de vulnerabilidades en el navegador y el servidor."
+        },
+        {
+          "id": "d",
+          "text": "La imposibilidad de que el propio servidor trate indebidamente los datos recibidos."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "TLS protege la conexión y permite comprobar la identidad de servicio certificada. No evalúa honestidad comercial, ausencia de malware ni el tratamiento posterior de los datos por los extremos.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-090",
+      "topic": "T11",
+      "difficulty": "aplicacion",
+      "prompt": "Con máscara /24, ¿qué par de direcciones IPv4 pertenece a la misma subred?",
+      "options": [
+        {
+          "id": "a",
+          "text": "172.16.2.10 y 172.16.3.10."
+        },
+        {
+          "id": "b",
+          "text": "192.168.10.20 y 192.168.10.200."
+        },
+        {
+          "id": "c",
+          "text": "192.168.10.20 y 192.168.11.20."
+        },
+        {
+          "id": "d",
+          "text": "10.0.0.5 y 10.0.1.5."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Con /24 los primeros 24 bits identifican la red: los tres primeros octetos deben coincidir. Esta simplificación se aplica a la máscara indicada; con otro prefijo puede cambiar la agrupación.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-091",
+      "topic": "T11",
+      "difficulty": "basico",
+      "prompt": "¿Qué distinción entre firewall y VPN es correcta?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Un firewall solo sirve para comprimir paquetes."
+        },
+        {
+          "id": "b",
+          "text": "Activar una VPN elimina la necesidad de autenticar a los usuarios."
+        },
+        {
+          "id": "c",
+          "text": "Un firewall aplica reglas de tráfico; una VPN crea una conexión o túnel entre extremos según su diseño."
+        },
+        {
+          "id": "d",
+          "text": "Toda VPN reemplaza automáticamente las reglas de acceso y la protección del equipo."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Son controles con objetivos diferentes y pueden combinarse. Una VPN no sanea los extremos ni concede confianza ilimitada; el filtrado y la autorización siguen siendo necesarios.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-092",
+      "topic": "T11",
+      "difficulty": "aplicacion",
+      "prompt": "En una captura autorizada de tráfico HTTPS, ¿qué resultado es esperable sin disponer de las claves de sesión?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Leer siempre todas las contraseñas en texto claro."
+        },
+        {
+          "id": "b",
+          "text": "No observar absolutamente ningún paquete porque TLS oculta los cables."
+        },
+        {
+          "id": "c",
+          "text": "Obtener autorización para capturar cualquier red ajena."
+        },
+        {
+          "id": "d",
+          "text": "Observar metadatos de red y transporte, pero no leer directamente el contenido HTTP cifrado."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "El cifrado protege el contenido, pero no oculta necesariamente IPs, puertos, tamaños o tiempos. El análisis debe limitarse al laboratorio autorizado y no atribuir al cifrado protección de todos los metadatos.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-093",
+      "topic": "T12",
+      "difficulty": "basico",
+      "prompt": "¿Qué caracteriza normalmente a un hipervisor de tipo 1?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Gestiona máquinas virtuales directamente sobre el hardware, según su arquitectura."
+        },
+        {
+          "id": "b",
+          "text": "Es necesariamente una extensión dentro de un navegador."
+        },
+        {
+          "id": "c",
+          "text": "Solo ejecuta un archivo de texto y no sistemas invitados."
+        },
+        {
+          "id": "d",
+          "text": "Se define únicamente por ser gratuito."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "La distinción clásica separa hipervisores sobre hardware y soluciones alojadas sobre un SO. Implementaciones actuales tienen matices, pero licencia y precio no definen el tipo.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-094",
+      "topic": "T12",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué diferencia general existe entre un contenedor y una máquina virtual?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una VM no puede ejecutar aplicaciones de usuario."
+        },
+        {
+          "id": "b",
+          "text": "El contenedor comparte el kernel anfitrión de su entorno; una VM ejecuta su propio kernel invitado."
+        },
+        {
+          "id": "c",
+          "text": "Cada contenedor incluye obligatoriamente un kernel totalmente independiente."
+        },
+        {
+          "id": "d",
+          "text": "Un contenedor equivale siempre a una frontera de aislamiento idéntica a una VM."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Los contenedores aíslan procesos utilizando mecanismos del sistema anfitrión. En macOS o Windows, una herramienta puede ejecutar contenedores Linux dentro de una VM; eso no convierte cada contenedor en una VM propia.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-095",
+      "topic": "T12",
+      "difficulty": "basico",
+      "prompt": "¿Qué relación entre imagen y contenedor en Docker es correcta?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Modificar un contenedor actualiza automáticamente todas las imágenes del registro."
+        },
+        {
+          "id": "b",
+          "text": "Borrar un contenedor garantiza borrar cualquier volumen persistente asociado."
+        },
+        {
+          "id": "c",
+          "text": "La imagen define una plantilla; un contenedor es una instancia creada a partir de ella, con estado de ejecución."
+        },
+        {
+          "id": "d",
+          "text": "La imagen es siempre un proceso activo y el contenedor solo una fotografía."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Las imágenes se usan para crear instancias. Capas escribibles y volúmenes requieren tratamiento propio; el ciclo de vida del contenedor no equivale necesariamente al de los datos persistentes.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-096",
+      "topic": "T12",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué comparación entre Docker Compose y orquestadores como Swarm o Kubernetes es adecuada?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Compose garantiza por sí solo alta disponibilidad entre cualquier número de servidores."
+        },
+        {
+          "id": "b",
+          "text": "Swarm y Kubernetes son formatos de imagen JPEG."
+        },
+        {
+          "id": "c",
+          "text": "Un archivo Compose elimina la necesidad de redes, almacenamiento y configuración."
+        },
+        {
+          "id": "d",
+          "text": "Compose define y gestiona una aplicación de varios contenedores; Swarm y Kubernetes añaden orquestación de clúster con sus propios modelos."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "Las herramientas resuelven capas relacionadas con modelos y capacidades diferentes. Declarar servicios no demuestra alta disponibilidad: hay que diseñar réplicas, estado, red, fallos y recuperación.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-097",
+      "topic": "T12",
+      "difficulty": "basico",
+      "prompt": "¿Qué escenario representa un servicio IaaS?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El proveedor entrega cómputo virtual y el cliente administra el SO y las aplicaciones de sus máquinas."
+        },
+        {
+          "id": "b",
+          "text": "El usuario solo utiliza una aplicación terminada sin gestionar su sistema operativo."
+        },
+        {
+          "id": "c",
+          "text": "El proveedor obliga a que el cliente fabrique físicamente cada CPU."
+        },
+        {
+          "id": "d",
+          "text": "El cliente deja de tener toda responsabilidad sobre identidades y datos."
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "IaaS ofrece infraestructura virtual y deja al cliente responsabilidades como SO y aplicaciones. PaaS abstrae más la plataforma; SaaS entrega una aplicación. Identidades, datos y configuración siguen exigiendo decisiones.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-098",
+      "topic": "T12",
+      "difficulty": "intermedio",
+      "prompt": "¿Qué describe mejor una nube híbrida?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cualquier servicio SaaS individual contratado por una persona."
+        },
+        {
+          "id": "b",
+          "text": "La combinación coordinada de entornos cloud privados y públicos, manteniendo sus características."
+        },
+        {
+          "id": "c",
+          "text": "Cualquier equipo que tenga simultáneamente un teclado y un ratón."
+        },
+        {
+          "id": "d",
+          "text": "El uso de dos carpetas en el mismo disco local."
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Híbrido se refiere a combinar entornos distintos con mecanismos de conexión o gestión. Usar varios proveedores públicos se describe habitualmente como multicloud; no es automáticamente lo mismo.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-099",
+      "topic": "T12",
+      "difficulty": "aplicacion",
+      "prompt": "¿Por qué un sistema IoT puede procesar datos en el borde o edge?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Para hacer imposible cualquier ataque al sistema."
+        },
+        {
+          "id": "b",
+          "text": "Para eliminar la necesidad de gestionar identidades de los dispositivos."
+        },
+        {
+          "id": "c",
+          "text": "Para decidir cerca del origen, reduciendo dependencia del enlace y latencia para determinadas funciones."
+        },
+        {
+          "id": "d",
+          "text": "Para garantizar que ningún dispositivo necesite actualizaciones."
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Edge sitúa parte del procesamiento cerca de sensores y actuadores. Puede ayudar con latencia y conectividad, pero añade recursos y superficies que deben administrarse, protegerse y actualizarse.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    },
+    {
+      "id": "INF-100",
+      "topic": "T12",
+      "difficulty": "aplicacion",
+      "prompt": "Una IA propone un comando con privilegios para arreglar tu laboratorio. ¿Qué debes hacer antes de ejecutarlo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ejecutarlo como root porque una respuesta fluida demuestra que es correcto."
+        },
+        {
+          "id": "b",
+          "text": "Pegar credenciales reales para que la IA lo complete."
+        },
+        {
+          "id": "c",
+          "text": "Desactivar los registros para no conservar errores."
+        },
+        {
+          "id": "d",
+          "text": "Comprender sus efectos, verificarlo con documentación y probarlo en el entorno autorizado con recuperación preparada."
+        }
+      ],
+      "correctOptionId": "d",
+      "explanation": "La IA puede asistir, pero una respuesta plausible no acredita exactitud, seguridad ni ejecución. Se revisan entradas, privilegios, alcance, reversión y evidencia antes de utilizar comandos.",
+      "study": {
+        "label": "D45 · Redes, virtualización y nube",
+        "url": "../#/recurso/D45"
+      }
+    }
+  ]
+}

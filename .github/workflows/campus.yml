@@ -2,9 +2,9 @@ name: Campus - build and acceptance
 on:
   push:
     branches: [main, 'feat/**']
-    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   pull_request:
-    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   workflow_dispatch:
 permissions:
   contents: read
@@ -57,6 +57,7 @@ jobs:
           python3 campus/tests/browser_bilingual.py 2>&1 | tee campus/qa/browser.log
           python3 campus/tests/browser_operations.py 2>&1 | tee campus/qa/browser-operations.log
           python3 campus/tests/browser_integral.py 2>&1 | tee campus/qa/browser-integral.log
+          python3 campus/tests/browser_exam.py 2>&1 | tee campus/qa/browser-exam.log
       - name: WebKit acceptance
         shell: bash
         env:
@@ -66,6 +67,7 @@ jobs:
           python3 campus/tests/browser_bilingual.py 2>&1 | tee campus/qa/browser-webkit.log
           python3 campus/tests/browser_operations.py 2>&1 | tee campus/qa/browser-operations-webkit.log
           python3 campus/tests/browser_integral.py 2>&1 | tee campus/qa/browser-integral-webkit.log
+          python3 campus/tests/browser_exam.py 2>&1 | tee campus/qa/browser-exam-webkit.log
       - name: Existing kit tests
         working-directory: formacion/sistemas-operativos/kit
         run: python3 -m unittest discover -p 'test_*.py' -v
@@ -94,6 +96,7 @@ jobs:
             campus/
             formacion/sistemas-operativos/
             formacion/itinerario-integral/
+            formacion/introduccion-informatica/
             README.md
             wrangler.jsonc
             .github/workflows/cloudflare.yml

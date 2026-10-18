@@ -24,7 +24,7 @@ args = parser.parse_args()
 origin = args.origin.rstrip('/')
 base = origin + PUBLIC_BASE_PATH
 expected_resources=[f'D{i:02}' for i in range(1,22)]+[item[0] for item in READINGS]+[item[0] for item in INTEGRAL_READINGS]
-assert expected_resources == [f'D{i:02}' for i in range(1,41)], 'Keep the complete ordered public resource contract.'
+assert expected_resources == [f'D{i:02}' for i in range(1,47)], 'Keep the complete ordered public resource contract.'
 expected_version=json.loads((Path(__file__).resolve().parents[1]/'package.json').read_text())['version']
 for attempt in range(80):
     try:
@@ -57,6 +57,25 @@ with urlopen(base+'build-info.json',timeout=5) as response:
         assert expected, 'Remote acceptance requires a clean, committed checkout.'
 with urlopen(base+'assets/catalog.js',timeout=5) as response:
     assert 'javascript' in response.headers.get('Content-Type','')
+
+# Both added applications must be served at the same reviewed public prefix.
+with urlopen(base+'sistemas/',timeout=5) as response:
+    assert response.status==200 and 'Sistemas' in response.read().decode()
+with urlopen(base+'sistemas/course.es.json',timeout=5) as response:
+    os_data=json.load(response)
+    assert len(os_data['lessons'])==28 and os_data['language']=='es'
+with urlopen(base+'examen/',timeout=5) as response:
+    assert response.status==200 and 'Autoevaluación' in response.read().decode()
+    assert "script-src 'self'" in response.headers.get('Content-Security-Policy','')
+with urlopen(base+'examen/model.mjs',timeout=5) as response:
+    assert 'javascript' in response.headers.get('Content-Type','')
+with urlopen(base+'examen/questions.json',timeout=5) as response:
+    exam_bytes=response.read();exam_data=json.loads(exam_bytes)
+    assert len(exam_data['questions'])==100
+    assert len({question['id'] for question in exam_data['questions']})==100
+    assert len(exam_data['topics'])==12
+    assert info['exam']['sessionQuestions']==20
+    assert info['exam']['bankSha256']==hashlib.sha256(exam_bytes).hexdigest()
 for name in ('not-a-real-file-123456.json','nested/not-a-real-file.html'):
     try:
         urlopen(base+name,timeout=5)
@@ -118,6 +137,7 @@ except HTTPError as error:
     assert error.code==404
     assert term_path in error.read().decode()
 print(json.dumps({'status':'passed','runtime':origin,'publicBasePath':PUBLIC_BASE_PATH,
-                  'checks':17,'sourceCommit':info['sourceCommit'], 'resources':len(expected_resources),
+                  'checks':22,'sourceCommit':info['sourceCommit'], 'resources':len(expected_resources),
+                  'examQuestions':len(exam_data['questions']), 'osStudyLessons':len(os_data['lessons']),
                   'termLessons':len(term_lessons),'termCourseSha256':term_info['courseSha256'],
                   'remoteDeployment':urlsplit(origin).hostname not in ('127.0.0.1','localhost')}))

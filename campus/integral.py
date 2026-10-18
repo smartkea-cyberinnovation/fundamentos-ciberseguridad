@@ -6,7 +6,11 @@ READINGS = tuple((f'D{n:02}', name) for n,name in enumerate((
     '01-computing.md','02-history.md','03-hardware.md','04-networks.md',
     '05-web.md','06-security.md','07-information.md','08-identity.md',
     '09-careers.md','10-glossary.md','11-sources.md','12-curriculum.md','13-ecosystem.md',
-    '14-library.md','15-master-glossary.md'),26))
+    '14-library.md','15-master-glossary.md'),26)) + tuple(
+    (f'D{n:02}', '../introduccion-informatica/'+name) for n,name in enumerate((
+        '01-representacion-codificacion.md', '02-logica-digital.md',
+        '03-arquitectura-memoria-es.md', '04-sistemas-software.md',
+        '05-redes-cloud.md', '06-guia-cobertura.md'),41))
 IDS = frozenset(r[0] for r in READINGS)
 OUTLINE_IDS = frozenset(('D37', 'D38', 'D39', 'D40'))
 
@@ -47,6 +51,7 @@ def add_resources(resources, course, root, repo, markdown, read_text) -> None:
     for rid,name in READINGS:
         path = folder(course)/name
         raw = editions(read_text(path))['es']
+        path = path.resolve()
         title,body = raw.split('\n',1)
         source = path.relative_to(root).as_posix() if path.is_relative_to(root) else path.name
         resources.append({'id':rid,'title':title[2:].strip(),

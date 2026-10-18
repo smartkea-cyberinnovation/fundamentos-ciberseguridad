@@ -6,13 +6,37 @@ import json
 import re
 import zipfile
 from pathlib import Path, PurePosixPath
+from posixpath import dirname, join, normpath
+from urllib.parse import urlsplit
+from exam_build import validate_bank
 
 HERE=Path(__file__).resolve().parent
+
+def validate_html_assets(files: dict[str, Path]) -> None:
+    """Resolve assets relative to each HTML page, including directory indexes."""
+    for rel, path in files.items():
+        if not rel.endswith('.html'):
+            continue
+        for target in re.findall(r'(?:src|href)="([^"]+)"', path.read_text(encoding='utf-8')):
+            url = urlsplit(target)
+            if url.scheme or url.netloc or not url.path:
+                continue
+            candidate = normpath(url.path.lstrip('/') if url.path.startswith('/')
+                                 else join(dirname(rel), url.path))
+            if candidate == '.':
+                candidate = 'index.html'
+            elif url.path.endswith('/'):
+                candidate = candidate.rstrip('/')+'/index.html'
+            if candidate.startswith(('../', '/')) or candidate not in files:
+                raise ValueError('Activo HTML inexistente: '+rel+' → '+target)
 
 def validate(directory: Path, archive: Path) -> dict:
     if directory.is_symlink() or not directory.is_dir():
         raise ValueError('La salida debe ser un directorio regular.')
     required={'index.html','course.json','course.en.json','reading.en.html','assets/i18n.js','assets/portable.js','lectura.html','_headers','build-info.json','assets/app.js','assets/state.js','assets/navigation.js','assets/styles.css','SHA256SUMS.txt','404.html','assets/catalog.js','assets/catalog.css'}
+    required |= {'examen/index.html', 'examen/exam.js', 'examen/exam.css',
+                 'examen/model.mjs', 'examen/questions.json',
+                 'sistemas/index.html', 'sistemas/course.es.json', 'sistemas/course.en.json'}
     files={p.relative_to(directory).as_posix():p for p in directory.rglob('*') if p.is_file() and not p.name.startswith('.')}
     if any(p.is_symlink() for p in directory.rglob('*')): raise ValueError('No se admiten enlaces simbólicos.')
     if not required <= files.keys(): raise ValueError('Faltan activos: '+', '.join(sorted(required-files.keys())))
@@ -45,19 +69,15 @@ def validate(directory: Path, archive: Path) -> dict:
     for value in ["script-src 'self'","object-src 'none'","frame-ancestors 'none'",'nosniff']:
         if value not in headers: raise ValueError('Falta una protección: '+value)
     if 'unsafe-inline' in headers or 'unsafe-eval' in headers: raise ValueError('CSP permisiva.')
-    for rel in ('index.html','lectura.html','reading.en.html'):
-        text=files[rel].read_text()
-        for target in re.findall(r'(?:src|href)="([^"]+)"',text):
-            if target.startswith(('https://','#','./')): continue
-            clean=target.partition('#')[0].partition('?')[0]
-            if clean and clean not in files: raise ValueError('Activo HTML inexistente: '+clean)
+    validate_html_assets(files)
+    validate_bank(json.loads(files['examen/questions.json'].read_text()), {r['id'] for r in course['resources']})
     with zipfile.ZipFile(archive) as z:
         if len(z.namelist())!=len(set(z.namelist())) or set(z.namelist())!=set(files):
             raise ValueError('El ZIP no coincide con los activos publicados.')
         for name in z.namelist():
             if name.startswith('/') or '..' in PurePosixPath(name).parts: raise ValueError('Ruta ZIP no válida.')
             if z.read(name)!=files[name].read_bytes(): raise ValueError('Contenido ZIP diferente: '+name)
-    return {'status':'passed','version':course['version'],'modules':32,'labs':96,'hours':480,
+    return {'status':'passed','version':course['version'],'modules':32,'labs':96,'hours':480,'examQuestions':100,
             'languages':['es','en'],'englishModules':len(english['modules']),'englishLabs':sum(len(m['labs']) for m in english['modules']),
             'assets':len(files),'zipBytes':archive.stat().st_size,'zipSha256':hashlib.sha256(archive.read_bytes()).hexdigest()}
 
