@@ -1,0 +1,803 @@
+{
+  "passed": true,
+  "checks": 158,
+  "outer_commands": 98,
+  "nested_shell_commands": 11,
+  "limitations": [
+    "Docker Engine/Compose not available in this execution environment; actual containers and Swarm not launched.",
+    "ShellCheck not installed locally; the curriculum supplies its invocation through toolbox.",
+    "Host SSH and nftables mutation was not executed; authored candidate commands received shell syntax validation only."
+  ],
+  "results": [
+    {
+      "check": "8 modules / 24 lessons",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09 lesson count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l01 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l01 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l01 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l01 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l01 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l02 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l02 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l02 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l02 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l02 step 3 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l02 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l03 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l03 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l03 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l03 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m09-l03 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10 lesson count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l01 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l01 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l01 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l01 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l01 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l01 step 4 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l02 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l02 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l02 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l02 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l02 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l03 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l03 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l03 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l03 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l03 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m10-l03 step 5 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11 lesson count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l01 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l01 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l01 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l01 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l01 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l02 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l02 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l02 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l02 step 2 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l02 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l02 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l03 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l03 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l03 step 1 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l03 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l03 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l03 step 3 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m11-l03 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12 lesson count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l01 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l01 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l01 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l01 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l01 step 3 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l01 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l02 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l02 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l02 step 1 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l02 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l02 step 2 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l02 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l02 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l02 step 4 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l03 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l03 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l03 step 1 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l03 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l03 step 2 nested shell",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l03 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m12-l03 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13 lesson count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l01 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l01 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l01 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l01 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l01 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l02 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l02 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l02 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l02 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l02 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l03 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l03 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l03 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l03 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m13-l03 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14 lesson count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l01 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l01 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l01 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l01 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l01 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l02 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l02 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l02 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l02 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l02 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l03 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l03 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l03 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l03 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m14-l03 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15 lesson count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l01 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l01 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l01 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l01 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l01 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l02 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l02 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l02 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l02 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l02 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l03 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l03 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l03 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l03 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m15-l03 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16 lesson count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l01 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l01 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l01 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l01 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l01 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l02 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l02 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l02 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l02 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l02 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l02 step 5 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l03 teaching fields",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l03 step 1 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l03 step 2 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l03 step 3 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "m16-l03 step 4 syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "final script sh syntax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "actual sh probe /health => 0",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "actual sh probe 404 => 2",
+      "passed": true,
+      "detail": "Contrato HTTP incumplido: 404\n"
+    },
+    {
+      "check": "actual sh probe invalid input => 64",
+      "passed": true,
+      "detail": "URL fuera del alcance del laboratorio\n"
+    },
+    {
+      "check": "nested curl/jq exercise filter",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "actual sh probe invalid JSON contract => 2",
+      "passed": true,
+      "detail": "Contrato JSON incumplido\n"
+    },
+    {
+      "check": "actual sh probe service stopped => 3",
+      "passed": true,
+      "detail": "curl: (7) Failed to connect to 127.0.0.1 port 8088 after 0 ms: Couldn't connect to server\nFallo de transporte, curl=7\n"
+    },
+    {
+      "check": "synthetic timeline step 1",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "synthetic timeline step 2",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "synthetic timeline step 3",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "synthetic timeline step 4",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "synthetic timeline exact counts",
+      "passed": true,
+      "detail": "200 2\n503 2\n/workspace/scratch/d47f42203884/term-staging/kea-security-verify-wb91ob5b/timeline/eventos-original.tsv: OK\n"
+    },
+    {
+      "check": "OpenSSL local certificate generation",
+      "passed": true,
+      "detail": "++++++++++++++++++++*.......+.+.....+.........+.......+..+...............+.+.....+....+...+...+.....+.+...+...........+..........+.....+....+..+...+...+...............+.......+...+...+.........+..+..........+...........+....+...+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n-----\n"
+    },
+    {
+      "check": "OpenSSL expected localhost SAN",
+      "passed": true,
+      "detail": "X509v3 Subject Alternative Name: \n    DNS:localhost, IP Address:127.0.0.1\n"
+    },
+    {
+      "check": "TLS default trust rejects self-signed certificate",
+      "passed": true,
+      "detail": "te problem: self-signed certificate\nMore details here: https://curl.se/docs/sslcerts.html\n\ncurl failed to verify the legitimacy of the server and therefore could not\nestablish a secure connection to it. To learn more about this situation and\nhow to fix it, please visit the web page mentioned above.\n"
+    },
+    {
+      "check": "TLS explicit CA succeeds without insecure flag",
+      "passed": true,
+      "detail": "ceived % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n100  5264    0  5264    0     0  1414k      0 --:--:-- --:--:-- --:--:-- 1713k\n"
+    }
+  ]
+}

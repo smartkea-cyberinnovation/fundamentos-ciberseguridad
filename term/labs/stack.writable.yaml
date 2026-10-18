@@ -1,0 +1,5 @@
+# Explicit administrator opt-in, applied after stack.yaml.
+version: "3.8"
+services:
+  terminal:
+    command: [--writable]

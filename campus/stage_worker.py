@@ -10,6 +10,8 @@ import tempfile
 from urllib.parse import urlsplit
 from check_release import validate
 from publication import PUBLIC_BASE_PATH, PUBLIC_URL, not_found_page
+from term_integration import (build_term, copy_term, expected_files as term_files,
+                              merged_headers, validate_term, TERM_PREFIX)
 
 HERE = Path(__file__).resolve().parent
 OUTPUT = HERE / 'worker-dist'
@@ -61,13 +63,14 @@ def validate_staging(output: Path = OUTPUT, source: Path = HERE/'dist',
     originals = public_files(source)
     expected = {prefix+'/'+name for name in originals if name != '_headers'}
     expected |= {'_headers', 'SHA256SUMS.txt'}
+    expected |= term_files()
     if files.keys() != expected:
         raise ValueError('El staging no conserva exactamente los activos públicos del campus.')
     for name, original in originals.items():
         if name not in TRANSFORMED and original.read_bytes() != (target/name).read_bytes():
             raise ValueError('El staging ha cambiado contenido del campus: ' + name)
-    if (output/'_headers').read_bytes() != (source/'_headers').read_bytes():
-        raise ValueError('Las cabeceras deben estar en la raíz del staging y conservar sus protecciones.')
+    if (output/'_headers').read_text() != merged_headers((source/'_headers').read_text(), PUBLIC_BASE_PATH):
+        raise ValueError('Las cabeceras deben conservar las protecciones de cada prefijo público.')
     if (target/'404.html').read_text(encoding='utf-8') != not_found_page(PUBLIC_BASE_PATH):
         raise ValueError('La página 404 no está adaptada al prefijo público.')
     for url in re.findall(r'(?:href|src)="([^"]+)"', (target/'404.html').read_text(encoding='utf-8')):
@@ -87,15 +90,19 @@ def validate_staging(output: Path = OUTPUT, source: Path = HERE/'dist',
     if info != expected_info:
         raise ValueError('La procedencia del staging no coincide con la release validada.')
     check_manifest(target)
+    term_report = validate_term(output)
+    check_manifest(output/TERM_PREFIX)
     check_manifest(output)
     return dict(release, publicUrl=PUBLIC_URL, publicBasePath=PUBLIC_BASE_PATH,
                 workerAssets=len(files), workerManifestSha256=sha256(output/'SHA256SUMS.txt'),
-                sourceCommit=info['sourceCommit'])
+                sourceCommit=info['sourceCommit'], termLessons=term_report['lessons'],
+                termCourseSha256=term_report['courseSha256'])
 
 
 def stage(output: Path = OUTPUT, source: Path = HERE/'dist',
           archive: Path = HERE/'pages-ready.zip') -> dict:
     validate(source, archive)
+    build_term()
     if output.is_symlink() or (output.exists() and not (output/MARKER).is_file()):
         raise ValueError('No se puede reemplazar un staging ajeno al generador.')
     temporary = Path(tempfile.mkdtemp(prefix='.campus-worker-build-', dir=output.parent))
@@ -104,7 +111,7 @@ def stage(output: Path = OUTPUT, source: Path = HERE/'dist',
         target.mkdir()
         for name, path in public_files(source).items():
             if name == '_headers':
-                shutil.copyfile(path, temporary/name)
+                (temporary/name).write_text(merged_headers(path.read_text(), PUBLIC_BASE_PATH))
             else:
                 (target/name).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(path, target/name)
@@ -115,6 +122,8 @@ def stage(output: Path = OUTPUT, source: Path = HERE/'dist',
         (target/'build-info.json').write_text(json.dumps(info, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
         (temporary/MARKER).write_text('campus-worker-v1\n', encoding='utf-8')
         (temporary/'.assetsignore').write_text(MARKER+'\n', encoding='utf-8')
+        term_target = copy_term(temporary)
+        write_manifest(term_target)
         write_manifest(target)
         write_manifest(temporary)
         report = validate_staging(temporary, source, archive)

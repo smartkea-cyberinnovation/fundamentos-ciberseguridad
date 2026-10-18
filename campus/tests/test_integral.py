@@ -38,12 +38,30 @@ class IntegralContentTests(unittest.TestCase):
         cls.raw={rid:editions(build.read_text(folder(build.COURSE)/name)) for rid,name in READINGS}
     def selected(self,data):return [r for r in data['resources'] if r['id'] in IDS]
     def test_stable_resource_order(self):
-        for data in (self.es,self.en):self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,37)])
+        for data in (self.es,self.en):self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,41)])
     def test_substantive_both_languages(self):
         for data in (self.es,self.en):
             for r in self.selected(data):
+                if r['id'] not in {f'D{i:02}' for i in range(26,37)}:
+                    continue
                 self.assertGreater(len(r['html']),3500,r['id']);self.assertGreaterEqual(len(r['toc']),4,r['id'])
                 self.assertTrue(r['slides']);self.assertNotIn('<!--',r['html']);self.assertNotIn('<h1',r['html'])
+    def test_new_outlines_are_explicit_about_translation_scope(self):
+        for rid,name in (('D37','12-curriculum.md'),('D38','13-ecosystem.md'),
+                         ('D39','14-library.md'),('D40','15-master-glossary.md')):
+            self.assertIn((rid,name),READINGS)
+            es=next(r for r in self.es['resources'] if r['id']==rid)
+            en=next(r for r in self.en['resources'] if r['id']==rid)
+            self.assertGreaterEqual(len(es['toc']),4,rid)
+            self.assertEqual(es['kind'],'Esquema de estudio')
+            self.assertEqual(en['kind'],'English summary')
+            self.assertIn('English summary',en['html'])
+            self.assertIn('full English teaching edition is pending',en['html'])
+            for resource in (es,en):
+                self.assertGreater(len(resource['html']),300,rid)
+                self.assertTrue(resource['slides'])
+                self.assertNotIn('<!--',resource['html'])
+                self.assertNotIn('<h1',resource['html'])
     def test_core_identity_and_hours(self):
         for data in (self.es,self.en):
             self.assertEqual(data['hours'],480)

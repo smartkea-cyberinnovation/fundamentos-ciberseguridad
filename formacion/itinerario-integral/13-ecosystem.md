@@ -58,4 +58,7 @@ CyberCamp/ECSC Team Spain, European Cyber Security Challenge, picoCTF y CTFtime 
 
 <!-- EN -->
 # Ecosystem for learning, practice, cooperation and innovation
+
+**English summary.** The full English teaching edition is pending; the expanded Spanish outline is available in the linked source.
+
 **Reading D38.** Curated directory. Inclusion is not affiliation or guaranteed access. Verify current official eligibility and conditions. The Spanish edition lists Spain's public institutions, European/international bodies, conferences, authorised labs, entrepreneurship programmes, competitions and a participation pathway. Core rule: use only owned or expressly authorised systems and official cooperation channels.

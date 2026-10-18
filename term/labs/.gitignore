@@ -1,0 +1,14 @@
+.env
+*.lock.env
+cloudflared.local.yml
+cloudflared.local.yaml
+cloudflared.swarm.yml
+cloudflared.swarm.yaml
+*.pem
+*.key
+*.secret
+*-credentials.json
+__pycache__/
+*.pyc
+evidence*/
+workspace/

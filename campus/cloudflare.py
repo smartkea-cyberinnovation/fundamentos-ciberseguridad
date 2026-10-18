@@ -22,8 +22,23 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CONFIG = ROOT / 'wrangler.jsonc'
 WRANGLER = '4.132.0'
+# Chokidar does not apply our Git ignore rules. Watch source paths explicitly:
+# watching campus/ or term/ would rebuild when logs or generated assets change.
+WATCH_PATHS = [
+    'formacion', 'campus/assets', 'campus/locales', 'campus/index.html', 'campus/package.json',
+    'campus/build.py', 'campus/bilingual.py', 'campus/check_release.py', 'campus/cloudflare.py',
+    'campus/content.py', 'campus/integral.py', 'campus/operations.py', 'campus/provenance.py',
+    'campus/publication.py', 'campus/release_inputs.py', 'campus/stage_worker.py', 'campus/term_integration.py',
+    'campus/README.md', 'campus/DESIGN.md', 'campus/EDICION.md', 'campus/DEPLOY-CLOUDFLARE.md',
+    'campus/INTEGRATION.md', 'campus/PUBLICACION-SEGURA.md',
+    'term/assets', 'term/content', 'term/docs', 'term/index.html', 'term/README.md', 'term/build.py',
+    'term/labs/public-files.json', 'term/labs/compose.yaml', 'term/labs/stack.yaml',
+    'term/labs/toolbox', 'term/labs/web', 'term/labs/scripts', 'term/labs/config',
+    'term/labs/fixtures', 'term/labs/tests', 'term/labs/README.md',
+    'term/labs/.dockerignore', 'term/labs/.gitignore', 'term/labs/.env.example',
+]
 BUILD = {'command': 'python3 campus/cloudflare.py build', 'cwd': '.',
-         'watch_dir': ['campus', 'formacion']}
+         'watch_dir': WATCH_PATHS}
 
 
 def check_config(path: Path = CONFIG) -> dict:
@@ -37,7 +52,7 @@ def check_config(path: Path = CONFIG) -> dict:
     if config['assets'] != {'directory': './campus/worker-dist', 'not_found_handling': '404-page'}:
         raise ValueError('Los activos deben ser campus/worker-dist, sin backend ni bindings.')
     if config['routes'] != PRODUCTION_ROUTES:
-        raise ValueError('La única ruta de producción admitida es la subruta pública del campus.')
+        raise ValueError('Sólo se admiten las rutas revisadas del campus y del curso TERM.')
     if config['workers_dev'] is not True or config['preview_urls'] is not True:
         raise ValueError('workers.dev y las URL de preview deben estar habilitados para verificar versiones.')
     if config['build'] != BUILD:

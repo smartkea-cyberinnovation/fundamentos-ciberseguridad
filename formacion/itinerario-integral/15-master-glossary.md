@@ -44,4 +44,7 @@ Internet ≠ Web · encoding ≠ encryption · hashing ≠ encryption · authent
 
 <!-- EN -->
 # Master computing and cybersecurity glossary
+
+**English summary.** The full English teaching edition is pending; the expanded Spanish outline is available in the linked source.
+
 **Reading D40.** Extends D35 with a domain-wide vocabulary spanning computing, operating systems, networks, development, cloud, security, cryptography, identity, SecOps, GRC, privacy, threats, AI, quantum, careers and innovation. Stable English terms are included in the Spanish edition so learners can search primary documentation without translation ambiguity.

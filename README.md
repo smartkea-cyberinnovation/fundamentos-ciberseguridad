@@ -6,7 +6,19 @@
 
 Este repositorio es, ante todo, **un entorno de aprendizaje**. El README explica cómo estudiarlo y cómo sacarle partido. La operación del software, el despliegue y la seguridad del proyecto se documentan por separado.
 
-> No intentes memorizar el repositorio. El objetivo es construir un modelo mental, practicarlo, equivocarte de forma segura, diagnosticar el error y conservar evidencia de que sabes hacerlo.
+Curso integral y progresivo para comprender cómo hemos llegado a la informática actual, construir y operar sistemas, protegerlos, gobernar su riesgo y conectar el aprendizaje con profesiones, instituciones, investigación e innovación. El itinerario evita imponer tiempos: se organiza por prerrequisitos, resultados de aprendizaje, práctica y evidencias.
+
+El campus reúne lectura, presentación a pantalla completa, búsqueda, autoevaluación y progreso local exportable. El plan maestro y el itinerario integral se mantienen como fuentes curriculares versionadas; las referencias externas deben verificarse antes de cada edición.
+
+La versión 3.0 conserva los 32 módulos, 96 fichas de laboratorio y las 480 horas de planificación del catálogo previo. La biblioteca tiene 40 recursos. D26–D36 son lecturas desarrolladas en ambos idiomas; D37–D40 son esquemas de estudio en español con resúmenes en inglés identificados como tales. Su traducción completa está pendiente.
+
+## TERM · Terminal Linux y seguridad
+
+[Curso de terminal Linux](https://smartkea.com/fundamentos-ciberseguridad/term/) · [Manual completo](https://smartkea.com/fundamentos-ciberseguridad/term/manual.html) · [Guía del alumno y contenidos](term/README.md).
+
+Itinerario autónomo con **16 módulos, 48 lecciones, 48 retos resueltos y 96 preguntas** sobre Linux, sh, Bash, shellscript, Kali, redes, web, Docker, Compose, Swarm, bastionado y evidencias. Cada práctica explica el comando, su efecto, el entorno, la verificación y la reversión. Incluye progreso local, cuaderno exportable, manual imprimible y conexión opcional a una VM mediante ttyd.
+
+El campus conserva su recorrido general y enlaza a esta nueva especialización. [Preparar el laboratorio](term/docs/LABS.md) · [Conectar ttyd](term/docs/CONEXION-TTYD.md) · [Publicación de TERM](term/docs/DEPLOY.md).
 
 ## Empieza en cinco minutos
 
@@ -19,44 +31,29 @@ Este repositorio es, ante todo, **un entorno de aprendizaje**. El README explica
 7. Comprueba el resultado y registra la duda que quede.
 8. Continúa sólo cuando puedas explicar qué ocurrió y por qué.
 
-El tiempo es una herramienta de atención, no una nota. Si un problema te bloquea, no saltes directamente a copiar una solución: aprende a diagnosticarlo.
+| Recurso | Contenido desarrollado |
+|---|---|
+| [D26 · Informática](formacion/itinerario-integral/01-computing.md) | Representación, algoritmos, procesos, persistencia, red y evidencia |
+| [D27 · Historia](formacion/itinerario-integral/02-history.md) | Computación, IA, Internet/Web, móvil y siete casos empresariales con fuentes |
+| [D28 · Hardware](formacion/itinerario-integral/03-hardware.md) | Ciudad como analogía y sus límites; arquitectura, servidores, DC, IA y cuántica |
+| [D29 · Redes](formacion/itinerario-integral/04-networks.md) | Capas, equipos, topologías, Wi-Fi6/6E/7, 5G y normalización 6G |
+| [D30 · Arquitecturas web](formacion/itinerario-integral/05-web.md) | De estático/WordPress a aplicaciones empresariales, cloud y contenedores |
+| [D31 · Seguridad y equipos](formacion/itinerario-integral/06-security.md) | CIA, CSF, responsabilidades, procedimientos y evidencia |
+| [D32 · Información](formacion/itinerario-integral/07-information.md) | Clasificación, TLP, DLP, cifrado, ciclo de vida y privacidad |
+| [D33 · Identidades](formacion/itinerario-integral/08-identity.md) | JML, entidad–centro–puesto, SoD, RBAC/ABAC/PAM y acceso efectivo |
+| [D34 · Profesiones](formacion/itinerario-integral/09-careers.md) | Árbol funcional TIC/ciber, fuentes laborales, IA y portfolio |
+| [D35 · Glosario](formacion/itinerario-integral/10-glossary.md) | 36 fichas ES/EN complementarias, capacidades y ejemplos abiertos/comerciales |
+| [D36 · Fuentes](formacion/itinerario-integral/11-sources.md) | Referencias primarias, fechas, límites y método para noticias/profundización |
+| [D37 · Itinerario maestro](formacion/itinerario-integral/12-curriculum.md) | U00–U15: historia, sistemas, redes, desarrollo, ciber, GRC, regulación, instituciones, IA y carrera |
+| [D38 · Ecosistema](formacion/itinerario-integral/13-ecosystem.md) | CCN-CERT, INCIBE, CNI, CNPIC, FCSE, MCCE, ENISA, CERT-EU, OTAN, labs, conferencias e innovación |
+| [D39 · Biblioteca/videoteca](formacion/itinerario-integral/14-library.md) | Libros gratuitos/de pago, Amazon como vía de compra, TED/TEDx, universidades y conferencias |
+| [D40 · Glosario maestro](formacion/itinerario-integral/15-master-glossary.md) | Vocabulario transversal y pares conceptuales que no deben confundirse |
 
-## Cómo estudiar
+[Índice y alcance de la ampliación](formacion/itinerario-integral/README.md). INT-L01–INT-L18 son dieciocho diseños de actividades integradoras, no dieciocho ejecuciones acreditadas. Los árboles profesionales y el glosario son ampliables, no una lista de todos los títulos o fabricantes existentes.
 
-Usa este ciclo para cada concepto:
+## Sistemas operativos: control verificable
 
-**Objetivo → concepto → recuperación activa → práctica → evidencia → explicación → revisión.**
-
-Una sesión típica puede ser:
-
-- **2 min** · define qué quieres comprender o conseguir;
-- **20–25 min** · lectura, análisis o práctica concentrada;
-- **3–5 min** · recuerda sin mirar y escribe lo esencial;
-- **5 min** · compruébalo con una práctica, pregunta o ejemplo;
-- **pausa breve** · después decide si continuar, revisar o profundizar.
-
-No necesitas respetar exactamente esos minutos. Ajusta el ciclo al tipo de tarea y a tu capacidad de concentración.
-
-### Cuando te atasques
-
-Un ingeniero no se mide por no tener problemas, sino por aprender a reducirlos.
-
-1. Reproduce el fallo.
-2. Lee el mensaje exacto.
-3. Identifica qué cambió.
-4. Formula una hipótesis.
-5. Observa estado, configuración y logs.
-6. Cambia una sola variable.
-7. Vuelve a probar.
-8. Documenta causa, solución y cómo evitar la regresión.
-
-Si sigues bloqueado, busca primero documentación primaria y después pide una pista. La solución completa debe ser el último nivel de ayuda, no el primero.
-
-## Qué debes conseguir
-
-Al avanzar por el itinerario deberías poder conectar cinco capas:
-
-| Capa | Pregunta que debes poder responder |
+| Recurso | Contenido |
 |---|---|
 | Fundamentos | ¿Qué está ocurriendo realmente debajo de la interfaz? |
 | Construcción | ¿Cómo lo implemento de forma reproducible? |
@@ -97,10 +94,16 @@ Para sistemas operativos existe una ruta operativa específica:
 
 | Recurso | Práctica conceptual |
 |---|---|
-| [D22 · Identidad y bastionado](formacion/sistemas-operativos/operacion/01-identidad-bastionado.md) | usuarios, privilegios, perfiles y política efectiva |
-| [D23 · Redes y recursos](formacion/sistemas-operativos/operacion/02-redes-recursos.md) | permisos, recursos compartidos, segmentación y restauración |
-| [D24 · Navegación y TLS](formacion/sistemas-operativos/operacion/03-navegacion-tls.md) | DNS, proxy, firewall, TLS, cuentas y privacidad |
-| [D25 · Detección y aceptación](formacion/sistemas-operativos/operacion/04-deteccion-laboratorios.md) | controles, evidencia, triaje y recuperación |
+| URL del campus | `https://smartkea.com/introduccion-ciberseguridad/` |
+| Entrada sin barra | `https://smartkea.com/introduccion-ciberseguridad` → redirección a la URL con barra, conservando parámetros |
+| Worker | `fundamentos-ciberseguridad` |
+| Rutas del Worker | Campus en `smartkea.com/introduccion-ciberseguridad/*`; TERM en `/fundamentos-ciberseguridad/term*` para `smartkea.com` y `www.smartkea.com`, incluida la entrada sin barra final y con parámetros |
+| Repositorio / rama de producción | `smartkea-cyberinnovation/fundamentos-ciberseguridad` / `main` |
+| Workers Builds: raíz / build command | Raíz del repositorio / vacío |
+| Deploy de producción | `python3 campus/cloudflare.py deploy` |
+| Preview de otras ramas | `python3 campus/cloudflare.py preview` |
+| Variables de build | `SKIP_DEPENDENCY_INSTALL=1`, `PYTHON_VERSION=3.13.3`, `NODE_VERSION=22.23.2` |
+| Wrangler fijado | `4.132.0` |
 
 Antes de una práctica, identifica siempre **objetivo, entorno, riesgo, rollback y evidencia esperada**.
 
@@ -132,98 +135,26 @@ El campus conserva progreso local exportable. Antes de cambiar de dispositivo u 
 
 [Cómo funciona el progreso y su privacidad](campus/PROGRESO.md).
 
-## Profundizar sin perderse
-
-Usa tres niveles:
-
-**Core** — lo que necesitas para continuar.  
-**Práctica** — lo que convierte la teoría en competencia.  
-**Profundización** — papers, RFC, estándares, libros, certificaciones, tecnologías o casos avanzados.
-
-Cuando una fuente externa contradiga el material, no elijas por autoridad aparente: compara fecha, alcance, versión, fuente primaria y contexto.
-
-## Estudiar para trabajar
-
-No optimices el aprendizaje únicamente para aprobar un examen o acumular certificaciones. Construye evidencia profesional:
-
-- repositorios limpios y explicables;
-- diagramas y decisiones de arquitectura;
-- scripts pequeños pero probados;
-- laboratorios reproducibles;
-- análisis de riesgos;
-- informes de incidentes sintéticos;
-- restauraciones verificadas;
-- presentaciones técnicas para públicos no técnicos;
-- documentación en inglés;
-- reflexiones sobre errores y mejoras.
-
-[D34 · Profesiones](formacion/itinerario-integral/09-careers.md) conecta el conocimiento con familias profesionales. El plan maestro amplía esa relación con ciberseguridad, GRC, IA, investigación e innovación.
-
-## Usar IA para aprender
-
-La IA puede ayudarte a formular preguntas, explicar alternativas, generar casos de prueba, revisar una explicación o encontrar documentación. No debe sustituir la comprensión.
-
-Una secuencia útil es:
-
-1. intenta explicar o resolver;
-2. pide una pista, no la respuesta;
-3. contrasta con documentación primaria;
-4. ejecuta o verifica;
-5. explica por qué la solución funciona;
-6. registra qué error cometiste.
-
-Nunca pegues secretos, datos personales, evidencias de clientes o información restringida en una herramienta que no esté autorizada para tratarlos.
-
-## El campus web
-
-El campus está diseñado para lectura, búsqueda, presentación a pantalla completa, autoevaluación y seguimiento local. La evolución de producto sigue estos principios:
-
-- un concepto principal por vista;
-- teoría seguida de práctica corta;
-- navegación usable en móvil, tableta y escritorio;
-- modo de concentración y pantalla completa;
-- progreso basado en evidencias, no sólo visitas;
-- ayuda gradual cuando el alumno se atasca;
-- temporización de sesiones como apoyo, no como vigilancia;
-- accesibilidad y funcionamiento sin cuenta para las funciones básicas.
-
-La especificación de producto educativo está en [docs/LEARNING-DESIGN.md](docs/LEARNING-DESIGN.md). Algunas capacidades descritas allí son objetivos de evolución y no deben interpretarse como funciones ya publicadas.
-
-## Para docentes y contribuidores
-
-Antes de añadir contenido, pregunta:
-
-- ¿qué resultado de aprendizaje produce?;
-- ¿qué prerrequisito necesita?;
-- ¿qué práctica lo consolida?;
-- ¿cómo sabremos que el alumno lo entiende?;
-- ¿qué error frecuente debe aprender a diagnosticar?;
-- ¿qué fuente primaria lo respalda?;
-- ¿cuándo debe revisarse?;
-- ¿es fundamento estable, tecnología cambiante o normativa fechada?
-
-Recursos de mantenimiento:
-
-- [Diseño de aprendizaje](docs/LEARNING-DESIGN.md)
-- [Guía de edición](campus/EDICION.md)
-- [QA](campus/QA.md)
-- [Seguridad](SECURITY.md)
-- [Despliegue](DEPLOY.md)
-- [Licencia y condiciones](LICENSE.md)
-- [Migración y procedencia](docs/MIGRATION.md)
-
-## Estructura del repositorio
+| Necesidad | Recurso |
+|---|---|
+| Empezar y estudiar | [Guía de estudio](formacion/sistemas-operativos/COMO-ESTUDIAR.md) |
+| Temario, prácticas, evaluación y fuentes | [Índice docente](formacion/sistemas-operativos/README.md) |
+| Historia, hardware, redes, datos e identidades | [Itinerario integral D26–D40](formacion/itinerario-integral/README.md) |
+| Control operativo de sistemas | [Lecturas D22–D25](formacion/sistemas-operativos/operacion/README.md) |
+| Ampliación y continuidad | [Plan maestro](formacion/plan-maestro/README.md) |
+| Editar fuentes y traducciones | [Guía de edición](campus/EDICION.md) |
+| Aislamiento del laboratorio | [Entorno de prácticas](formacion/sistemas-operativos/LABORATORIO.md) |
+| Copiar o trasladar progreso | [Progreso y privacidad](campus/PROGRESO.md) |
+| Procedencia y alcance de este repositorio | [Migración](docs/MIGRATION.md) |
 
 ```text
-campus/                         aplicación web, compilación, ES/EN, pruebas y operación
-formacion/sistemas-operativos/  lecciones, prácticas, laboratorio y evaluación
-formacion/itinerario-integral/  fundamentos, historia, redes, seguridad, carrera y fuentes
-formacion/plan-maestro/         mapa curricular, marcos y continuidad
-docs/                           diseño, mantenimiento y procedencia
-.github/workflows/              validación y aceptación
-SECURITY.md                     política de seguridad
-LICENSE.md                      condiciones de uso
-DEPLOY.md                       operación y publicación
+campus/                        Web estática, compilador, ES/EN, pruebas y operación
+formacion/sistemas-operativos/  Temario, lecciones, prácticas, kit y evaluación
+formacion/itinerario-integral/   Once lecturas ES/EN y cuatro esquemas ES con resumen EN
+formacion/plan-maestro/         Referencia curricular y continuidad
+.github/workflows/             Validación y aceptación
+wrangler.jsonc                 Worker y ruta pública
+docs/MIGRATION.md              Origen del snapshot y alcance del traslado
 ```
 
 ## Seguridad y límites

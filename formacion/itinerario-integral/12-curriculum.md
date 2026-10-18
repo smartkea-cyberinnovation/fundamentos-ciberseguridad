@@ -60,4 +60,7 @@ Cada bloque termina: **explica → demuestra → evidencia → límites → fuen
 
 <!-- EN -->
 # Master pathway: from computing history to cybersecurity
+
+**English summary.** The full English teaching edition is pending; the expanded Spanish outline is available in the linked source.
+
 **Reading D37.** Recommended sequence without time allocation. Stable unit IDs U00–U15 are shared across languages. Progression: understand → build → operate → protect → govern → innovate. The Spanish edition contains the complete unit map. The capstone is a synthetic digital service used to demonstrate reproducible deployment, security, risk, regulation, incident response and recovery.
