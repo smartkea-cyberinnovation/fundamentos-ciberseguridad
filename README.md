@@ -1,10 +1,10 @@
-# SmartKEA · Fundamentos de ciberseguridad
+# SmartKEA · Fundamentos de informática y ciberseguridad
 
-**Wiktor Nykiel · Campus 3.0 · Informática, sistemas, redes, ciberseguridad, GRC, IA e innovación · Español e inglés**
+**Aprende a comprender sistemas, construirlos, diagnosticarlos, protegerlos y explicar tus decisiones.**
 
-**Campus público: [smartkea.com/introduccion-ciberseguridad/](https://smartkea.com/introduccion-ciberseguridad/)**
+[Entrar al campus](https://smartkea.com/introduccion-ciberseguridad/) · [Ruta curricular](formacion/itinerario-integral/12-curriculum.md) · [Guía de estudio](formacion/sistemas-operativos/COMO-ESTUDIAR.md) · [Biblioteca](formacion/itinerario-integral/14-library.md)
 
-**Código: [smartkea-cyberinnovation/fundamentos-ciberseguridad](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad)**
+Este repositorio es, ante todo, **un entorno de aprendizaje**. El README explica cómo estudiarlo y cómo sacarle partido. La operación del software, el despliegue y la seguridad del proyecto se documentan por separado.
 
 Curso integral y progresivo para comprender cómo hemos llegado a la informática actual, construir y operar sistemas, protegerlos, gobernar su riesgo y conectar el aprendizaje con profesiones, instituciones, investigación e innovación. El itinerario evita imponer tiempos: se organiza por prerrequisitos, resultados de aprendizaje, práctica y evidencias.
 
@@ -20,9 +20,16 @@ Itinerario autónomo con **16 módulos, 48 lecciones, 48 retos resueltos y 96 pr
 
 El campus conserva su recorrido general y enlaza a esta nueva especialización. [Preparar el laboratorio](term/docs/LABS.md) · [Conectar ttyd](term/docs/CONEXION-TTYD.md) · [Publicación de TERM](term/docs/DEPLOY.md).
 
-## Ruta de estudio integral / Integrated study pathway
+## Empieza en cinco minutos
 
-Empieza por [D26: mapa de informática](https://smartkea.com/introduccion-ciberseguridad/#/recurso/D26), luego historia y hardware, redes y servicios, controles y datos, identidad y profesiones. Las once lecturas tienen texto completo en español e inglés dentro de sus fuentes; el campus selecciona el idioma sin traducir comandos en ejecución.
+1. Abre el [campus web](https://smartkea.com/introduccion-ciberseguridad/).
+2. Empieza por **D26 · Informática** para construir el mapa general.
+3. Elige un único objetivo: «al terminar podré explicar o hacer X».
+4. Trabaja un bloque de aproximadamente 25 minutos sin cambiar de tema.
+5. Cierra la lectura e intenta reconstruir la idea con tus palabras.
+6. Haz la micropráctica relacionada o crea un ejemplo mínimo.
+7. Comprueba el resultado y registra la duda que quede.
+8. Continúa sólo cuando puedas explicar qué ocurrió y por qué.
 
 | Recurso | Contenido desarrollado |
 |---|---|
@@ -48,16 +55,44 @@ Empieza por [D26: mapa de informática](https://smartkea.com/introduccion-cibers
 
 | Recurso | Contenido |
 |---|---|
-| [D22 · Identidades y bastionado](formacion/sistemas-operativos/operacion/01-identidad-bastionado.md) | Cuentas locales, LDAP/AD/Entra, ciclo de vida, privilegios, perfiles y política efectiva |
-| [D23 · Redes y recursos](formacion/sistemas-operativos/operacion/02-redes-recursos.md) | ACL, shares SMB/Samba/NFS, segmentación y restauración con permisos |
-| [D24 · Navegación y TLS](formacion/sistemas-operativos/operacion/03-navegacion-tls.md) | DNS/proxy/firewall, cuentas personales/corporativas, mensajería, inspección y privacidad |
-| [D25 · Detección y aceptación](formacion/sistemas-operativos/operacion/04-deteccion-laboratorios.md) | Dieciséis controles, doce diseños de laboratorio, evidencias, triaje y recuperación |
+| Fundamentos | ¿Qué está ocurriendo realmente debajo de la interfaz? |
+| Construcción | ¿Cómo lo implemento de forma reproducible? |
+| Operación | ¿Cómo sé que funciona y cómo diagnostico un fallo? |
+| Seguridad y riesgo | ¿Qué puede salir mal, qué control aplico y qué evidencia tengo? |
+| Negocio y profesión | ¿Qué valor aporta, quién decide, cuánto cuesta y cómo lo comunico? |
 
-[English teaching edition](campus/locales/en/operations-control.md). Las lecturas se enlazan desde los módulos pertinentes y la biblioteca; no añaden horas ni alteran el progreso. DNS no distingue todas las cuentas de un SaaS; inspección TLS no elimina E2EE. Los diseños no aplican restricciones a dispositivos reales ni acreditan una auditoría completa.
+Leer es sólo una parte. El aprendizaje se demuestra con explicaciones, prácticas, decisiones justificadas y resultados reproducibles.
 
-## Ruta pública y publicación
+## Ruta principal
 
-| Elemento | Configuración |
+La ruta recomendada construye dependencias en lugar de acumular siglas:
+
+| Orden | Recurso | Pregunta principal |
+|---:|---|---|
+| 1 | [D26 · Informática](formacion/itinerario-integral/01-computing.md) | ¿Qué es realmente un sistema informático? |
+| 2 | [D27 · Historia](formacion/itinerario-integral/02-history.md) | ¿Cómo llegamos hasta la tecnología actual? |
+| 3 | [D28 · Hardware](formacion/itinerario-integral/03-hardware.md) | ¿Qué ocurre físicamente cuando ejecutamos software? |
+| 4 | [D29 · Redes](formacion/itinerario-integral/04-networks.md) | ¿Cómo se comunican los sistemas? |
+| 5 | [D30 · Web y cloud](formacion/itinerario-integral/05-web.md) | ¿Cómo se construye y publica un servicio moderno? |
+| 6 | [D31 · Seguridad](formacion/itinerario-integral/06-security.md) | ¿Qué protegemos, de qué y con qué evidencia? |
+| 7 | [D32 · Información](formacion/itinerario-integral/07-information.md) | ¿Cómo gobernamos los datos durante su ciclo de vida? |
+| 8 | [D33 · Identidades](formacion/itinerario-integral/08-identity.md) | ¿Quién puede hacer qué, sobre qué y por qué? |
+| 9 | [D34 · Profesiones](formacion/itinerario-integral/09-careers.md) | ¿Cómo se convierte el conocimiento en trabajo profesional? |
+| 10 | [D37 · Itinerario maestro](formacion/itinerario-integral/12-curriculum.md) | ¿Qué me falta y en qué orden debería profundizar? |
+| 11 | [D38 · Ecosistema](formacion/itinerario-integral/13-ecosystem.md) | ¿Qué instituciones, comunidades y entornos existen? |
+| 12 | [D39 · Biblioteca](formacion/itinerario-integral/14-library.md) | ¿Dónde profundizo con fuentes de calidad? |
+| apoyo | [D35](formacion/itinerario-integral/10-glossary.md) / [D40](formacion/itinerario-integral/15-master-glossary.md) | ¿Qué significa cada término y qué conceptos no debo confundir? |
+| método | [D36 · Fuentes](formacion/itinerario-integral/11-sources.md) | ¿Cómo verifico una afirmación y mantengo el conocimiento actualizado? |
+
+No es obligatorio consumir todos los recursos de una vez. Usa D37 como mapa y vuelve a D35/D40/D36 cuando aparezca una laguna.
+
+## Teoría que termina en práctica
+
+Cada concepto importante debería acabar en una acción observable: explicar, configurar, programar, medir, diagnosticar, comparar, recuperar o justificar.
+
+Para sistemas operativos existe una ruta operativa específica:
+
+| Recurso | Práctica conceptual |
 |---|---|
 | URL del campus | `https://smartkea.com/introduccion-ciberseguridad/` |
 | Entrada sin barra | `https://smartkea.com/introduccion-ciberseguridad` → redirección a la URL con barra, conservando parámetros |
@@ -70,35 +105,35 @@ Empieza por [D26: mapa de informática](https://smartkea.com/introduccion-cibers
 | Variables de build | `SKIP_DEPENDENCY_INSTALL=1`, `PYTHON_VERSION=3.13.3`, `NODE_VERSION=22.23.2` |
 | Wrangler fijado | `4.132.0` |
 
-El custom build de Wrangler compila, valida y prepara los activos antes de subirlos. La ruta sólo cubre el campus; la web corporativa conserva sus otras rutas. La redirección de barra final se configura por separado en la zona Cloudflare.
+Antes de una práctica, identifica siempre **objetivo, entorno, riesgo, rollback y evidencia esperada**.
 
-Consultar el commit servido en [build-info.json](https://smartkea.com/introduccion-ciberseguridad/build-info.json) y compararlo con la versión activa. [Publicación y recuperación](campus/WORKERS-RECOVERY.md) documenta la conexión Git, aceptación y rollback; [configuración de Cloudflare](campus/DEPLOY-CLOUDFLARE.md) incluye la alternativa portable de Pages.
+## Si tu ordenador no coincide con la práctica
 
-La observación HTTP se puede repetir explícitamente con `python3 campus/audit_publication.py --output campus/qa/publication.json`: siete recursos públicos fijos, sin login ni cambios de cuenta. Una prueba del build no equivale a esa observación en producción. La ampliación contiene un [registro de revisión](docs/maintenance/2026-09-21-integral-curriculum.md); un commit integrado no se declara publicado hasta observarlo en el servicio.
+No abandones una competencia porque utilices otro sistema operativo.
 
-## Compilar y comprobar
+- Si el objetivo es aprender **Windows** desde macOS o Linux, utiliza una máquina virtual compatible o un laboratorio autorizado.
+- Si necesitas **Linux** desde Windows o macOS, una VM suele ser la opción más fiel para estudiar el sistema completo.
+- Los contenedores son excelentes para aplicaciones y servicios, pero no sustituyen una VM cuando el concepto depende de kernel, arranque, drivers o determinadas políticas del sistema.
+- En Apple Silicon, Windows/ARM, x86 y otras combinaciones, comprueba arquitectura y compatibilidad antes de descargar una imagen.
+- Usa documentación oficial vigente del hipervisor y del sistema operativo; evita imágenes de procedencia dudosa.
 
-Desde la raíz, con Python 3.11 o posterior:
+Consulta [Entorno de laboratorio](formacion/sistemas-operativos/LABORATORIO.md). La competencia importante no es «seguir estos clics», sino saber preparar un entorno, comprobar requisitos, aislar el riesgo y recuperarte si algo falla.
 
-```sh
-python3 campus/cloudflare.py plan
-python3 campus/cloudflare.py build
-python3 campus/cloudflare.py check
-python3 campus/serve.py --port 8788
-```
+## Tu progreso
 
-Abrir `http://127.0.0.1:8788`. La compilación y el servidor local no necesitan paquetes Python, cuentas, API keys ni dependencias npm. Node y Playwright se usan para pruebas; Node/npm también permite ejecutar Wrangler. `build` y `check` no publican; `dry-run` comprueba Wrangler sin subir activos; `deploy` publica y `preview` sólo sube una versión de prueba.
+No confundas progreso con páginas abiertas. Considera un concepto consolidado cuando puedas:
 
-```sh
-python3 -m unittest discover -s campus/tests -p 'test_*.py' -v
-python3 campus/build.py && python3 campus/check_release.py
-node --test campus/tests/*.test.mjs
-python3 formacion/plan-maestro/validar.py
-```
+- explicarlo sin leer;
+- reconocer cuándo se aplica y cuándo no;
+- completar una práctica pequeña;
+- interpretar el resultado;
+- detectar al menos un error frecuente;
+- guardar una evidencia reproducible;
+- relacionarlo con un sistema o problema real.
 
-Los workflows conservan aceptación Python/JavaScript, Chromium/WebKit, validación del plan maestro y comprobación del runtime estático. Los resultados corresponden al commit de cada ejecución; véanse [alcance y límites](campus/QA.md) y [lecturas operativas](formacion/sistemas-operativos/operacion/README.md).
+El campus conserva progreso local exportable. Antes de cambiar de dispositivo u origen, exporta tu estado. No guardes secretos, contraseñas ni datos personales en las notas.
 
-## Materiales y estructura
+[Cómo funciona el progreso y su privacidad](campus/PROGRESO.md).
 
 | Necesidad | Recurso |
 |---|---|
@@ -122,6 +157,13 @@ wrangler.jsonc                 Worker y ruta pública
 docs/MIGRATION.md              Origen del snapshot y alcance del traslado
 ```
 
-Este repositorio comienza con una copia del contenido integrado en `main` del [repositorio original](https://github.com/WiktorNykiel/fundamentos-ciberseguridad), sin importar su historial ni la aplicación Next.js heredada. Se conserva la autoría de Wiktor Nykiel; la visibilidad pública no concede una licencia nueva.
+## Seguridad y límites
 
-El asistente orienta la práctica manual y el campus guarda el progreso en el navegador. No ejecuta comandos del alumno ni sincroniza cuentas. Exportar el progreso antes de cambiar de origen o dispositivo y mantener secretos y datos personales fuera de las notas.
+Practica únicamente en sistemas propios, laboratorios aislados o entornos para los que exista autorización explícita. No introduzcas secretos ni datos personales reales en repositorios, notas o laboratorios.
+
+Este repositorio conserva la autoría indicada y no concede una licencia abierta por el mero hecho de ser público. Consulta [LICENSE.md](LICENSE.md).
+
+---
+
+**Wiktor Nykiel · SmartKEA CyberInnovation**  
+Informática · Ciberseguridad · GRC · IA · Investigación · Innovación
