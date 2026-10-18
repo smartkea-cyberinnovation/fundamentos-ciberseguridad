@@ -167,6 +167,27 @@ export function finishAttempt(attempt, now = new Date()) {
   return { ...attempt, status: 'finished', finishedAt: timestamp < attempt.startedAt ? attempt.startedAt : timestamp };
 }
 
+/** Stable identity from existing immutable fields; saved v1 attempts need no migration. */
+export function sameAttempt(left, right) {
+  return Boolean(left && right && left.bankRevision === right.bankRevision && left.startedAt === right.startedAt
+    && Array.isArray(left.questionIds) && Array.isArray(right.questionIds)
+    && left.questionIds.length === right.questionIds.length
+    && left.questionIds.every((id, index) => id === right.questionIds[index]
+      && Array.isArray(left.optionOrders?.[id]) && Array.isArray(right.optionOrders?.[id])
+      && left.optionOrders[id].join(',') === right.optionOrders[id].join(',')));
+}
+
+/** Stored answers win conflicts; a committed finish never accepts late answers. */
+export function reconcileAttempts(stored, proposed) {
+  requireValue(sameAttempt(stored, proposed), 'No se pueden combinar intentos distintos.');
+  if (stored.status === 'finished') return stored;
+  const answers = { ...stored.answers };
+  for (const [id, optionId] of Object.entries(proposed.answers)) {
+    if (!has(answers, id)) answers[id] = optionId;
+  }
+  return { ...proposed, answers };
+}
+
 /** Build a fresh trusted shape. Reject malformed, stale or inconsistent persisted state. */
 export function restoreAttempt(bank, candidate) {
   if (!isRecord(candidate) || candidate.schemaVersion !== STATE_SCHEMA || candidate.bankRevision !== bankRevision(bank)) return null;
@@ -227,27 +248,61 @@ export function summarizeAttempt(bank, attempt) {
   };
 }
 
-/** All storage access, including the localStorage getter, can fail harmlessly. */
-export function createPersistence(storageAccessor = () => globalThis.localStorage) {
+/** Read/merge/write is one origin-wide Web Lock transaction, not a localStorage CAS.
+ * Without coordination, callers keep an in-memory attempt and never write shared data.
+ */
+export function createPersistence(storageAccessor = () => globalThis.localStorage,
+  locksAccessor = () => globalThis.navigator?.locks) {
+  function load(bank) {
+    let raw;
+    try { raw = storageAccessor().getItem(STORAGE_KEY); }
+    catch { return { status: 'unavailable', attempt: null }; }
+    if (raw === null) return { status: 'empty', attempt: null };
+    if (typeof raw !== 'string' || raw.length > MAX_STORED_LENGTH) return { status: 'invalid', attempt: null };
+    try {
+      const attempt = restoreAttempt(bank, JSON.parse(raw));
+      return { status: attempt ? 'restored' : 'invalid', attempt };
+    } catch { return { status: 'invalid', attempt: null }; }
+  }
+  function canCoordinate() {
+    try { return typeof locksAccessor()?.request === 'function'; }
+    catch { return false; }
+  }
   return {
-    load(bank) {
-      let raw;
-      try { raw = storageAccessor().getItem(STORAGE_KEY); }
-      catch { return { status: 'unavailable', attempt: null }; }
-      if (raw === null) return { status: 'empty', attempt: null };
-      if (typeof raw !== 'string' || raw.length > MAX_STORED_LENGTH) return { status: 'invalid', attempt: null };
+    load,
+    canCoordinate,
+    async commit(bank, proposed, { replace = false, expected = null } = {}) {
+      const candidate = restoreAttempt(bank, proposed);
+      requireValue(Boolean(candidate), 'El intento que se quiere guardar es inválido.');
+      let localAttempt = candidate;
+      const unavailable = () => ({ status: 'unavailable', attempt: localAttempt });
+      if (!canCoordinate()) return unavailable();
       try {
-        const attempt = restoreAttempt(bank, JSON.parse(raw));
-        return { status: attempt ? 'restored' : 'invalid', attempt };
-      } catch { return { status: 'invalid', attempt: null }; }
-    },
-    save(attempt) {
-      try {
-        const raw = JSON.stringify(attempt);
-        if (raw.length > MAX_STORED_LENGTH) return false;
-        storageAccessor().setItem(STORAGE_KEY, raw);
-        return true;
-      } catch { return false; }
+        return await locksAccessor().request(`${STORAGE_KEY}:write`, { mode: 'exclusive' }, async () => {
+          const current = load(bank);
+          if (current.status === 'unavailable') return unavailable();
+          const stored = current.attempt;
+          if (replace ? !(sameAttempt(stored, expected) || (!stored && !expected)) : !sameAttempt(stored, candidate)) {
+            return { status: 'superseded', attempt: stored };
+          }
+          const next = replace ? candidate : reconcileAttempts(stored, candidate);
+          localAttempt = next;
+          const raw = JSON.stringify(next);
+          if (raw.length > MAX_STORED_LENGTH) return unavailable();
+          if (raw !== JSON.stringify(stored)) {
+            storageAccessor().setItem(STORAGE_KEY, raw);
+            // Keep the lock across a task boundary: Firefox checkpoints localStorage at task end.
+            await new Promise(resolve => {
+              const channel = new MessageChannel();
+              channel.port1.onmessage = () => {
+                channel.port1.close(); channel.port2.close(); resolve();
+              };
+              channel.port2.postMessage(null);
+            });
+          }
+          return { status: 'saved', attempt: next };
+        });
+      } catch { return unavailable(); }
     },
   };
 }

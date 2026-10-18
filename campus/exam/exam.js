@@ -1,6 +1,6 @@
 import {
-  BANK_SIZE, SESSION_LENGTH, validateBank, createAttempt, answerQuestion,
-  navigateAttempt, finishAttempt, summarizeAttempt, createPersistence,
+  BANK_SIZE, SESSION_LENGTH, STORAGE_KEY, validateBank, createAttempt, answerQuestion,
+  navigateAttempt, finishAttempt, summarizeAttempt, createPersistence, sameAttempt,
 } from './model.mjs';
 
 const main = document.querySelector('#main');
@@ -16,6 +16,9 @@ let view = 'home';
 let reviewIndices = [];
 let reviewPosition = 0;
 let storageAvailable = true;
+let saving = false;
+let memoryOnly = false;
+const memoryNotice = 'Este navegador no permite guardar el intento de forma segura entre pestañas. Puedes practicar en esta página; las nuevas respuestas se conservarán solo mientras permanezca abierta.';
 let pendingAction = null;
 let confirmationOrigin = null;
 let loading = false;
@@ -52,6 +55,7 @@ function focusOn(id) {
 function mount(content, focusId) {
   main.replaceChildren(content);
   restartButton.hidden = !attempt || view === 'home';
+  refreshSaving();
   if (focusId) focusOn(focusId);
 }
 
@@ -60,10 +64,87 @@ function showNotice(message) {
   storageNote.hidden = !message;
 }
 
-function persist() {
-  storageAvailable = persistence.save(attempt);
-  showNotice(storageAvailable ? '' : 'El navegador no permite guardar este intento. Puedes practicar; se conservará mientras mantengas esta página abierta.');
+function refreshSaving() {
+  main.dataset.saving = String(saving);
+  for (const control of document.querySelectorAll('#main button, #main input[type=radio], #restart-attempt')) {
+    if (saving && !control.disabled) {
+      control.dataset.saveDisabled = 'true';
+      control.disabled = true;
+    } else if (!saving && control.dataset.saveDisabled) {
+      control.disabled = false;
+      delete control.dataset.saveDisabled;
+    }
+  }
+  const status = document.querySelector('#save-status');
+  if (status) status.textContent = saving ? 'Guardando el intento…'
+    : storageAvailable ? 'Guardado en este navegador.' : 'Sesión disponible mientras esta página permanezca abierta.';
 }
+
+function redraw() {
+  const focusId = document.activeElement?.id;
+  if (view === 'home') renderHome();
+  else if (view === 'results') renderResults(false);
+  else renderQuestion();
+  const target = document.getElementById(focusId);
+  if (target && !target.disabled) target.focus();
+}
+
+function adoptAttempt(next, start = false) {
+  if (start) {
+    attempt = next;
+    view = next.status === 'active' ? 'attempt' : 'results';
+    if (view === 'attempt') renderQuestion({ focus: true });
+    else renderResults();
+    return;
+  }
+  if (!sameAttempt(attempt, next)) {
+    attempt = next;
+    pendingAction = null;
+    if (confirmation.open) confirmation.close('changed');
+    showNotice(next ? 'El intento ha cambiado en otra pestaña. Puedes reanudar el que está guardado.'
+      : 'El intento guardado se ha eliminado o ya no es válido. Puedes empezar uno nuevo.');
+    renderHome(true);
+    return;
+  }
+  const updated = { ...next, currentIndex: attempt.currentIndex };
+  if (JSON.stringify(updated) === JSON.stringify(attempt)) return;
+  attempt = updated;
+  if (attempt.status === 'finished') {
+    pendingAction = null;
+    if (confirmation.open) confirmation.close('changed');
+    if (view === 'attempt') view = 'results';
+  }
+  showNotice('Se han incorporado las respuestas guardadas en otra pestaña. Se conserva la primera respuesta de cada pregunta.');
+  redraw();
+}
+
+async function persist(proposed = attempt, options = {}) {
+  saving = true;
+  refreshSaving();
+  const result = memoryOnly ? { status: 'unavailable', attempt: proposed }
+    : await persistence.commit(bank, proposed, options);
+  let next = result.attempt;
+  if (result.status === 'unavailable') {
+    memoryOnly = true;
+    storageAvailable = false;
+  } else {
+    // Read the latest value: another locked transaction can finish before this continuation.
+    const latest = persistence.load(bank);
+    if (latest.status !== 'unavailable') next = latest.attempt;
+    else { memoryOnly = true; storageAvailable = false; }
+  }
+  saving = false;
+  refreshSaving();
+  showNotice(memoryOnly ? memoryNotice : '');
+  adoptAttempt(next, Boolean(options.replace && sameAttempt(next, proposed) && result.status !== 'superseded'));
+  if (memoryOnly) showNotice(memoryNotice);
+}
+
+window.addEventListener('storage', event => {
+  if (!bank || memoryOnly || saving || (event.key !== STORAGE_KEY && event.key !== null)) return;
+  const latest = persistence.load(bank);
+  if (latest.status !== 'unavailable' && (attempt || latest.attempt)) adoptAttempt(latest.attempt);
+});
 
 function requestConfirmation(title, description, actionLabel, action) {
   if (typeof confirmation.showModal !== 'function') {
@@ -96,25 +177,25 @@ document.querySelector('.skip-link').addEventListener('click', event => {
   main.focus();
 });
 
-function startAttempt() {
+async function startAttempt(expected) {
+  if (saving) return;
   try {
     const next = createAttempt(bank);
-    attempt = next;
-    view = 'attempt';
-    persist();
-    renderQuestion({ focus: true });
+    await persist(next, { replace: true, expected });
   } catch {
     showNotice('No se ha podido preparar la selección aleatoria. Vuelve a cargar la página en un navegador actualizado e inténtalo de nuevo.');
   }
 }
 
 function requestNewAttempt() {
+  if (saving) return;
+  const expected = attempt;
   if (attempt?.status === 'active') {
     const result = summarizeAttempt(bank, attempt);
     requestConfirmation('¿Empezar otro intento?',
       `Tienes ${result.answered} de ${result.total} preguntas respondidas en el intento actual. Al empezar otro, se sustituirán esas respuestas por una nueva selección de ${SESSION_LENGTH} preguntas.`,
-      'Sustituir y empezar', startAttempt);
-  } else startAttempt();
+      'Sustituir y empezar', () => startAttempt(expected));
+  } else startAttempt(expected);
 }
 restartButton.addEventListener('click', requestNewAttempt);
 
@@ -182,13 +263,14 @@ function renderHome(focus = false) {
 }
 
 function navigate(index) {
+  if (saving) return;
   if (view === 'review') reviewPosition = index;
   else { attempt = navigateAttempt(attempt, index); persist(); }
   renderQuestion({ focus: true });
 }
 
 function acceptAnswer(questionId, optionId) {
-  if (view !== 'attempt') return;
+  if (saving || view !== 'attempt') return;
   const next = answerQuestion(bank, attempt, questionId, optionId);
   if (next === attempt) return;
   attempt = next;
@@ -241,7 +323,7 @@ function renderQuestion({ focus = false, feedbackFocus = false } = {}) {
   title.id = 'question-title';
   title.tabIndex = -1;
   const help = element('p', reviewing ? 'Consulta tu primera respuesta y la explicación de la solución.'
-    : answered ? 'Respuesta guardada. Puedes revisar la explicación o avanzar.'
+    : answered ? 'Tu primera respuesta queda fijada. Puedes revisar la explicación o avanzar.'
       : 'Elige una opción. Se corrige al seleccionarla y la respuesta queda fijada.', 'small');
   help.id = 'selection-help';
   panel.append(meta, title, help);
@@ -299,6 +381,7 @@ function renderQuestion({ focus = false, feedbackFocus = false } = {}) {
     const labels = { unanswered: 'sin responder', correct: 'correcta', incorrect: 'incorrecta' };
     const itemButton = element('button', String(originalIndex + 1));
     itemButton.type = 'button';
+    itemButton.id = `question-index-${originalIndex + 1}`;
     itemButton.dataset.result = status;
     itemButton.setAttribute('aria-label', `Pregunta ${originalIndex + 1}: ${labels[status]}`);
     if (localIndex === position) itemButton.setAttribute('aria-current', 'step');
@@ -310,16 +393,20 @@ function renderQuestion({ focus = false, feedbackFocus = false } = {}) {
   }
   tools.append(indexNavigation, element('p', '✓ Correcta · × Incorrecta · ○ Sin responder', 'index-legend'));
   tools.append(button('finish-attempt', reviewing ? 'Volver al resultado' : result.unanswered ? 'Finalizar intento' : 'Ver resultado', reviewing ? renderResults : requestFinish));
-  tools.append(element('p', reviewing ? 'Las respuestas del intento ya están cerradas.'
-    : storageAvailable ? 'Guardado en este navegador.' : 'Sesión disponible mientras esta página permanezca abierta.', 'small'));
+  const saveStatus = element('p', reviewing ? 'Las respuestas del intento ya están cerradas.' : '', 'small');
+  if (!reviewing) saveStatus.id = 'save-status';
+  tools.append(saveStatus);
   layout.append(panel, tools);
   container.append(header, layout);
   mount(container, feedbackFocus ? 'answer-feedback' : focus ? 'question-title' : null);
 }
 
 function requestFinish() {
+  if (saving) return;
+  const expected = attempt;
   const result = summarizeAttempt(bank, attempt);
   const finish = () => {
+    if (saving || !sameAttempt(expected, attempt)) return;
     attempt = finishAttempt(attempt);
     persist();
     renderResults();
@@ -339,7 +426,7 @@ function beginReview(mistakesOnly) {
   renderQuestion({ focus: true });
 }
 
-function renderResults() {
+function renderResults(focus = true) {
   view = 'results';
   const result = summarizeAttempt(bank, attempt);
   const container = element('div');
@@ -427,7 +514,7 @@ function renderResults() {
   finalActions.append(button('new-attempt-result', 'Nuevo intento aleatorio', requestNewAttempt), button('return-home', 'Volver al inicio', () => renderHome(true), true));
   container.append(header, hero, grid, finalActions,
     element('p', 'Resultado orientativo de práctica. No equivale a una certificación ni a una evaluación oficial del curso.', 'small'));
-  mount(container, 'results-heading');
+  mount(container, focus ? 'results-heading' : null);
 }
 
 async function bootstrap() {
@@ -445,8 +532,9 @@ async function bootstrap() {
     bank = validateBank(JSON.parse(raw));
     const stored = persistence.load(bank);
     attempt = stored.attempt;
-    storageAvailable = stored.status !== 'unavailable';
-    if (stored.status === 'unavailable') showNotice('Este navegador no permite guardar el intento. Puedes practicar mientras mantengas esta página abierta.');
+    memoryOnly = stored.status === 'unavailable' || !persistence.canCoordinate();
+    storageAvailable = !memoryOnly;
+    if (memoryOnly) showNotice(memoryNotice);
     else if (stored.status === 'invalid') showNotice('El intento guardado está incompleto o pertenece a otra versión del banco. Puedes empezar uno nuevo.');
     renderHome();
   } catch {

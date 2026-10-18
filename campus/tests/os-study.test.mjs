@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {empty,parse,merge,totals,completion,createTimer,start,tick,pause,format,remainingEstimate} from '../os_classroom/model.js';
+import {empty,resetRecord,parse,merge,totals,completion,createTimer,start,tick,pause,format,remainingEstimate} from '../os_classroom/model.js';
 import {routeFor,guidance,HOSTS,TARGETS} from '../os_classroom/environment.js';
 const course={lessons:[{id:'OS-C01',views:[{id:'OS-C01:0',kind:'concept'},{id:'OS-C01:1',kind:'lab'}]}]};
 const record=()=>({lesson:'OS-C01',kind:'study',ms:2000,problemMs:1000,at:1000});
@@ -17,6 +17,42 @@ test('double pause does not double count',()=>{const t=createTimer();start(t,0);
 test('bad duration rejected',()=>{assert.throws(()=>createTimer('study',-1));assert.throws(()=>createTimer('random'));});
 test('clock formatting',()=>{assert.equal(format(1500000),'25:00');assert.equal(format(0),'00:00');});
 test('schema roundtrip',()=>{assert.deepEqual(parse(JSON.stringify(empty()),course),empty());});
+test('old schema-1 copies have a stable legacy identity and generation zero',()=>{
+ const x=empty();delete x.generation;delete x.recordId;const raw=JSON.stringify(x);
+ assert.deepEqual(parse(raw,course,1000),empty());assert.deepEqual(parse(raw,course,2000),empty());
+});
+test('reset preserves the persisted lifetime identity',()=>{
+ const x={...empty(),recordId:'record-first-life',generation:5};
+ const reset=resetRecord(x);assert.equal(reset.recordId,x.recordId);assert.equal(reset.generation,6);
+ assert.deepEqual(parse(JSON.stringify(reset),course),reset);
+});
+test('generations cannot merge across different record lifetimes',()=>{
+ const old={...empty(),recordId:'record-first-life',generation:8},fresh={...empty(),recordId:'record-new-life'};
+ assert.throws(()=>merge(old,fresh),/RECORD_ID/);assert.throws(()=>merge(fresh,old),/RECORD_ID/);
+});
+test('invalid record identities are rejected',()=>{for(const recordId of ['',null,1,'a/b','x'.repeat(81)])assert.throws(()=>parse(JSON.stringify({...empty(),recordId}),course));});
+test('reset removes old marks and sessions in either merge order',()=>{
+ const old=empty();old.marks['OS-C01:0']={status:'done',at:Number.MAX_SAFE_INTEGER};old.sessions['session-123']=record();
+ const reset=resetRecord(old);assert.equal(reset.schema,1);assert.equal(reset.generation,1);
+ assert.deepEqual(merge(old,reset),reset);assert.deepEqual(merge(reset,old),reset);
+ reset.marks['OS-C01:1']={status:'review',at:2000};
+ assert.deepEqual(merge(reset,old),reset);assert.deepEqual(parse(JSON.stringify(reset),course,2000),reset);
+});
+test('invalid generations are rejected',()=>{for(const generation of [-1,1.5,'1'])assert.throws(()=>parse(JSON.stringify({...empty(),generation}),course));});
+test('future marks have stable low priority across repeated saves and merges',()=>{
+ const future=empty();future.marks['OS-C01:0']={status:'done',at:Number.MAX_SAFE_INTEGER};const raw=JSON.stringify(future);
+ let local=parse(raw,course,2000);assert.equal(local.marks['OS-C01:0'].at,0);
+ local.marks['OS-C01:0']={status:'review',at:2000};
+ for(const now of [2000,2001,3000,5000]){
+  local=parse(JSON.stringify(merge(local,parse(raw,course,now))),course,now);
+  assert.deepEqual(local.marks['OS-C01:0'],{status:'review',at:2000});
+ }
+});
+test('even a one-millisecond future date cannot block a local edit',()=>{
+ const x=empty();x.marks['OS-C01:0']={status:'done',at:2001};
+ const stored=JSON.stringify(parse(JSON.stringify(x),course,2000));const local=empty();local.marks['OS-C01:0']={status:'blocked',at:2000};
+ for(const now of [2000,2001,3000])assert.equal(merge(local,parse(stored,course,now)).marks['OS-C01:0'].status,'blocked');
+});
 test('marks require recognized IDs',()=>{const x=empty();x.marks['OS-C99:0']={status:'done',at:1};assert.throws(()=>parse(JSON.stringify(x),course));});
 test('unknown state rejected',()=>{const x=empty();x.marks['OS-C01:0']={status:'excellent',at:1};assert.throws(()=>parse(JSON.stringify(x),course));});
 test('sessions must have bounded values',()=>{const x=empty();x.sessions['session-123']=record();x.sessions['session-123'].ms=-1;assert.throws(()=>parse(JSON.stringify(x),course));});
