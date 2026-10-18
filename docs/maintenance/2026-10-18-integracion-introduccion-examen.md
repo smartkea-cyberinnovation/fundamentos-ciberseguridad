@@ -46,10 +46,11 @@ Pruebas necesarias: compilador, contratos, modelo de examen, conservación de pr
 
 ## Revisión posterior a la integración
 
-La revisión de [PR #10](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/pull/10) identificó cinco casos adicionales que se verifican con regresiones específicas:
+Las revisiones de [PR #10](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/pull/10) y [PR #11](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/pull/11) identificaron los siguientes casos, que se verifican con regresiones específicas:
 
 - Dos pestañas del mismo intento conservan las respuestas ya registradas, y una pestaña antigua no puede recuperar un intento sustituido o volver a abrirlo tras finalizar.
-- Reiniciar el registro del aula OS propaga el reinicio a otras pestañas; sus marcas y sesiones anteriores no reaparecen al guardar.
+- Reiniciar el registro del aula OS propaga el reinicio a otras pestañas; sus marcas y sesiones anteriores no reaparecen al guardar. Si una pestaña pierde el aviso, adopta el registro vigente antes de aplicar una nueva marca, para conservar esa acción posterior al reinicio.
+- Borrar y recrear el guardado inicia una identidad nueva. Una pestaña que vuelva a activarlo o pierda el aviso de borrado adopta el registro vigente y no recupera los datos de una vida anterior. Las copias antiguas siguen siendo importables, con su identidad y generación adaptadas al registro de destino.
 - Las fechas futuras de una copia del aula no pueden impedir una edición posterior.
 - Un fallo de carga inicial del aula ofrece reintento y lectura continua; un cambio de idioma fallido conserva el selector del idioma que sigue visible.
 - Las siete referencias compartidas de D46 se conservan también en inglés, incluidos sus enlaces internos a D27–D29 y los de las diapositivas. La navegación mantiene el idioma elegido.

@@ -2,7 +2,7 @@ import {KEY,empty,resetRecord,parse,merge,totals,completion,createTimer,start,ti
 import {HOSTS,TARGETS,guidance} from './environment.js';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let lang=new URL(location.href).searchParams.get('lang')==='en'?'en':'es',course,state=empty(),current,index=0,persistent=false,storedOnce=false,recoveryRaw=null,loading=0;
-let timer=createTimer(),session=null,releaseLock=null,lockPending=false,lastSave=0,idleAt=performance.now(),noticeId;
+let timer=createTimer(),session=null,releaseLock=null,lockPending=false,activityVersion=0,lastSave=0,idleAt=performance.now(),noticeId;
 let hints=0,pendingImport=null,host='unknown',quizPassed=false;
 const tr=(es,en)=>lang==='es'?es:en;
 const p=text=>'<p>'+esc(text)+'</p>';
@@ -13,18 +13,35 @@ const kindName=k=>({goal:tr('Objetivo','Goal'),concept:tr('Un concepto','One con
 function toast(text){clearTimeout(noticeId);$('#status').textContent=text;$('#status').hidden=false;noticeId=setTimeout(()=>$('#status').hidden=true,6000);}
 function download(name,text,type='application/json'){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([text],{type}));a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 function readSaved(){try{return localStorage.getItem(KEY);}catch{return null;}}
-function discardActivity(){session=null;timer=createTimer();pendingImport=null;lockPending=false;unlock();paintTimer();}
+function discardActivity(){activityVersion++;session=null;timer=createTimer();pendingImport=null;lockPending=false;unlock();paintTimer();}
 function recordWasReset(){
  discardActivity();recoveryRaw=null;if($('#panel').open)$('#panel').close();
- if(course)queueMicrotask(()=>render(false));
+ if(course){if(current)state.last=current.id+'/'+index;render(false);}
  toast(tr('El registro se ha reiniciado en este navegador. El temporizador anterior se ha detenido.','The record was reset in this browser. The previous timer was stopped.'));
 }
-function acceptRecord(other){const generation=state.generation;state=merge(state,other);if(state.generation!==generation)recordWasReset();}
-function savedRecordRemoved(){persistent=false;storedOnce=false;state=resetRecord(state);recordWasReset();}
+function acceptRecord(other){
+ const changedLife=state.recordId!==other.recordId,generation=state.generation;
+ state=changedLife?structuredClone(other):merge(state,other);
+ if(changedLife||state.generation!==generation)recordWasReset();
+}
+function savedRecordRemoved(){persistent=false;storedOnce=false;state=empty();recordWasReset();}
+function saveFailed(){persistent=false;toast(tr('No se pudo guardar. Exporta tu copia; no se ha borrado la anterior.','Could not save. Export your record; the previous copy was not deleted.'));}
+function synchronizeRecord(){
+ if(!persistent||recoveryRaw||!course)return null;
+ try{
+  const raw=localStorage.getItem(KEY);
+  if(raw===null){if(storedOnce)savedRecordRemoved();return null;}
+  const saved=parse(raw,course);acceptRecord(saved);storedOnce=true;return saved;
+ }catch{saveFailed();return null;}
+}
 function save(){
  if(!persistent||recoveryRaw||!course)return;
- try{const old=localStorage.getItem(KEY);if(old===null&&storedOnce){savedRecordRemoved();return;}if(old)acceptRecord(parse(old,course));state=parse(JSON.stringify(state),course);localStorage.setItem(KEY,JSON.stringify(state));storedOnce=true;}
- catch{persistent=false;toast(tr('No se pudo guardar. Exporta tu copia; no se ha borrado la anterior.','Could not save. Export your record; the previous copy was not deleted.'));}
+ const saved=synchronizeRecord();if(!persistent)return;
+ try{
+  // Opting back in creates a new lifetime even when retaining this tab's draft.
+  if(!saved)state={...state,recordId:crypto.randomUUID(),generation:0};
+  state=parse(JSON.stringify(state),course);localStorage.setItem(KEY,JSON.stringify(state));storedOnce=true;
+ }catch{saveFailed();}
 }
 function route(){const raw=location.hash.slice(1);const match=/^(OS-[CLWA]\d{2})\/(\d+)$/.exec(raw||state.last);let l=course.lessons.find(l=>l.id===match?.[1]);if(!l)l=course.lessons[0];return [l,Math.min(match?Number(match[2]):0,l.views.length-1)];}
 function go(id,n=0){halt('navigation');location.hash=id+'/'+n;}
@@ -73,6 +90,7 @@ function mark(status){
  const v=current.views[index];
  if(status==='done'&&v.kind==='quiz'&&!quizPassed)return;
  if(status==='done'&&$('#native-confirm')&&!$('#native-confirm').checked){toast(tr('Confirma ejecución nativa o marca bloqueo de entorno.','Confirm native execution or mark an environment blocker.'));return;}
+ synchronizeRecord();
  state.marks[v.id]={status,at:Date.now()};save();render();
 }
 function move(delta){
@@ -94,9 +112,9 @@ function halt(reason='manual'){
  pause(timer,performance.now(),reason);sessionRecord();save();unlock();paintTimer();
 }
 async function begin(kind=null){
- if(!current||timer.running||lockPending)return;
+ if(!current)return;synchronizeRecord();if(timer.running||lockPending)return;
  if(Object.keys(state.sessions).length>=1000){toast(tr('Exporta el registro y comienza uno nuevo: límite de sesiones alcanzado.','Export the record and begin a new one: session limit reached.'));return;}
- const requested=kind||(['environment','lab','evidence','recovery'].includes(current.views[index].kind)?'practice':'study'),generation=state.generation;
+ const requested=kind||(['environment','lab','evidence','recovery'].includes(current.views[index].kind)?'practice':'study'),activity=activityVersion;
  const activate=()=>{
   if(kind||!session||timer.remaining===0||session.lesson!==current.id){timer=createTimer(requested,requested==='break'?300000:1500000);session={id:crypto.randomUUID(),lesson:current.id,at:Date.now()};}
   idleAt=performance.now();start(timer,idleAt);paintTimer();
@@ -104,11 +122,12 @@ async function begin(kind=null){
  if(navigator.locks){
   lockPending=true;paintTimer();
   try{await navigator.locks.request(KEY+'.timer',{ifAvailable:true},async lock=>{
+   synchronizeRecord();
+   if(activityVersion!==activity){paintTimer();return;}
    lockPending=false;
-   if(state.generation!==generation){paintTimer();return;}
    if(!lock){toast(tr('Hay un temporizador activo en otra pestaña. Páusalo primero.','A timer is active in another tab. Pause it first.'));paintTimer();return;}
    activate();await new Promise(resolve=>releaseLock=resolve);
-  });}catch{lockPending=false;toast(tr('No se pudo reservar el temporizador. No se ha iniciado.','Could not reserve the timer. It was not started.'));paintTimer();}
+  });}catch{if(activityVersion!==activity)return;lockPending=false;toast(tr('No se pudo reservar el temporizador. No se ha iniciado.','Could not reserve the timer. It was not started.'));paintTimer();}
  }else{toast(tr('Este navegador no coordina temporizadores entre pestañas: utiliza solo una.','This browser cannot coordinate tab timers: use only one tab.'));activate();}
 }
 function show(title,body){halt('panel');$('#panel-title').textContent=title;$('#panel-body').innerHTML=body;$('#panel').showModal();}
@@ -118,6 +137,7 @@ function environment(){
  $('#host-choice').addEventListener('change',update);$('#target-choice').addEventListener('change',update);update();
 }
 function dashboard(){
+ synchronizeRecord();
  sessionRecord();const t=totals(state),today=totals(state,null,new Date()),c=completion(state,current),estimate=remainingEstimate(state,current),left=Math.max(0,state.goal*25*60000-today.study-today.practice);
  const stats=[[tr('Estudio registrado','Recorded study'),format(t.study)],[tr('Práctica registrada','Recorded practice'),format(t.practice)],[tr('Pausas registradas','Recorded breaks'),format(t.break)],[tr('Tiempo de bloqueo (subconjunto)','Problem time (subset)'),format(t.problem)],[tr('Práctica externa declarada','Declared external practice'),format(t.declared)],[tr('Objetivo de foco pendiente hoy','Remaining focus goal today'),format(left)]];
  const flagged=current.views.filter(v=>['review','blocked'].includes(state.marks[v.id]?.status));
@@ -135,19 +155,19 @@ function dashboard(){
  '<div class="actions">'+button('export',tr('Exportar mi registro','Export my record'))+button('reset',tr('Reiniciar registro','Reset record'))+'</div>'+`<p><label for="import">${tr('Importar copia JSON (máximo 1 MiB)','Import JSON record (1 MiB maximum)')}</label> <input id="import" type="file" accept="application/json,.json"></p>`+
  (recoveryRaw?'<div class="callout">'+tr('La copia anterior no es válida; se conserva sin sobrescribir.','The previous copy is invalid; it remains untouched.')+button('recover',tr('Descargar copia original','Download original copy'))+'</div>':'')+
  '<div id="import-preview"></div>');
- $('#goal').addEventListener('change',e=>{state.goal=Number(e.target.value);save();});
+ $('#goal').addEventListener('change',e=>{const goal=Number(e.target.value);synchronizeRecord();state.goal=goal;save();});
  $('#remember').addEventListener('change',e=>{persistent=e.target.checked;if(persistent)save();else{storedOnce=false;try{localStorage.removeItem(KEY);}catch{}}});
  $('#export').onclick=()=>download('smartkea-os-study.json',JSON.stringify(state,null,2));
  $('#reset').onclick=()=>{if(confirm(tr('¿Reiniciar solo el registro de esta aula? Exporta primero para conservarlo.','Reset only this classroom record? Export first to retain it.'))){
-  try{const raw=readSaved();if(raw)state=merge(state,parse(raw,course));}catch{}
+  synchronizeRecord();
   state=resetRecord(state);recoveryRaw=null;discardActivity();
   try{if(persistent){localStorage.setItem(KEY,JSON.stringify(state));storedOnce=true;}else{localStorage.removeItem(KEY);storedOnce=false;}}
   catch{persistent=false;toast(tr('No se pudo actualizar la copia del navegador. Comprueba el almacenamiento antes de cerrar.','Could not update the browser copy. Check storage before closing.'));}
   $('#panel').close();go('OS-C01',0);render();
  }};
- $('#external-add').onclick=()=>{const n=Number($('#external-min').value);if(!Number.isInteger(n)||n<1||n>240||Object.keys(state.sessions).length>=1000){toast(tr('Valor no válido.','Invalid value.'));return;}state.sessions[crypto.randomUUID()]={lesson:current.id,kind:'declared',ms:n*60000,problemMs:0,at:Date.now()};save();dashboard();};
+ $('#external-add').onclick=()=>{const n=Number($('#external-min').value);synchronizeRecord();if(!Number.isInteger(n)||n<1||n>240||Object.keys(state.sessions).length>=1000){toast(tr('Valor no válido.','Invalid value.'));return;}state.sessions[crypto.randomUUID()]={lesson:current.id,kind:'declared',ms:n*60000,problemMs:0,at:Date.now()};save();dashboard();};
  $('#recover')?.addEventListener('click',()=>download('os-record-recovery.txt',recoveryRaw,'text/plain'));
- $('#import').addEventListener('change',async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>1048576)throw Error('SIZE');pendingImport=parse(await f.text(),course);$('#import-preview').innerHTML=p(tr('Copia validada. Las marcas se combinan por fecha y las sesiones duplicadas por identificador. Las fechas futuras no dan prioridad a una marca.','Validated record. Marks merge by timestamp and duplicate sessions by ID. Future dates do not give a mark priority.'))+button('confirm-import',tr('Combinar esta copia','Merge this copy'));$('#confirm-import').onclick=()=>{try{state=parse(JSON.stringify(merge(state,{...pendingImport,generation:state.generation})),course);pendingImport=null;save();$('#panel').close();render();toast(tr('Copia combinada.','Record merged.'));}catch{toast(tr('La combinación excede los límites; conserva ambas copias.','The merge exceeds limits; keep both records.'));}};}catch{pendingImport=null;$('#import-preview').textContent=tr('Copia rechazada; no se han cambiado tus datos.','Record rejected; your data was not changed.');}});
+ $('#import').addEventListener('change',async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>1048576)throw Error('SIZE');pendingImport=parse(await f.text(),course);$('#import-preview').innerHTML=p(tr('Copia validada. Las marcas se combinan por fecha y las sesiones duplicadas por identificador. Las fechas futuras no dan prioridad a una marca.','Validated record. Marks merge by timestamp and duplicate sessions by ID. Future dates do not give a mark priority.'))+button('confirm-import',tr('Combinar esta copia','Merge this copy'));$('#confirm-import').onclick=()=>{try{const incoming=pendingImport;if(!incoming)return;synchronizeRecord();state=parse(JSON.stringify(merge(state,{...incoming,recordId:state.recordId,generation:state.generation})),course);pendingImport=null;save();$('#panel').close();render();toast(tr('Copia combinada.','Record merged.'));}catch{toast(tr('La combinación excede los límites; conserva ambas copias.','The merge exceeds limits; keep both records.'));}};}catch{pendingImport=null;$('#import-preview').textContent=tr('Copia rechazada; no se han cambiado tus datos.','Record rejected; your data was not changed.');}});
 }
 function courseControls(available){
  for(const id of ['menu','help','dashboard','present','fullscreen','share','prev','next','start','pause','break','problem','hint','download-note'])$('#'+id).disabled=!available;
@@ -197,7 +217,7 @@ $('#problem').onclick=()=>{tick(timer,performance.now());timer.problem=!timer.pr
 $('#hint').onclick=()=>{const items=[tr('Primero: '+current.lab.symptom,'First: '+current.lab.symptom),current.lab.hint,tr('Formula dos hipótesis y una prueba de bajo impacto. Si no tienes el entorno o permiso, detente y solicita el laboratorio adecuado.','Form two hypotheses and one low-impact check. If the environment or authorization is missing, stop and request the appropriate lab.')];$('#hint-text').textContent=items[Math.min(hints++,2)];};
 $('#download-note').onclick=()=>download('problema-'+current.id+'.txt',current.id+'\n'+$('#problem-note').value,'text/plain');
 $('#content').addEventListener('click',async e=>{
- const answer=e.target.closest('[data-answer]');if(answer){const q=current.views[index].quiz;quizPassed=Number(answer.dataset.answer)===q.correct;$('#answer-feedback').textContent=(quizPassed?tr('Correcto. ','Correct. '):tr('Revisa la explicación. ','Review the explanation. '))+q.explanation;$('#done').disabled=!quizPassed;if(!quizPassed){state.marks[current.views[index].id]={status:'review',at:Date.now()};save();}return;}
+ const answer=e.target.closest('[data-answer]');if(answer){synchronizeRecord();const q=current.views[index].quiz;quizPassed=Number(answer.dataset.answer)===q.correct;$('#answer-feedback').textContent=(quizPassed?tr('Correcto. ','Correct. '):tr('Revisa la explicación. ','Review the explanation. '))+q.explanation;$('#done').disabled=!quizPassed;if(!quizPassed){state.marks[current.views[index].id]={status:'review',at:Date.now()};save();}return;}
  if(e.target.id==='copy-code'){try{await navigator.clipboard.writeText(current.views[index].code);toast(tr('Copiado. Revisa contexto y permisos antes de ejecutar.','Copied. Review context and permissions before execution.'));}catch{toast(tr('Selecciona y copia el bloque manualmente.','Select and copy the block manually.'));}}
  if(e.target.id==='open-environment')environment();
  if(e.target.id==='template')download('entrega-'+current.id+'.md',`# ${current.id} · ${current.title}\n\n${tr('Objetivo / impacto:\nEntorno y versiones:\nEsperado / observado:\nHipótesis y comprobación:\nResultado y evidencia:\nAlternativas y decisión:\nLímites:\nRecuperación:\nResponsable y siguiente acción:\nUso de IA y verificación independiente:','Goal / impact:\nEnvironment and versions:\nExpected / observed:\nHypothesis and check:\nResult and evidence:\nOptions and decision:\nLimits:\nRecovery:\nOwner and next action:\nAI use and independent verification:')}\n`,'text/markdown');
@@ -208,10 +228,9 @@ window.addEventListener('hashchange',()=>{halt('navigation');document.body.class
 window.addEventListener('storage',e=>{
  if((e.key!==KEY&&e.key!==null)||!course||!persistent)return;
  try{
-  if(e.newValue===null){savedRecordRemoved();return;}
-  acceptRecord(parse(e.newValue,course));
-  const raw=localStorage.getItem(KEY);if(raw===null){savedRecordRemoved();return;}
-  const latest=parse(raw,course);acceptRecord(latest);
+  // Events can be delayed past deletion/recreation. The current stored ID wins.
+  const latest=synchronizeRecord();if(!latest||!persistent)return;
+  if(e.newValue){const announced=parse(e.newValue,course);if(announced.recordId===latest.recordId)acceptRecord(announced);}
   // Repair a stale writer only; ordinary remote renders must not echo tab routes.
   if(latest.generation<state.generation)save();
   if(!timer.running&&!$('#panel').open)render(false);

@@ -17,7 +17,20 @@ test('double pause does not double count',()=>{const t=createTimer();start(t,0);
 test('bad duration rejected',()=>{assert.throws(()=>createTimer('study',-1));assert.throws(()=>createTimer('random'));});
 test('clock formatting',()=>{assert.equal(format(1500000),'25:00');assert.equal(format(0),'00:00');});
 test('schema roundtrip',()=>{assert.deepEqual(parse(JSON.stringify(empty()),course),empty());});
-test('old schema-1 copies begin in generation zero',()=>{const x=empty();delete x.generation;assert.deepEqual(parse(JSON.stringify(x),course),empty());});
+test('old schema-1 copies have a stable legacy identity and generation zero',()=>{
+ const x=empty();delete x.generation;delete x.recordId;const raw=JSON.stringify(x);
+ assert.deepEqual(parse(raw,course,1000),empty());assert.deepEqual(parse(raw,course,2000),empty());
+});
+test('reset preserves the persisted lifetime identity',()=>{
+ const x={...empty(),recordId:'record-first-life',generation:5};
+ const reset=resetRecord(x);assert.equal(reset.recordId,x.recordId);assert.equal(reset.generation,6);
+ assert.deepEqual(parse(JSON.stringify(reset),course),reset);
+});
+test('generations cannot merge across different record lifetimes',()=>{
+ const old={...empty(),recordId:'record-first-life',generation:8},fresh={...empty(),recordId:'record-new-life'};
+ assert.throws(()=>merge(old,fresh),/RECORD_ID/);assert.throws(()=>merge(fresh,old),/RECORD_ID/);
+});
+test('invalid record identities are rejected',()=>{for(const recordId of ['',null,1,'a/b','x'.repeat(81)])assert.throws(()=>parse(JSON.stringify({...empty(),recordId}),course));});
 test('reset removes old marks and sessions in either merge order',()=>{
  const old=empty();old.marks['OS-C01:0']={status:'done',at:Number.MAX_SAFE_INTEGER};old.sessions['session-123']=record();
  const reset=resetRecord(old);assert.equal(reset.schema,1);assert.equal(reset.generation,1);

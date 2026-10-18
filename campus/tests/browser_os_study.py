@@ -40,8 +40,10 @@ class BrowserOS(unittest.TestCase):
     def seed_record(self):
         record={'schema':1,'course':'smartkea-os-study','marks':{'OS-C01:0':{'status':'done','at':1}},
                 'sessions':{'session-old':{'lesson':'OS-C01','kind':'study','ms':2000,'problemMs':0,'at':1}},'last':'OS-C01/0','goal':2}
-        self.open();self.page.evaluate("record=>localStorage.setItem('smartkea.os.study.v1',JSON.stringify(record))",record)
-        self.page.reload();self.wait_view('OS-C01',0)
+        # Seed from the static reader so an old pagehide handler cannot rewrite it.
+        self.page.goto(self.url+'reading.es.html')
+        self.page.evaluate("record=>localStorage.setItem('smartkea.os.study.v1',JSON.stringify(record))",record)
+        self.open()
     def saved_record(self):return self.page.evaluate("JSON.parse(localStorage.getItem('smartkea.os.study.v1'))")
     def test_01_all_lessons_both_languages(self):
         for lang in ['es','en']:
@@ -150,17 +152,17 @@ class BrowserOS(unittest.TestCase):
         other.add_init_script("window.addEventListener('storage',event=>event.stopImmediatePropagation(),true)")
         other.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1,other)
         self.page.locator('#dashboard').click();self.page.once('dialog',lambda d:d.accept());self.page.locator('#reset').click()
-        other.locator('#next').click();self.wait_view('OS-L01',2,other)
+        other.locator('#done').click()
         expect(other.locator('#status')).to_contain_text('reiniciado')
-        other.locator('#blocked').click()
-        saved=self.saved_record();self.assertEqual(1,saved['generation']);self.assertEqual(['OS-L01:2'],list(saved['marks']));self.assertEqual({},saved['sessions'])
+        saved=self.saved_record();self.assertEqual(1,saved['generation']);self.assertEqual(['OS-L01:1'],list(saved['marks']));self.assertEqual({},saved['sessions'])
+        self.assertEqual('done',saved['marks']['OS-L01:1']['status'])
     def test_19_removing_saved_record_disables_saving_in_other_tab(self):
         for method in ('removeItem','clear'):
             with self.subTest(method=method):
                 self.seed_record();other=self.context.new_page();other.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1,other)
                 self.page.evaluate("method=>method==='clear'?localStorage.clear():localStorage.removeItem('smartkea.os.study.v1')",method)
                 expect(other.locator('#status')).to_contain_text('reiniciado')
-                other.locator('#next').click();self.wait_view('OS-L01',2,other);other.locator('#blocked').click()
+                other.locator('#blocked').click()
                 self.assertIsNone(self.saved_record());other.locator('#dashboard').click();expect(other.locator('#remember')).not_to_be_checked();other.close()
     def test_20_initial_load_error_is_persistent_and_can_retry(self):
         self.page.clock.install();self.page.route('**/course.es.json',lambda route:route.abort())
@@ -190,10 +192,11 @@ class BrowserOS(unittest.TestCase):
         expect(self.page.locator('html')).to_have_attribute('lang','es');self.wait_view('OS-C01',0)
     def test_23_future_import_remains_editable_after_saves_and_reload(self):
         self.open();self.page.locator('#dashboard').click();self.page.locator('#remember').check()
-        record={'schema':1,'course':'smartkea-os-study','generation':9007199254740991,
+        record_id=self.saved_record()['recordId']
+        record={'schema':1,'course':'smartkea-os-study','recordId':'external-copy-lifetime','generation':9007199254740991,
                 'marks':{'OS-C01:0':{'status':'done','at':9007199254740991}},'sessions':{},'last':'OS-C01/0','goal':2}
         self.page.locator('#import').set_input_files({'name':'future.json','mimeType':'application/json','buffer':json.dumps(record).encode()})
-        self.page.locator('#confirm-import').click();self.assertEqual(0,self.saved_record()['generation'])
+        self.page.locator('#confirm-import').click();self.assertEqual(0,self.saved_record()['generation']);self.assertEqual(record_id,self.saved_record()['recordId'])
         self.assertEqual(0,self.saved_record()['marks']['OS-C01:0']['at'])
         self.page.locator('#review').click();self.page.locator('#next').click();self.wait_view('OS-C01',1)
         self.page.locator('#prev').click();self.wait_view('OS-C01',0);self.page.reload();self.wait_view('OS-C01',0)
@@ -201,5 +204,111 @@ class BrowserOS(unittest.TestCase):
         self.assertIn('review',self.page.locator('#marks').inner_text())
         self.page.locator('#dashboard').click();self.page.once('dialog',lambda d:d.accept());self.page.locator('#reset').click()
         self.assertEqual(1,self.saved_record()['generation']);self.assertEqual({},self.saved_record()['marks'])
+    def test_24_opt_in_adopts_the_record_recreated_by_another_tab(self):
+        self.seed_record();original=self.saved_record();other=self.context.new_page()
+        other.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1,other)
+        self.page.locator('#dashboard').click();self.page.locator('#remember').uncheck()
+        expect(other.locator('#status')).to_contain_text('reiniciado')
+        self.page.locator('#remember').check();self.page.locator('#close-panel').click();self.page.locator('#blocked').click()
+        recreated=self.saved_record();other.locator('#dashboard').click();expect(other.locator('#remember')).not_to_be_checked()
+        other.locator('#remember').check();saved=self.saved_record()
+        self.assertEqual(recreated['marks'],saved['marks']);self.assertEqual(recreated['sessions'],saved['sessions'])
+        self.assertNotEqual(original.get('recordId','legacy'),saved['recordId']);self.assertEqual(recreated['recordId'],saved['recordId'])
+        self.assertEqual(0,saved['generation'])
+    def test_25_missed_deletion_and_recreation_cannot_revive_the_previous_record(self):
+        for method in ('removeItem','clear'):
+            with self.subTest(method=method):
+                self.seed_record();original=self.saved_record();other=self.context.new_page()
+                other.add_init_script("window.addEventListener('storage',event=>event.stopImmediatePropagation(),true)")
+                other.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1,other)
+                self.page.evaluate("method=>method==='clear'?localStorage.clear():localStorage.removeItem('smartkea.os.study.v1')",method)
+                self.page.reload();self.wait_view('OS-C01',0);self.page.locator('#next').click();self.wait_view('OS-C01',1)
+                self.page.locator('#dashboard').click();self.page.locator('#remember').check();self.page.locator('#close-panel').click()
+                self.page.locator('#review').click();recreated=self.saved_record();other.locator('#done').click();saved=self.saved_record()
+                self.assertEqual({'OS-C01:1','OS-L01:1'},set(saved['marks']));self.assertEqual({},saved['sessions'])
+                self.assertEqual('done',saved['marks']['OS-L01:1']['status']);self.assertEqual(0,saved['generation'])
+                self.assertNotEqual(original.get('recordId','legacy'),saved['recordId']);self.assertEqual(recreated['recordId'],saved['recordId'])
+                other.close()
+    def test_26_explicit_dashboard_actions_follow_a_reset_without_replaying_old_data(self):
+        for action in ('goal','external','import'):
+            with self.subTest(action=action):
+                self.seed_record();other=self.context.new_page()
+                other.add_init_script("window.addEventListener('storage',event=>event.stopImmediatePropagation(),true)")
+                other.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1,other);other.locator('#dashboard').click()
+                if action=='external':
+                    other.locator('details').filter(has=other.locator('#external-min')).locator('summary').click();other.locator('#external-min').fill('7')
+                if action=='import':
+                    incoming={'schema':1,'course':'smartkea-os-study','recordId':'external-copy-lifetime','generation':9007199254740991,
+                              'marks':{'OS-L01:2':{'status':'review','at':1}},'sessions':{}}
+                    other.locator('#import').set_input_files({'name':'copy.json','mimeType':'application/json','buffer':json.dumps(incoming).encode()})
+                    expect(other.locator('#confirm-import')).to_be_visible()
+                self.page.locator('#dashboard').click();self.page.once('dialog',lambda d:d.accept());self.page.locator('#reset').click()
+                if action=='goal':other.locator('#goal').select_option('6')
+                elif action=='external':other.locator('#external-add').click()
+                else:other.locator('#confirm-import').click()
+                saved=self.saved_record();self.assertEqual(1,saved['generation']);self.assertEqual('legacy',saved['recordId'])
+                self.assertNotIn('session-old',saved['sessions']);self.assertNotIn('OS-C01:0',saved['marks'])
+                if action=='goal':self.assertEqual(6,saved['goal']);self.assertEqual({},saved['sessions']);self.assertEqual({},saved['marks'])
+                elif action=='external':
+                    self.assertEqual({},saved['marks']);self.assertEqual(1,len(saved['sessions']))
+                    declared=next(iter(saved['sessions'].values()));self.assertEqual(('OS-L01','declared',420000),(declared['lesson'],declared['kind'],declared['ms']))
+                else:self.assertEqual({'OS-L01:2'},set(saved['marks']));self.assertEqual({},saved['sessions'])
+                other.close()
+    def test_27_start_after_a_missed_reset_creates_a_new_session(self):
+        self.seed_record();other=self.context.new_page();other.clock.install()
+        other.add_init_script("window.addEventListener('storage',event=>event.stopImmediatePropagation(),true)")
+        other.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1,other)
+        other.locator('#start').click();expect(other.locator('#pause')).to_be_enabled();other.clock.fast_forward(2000);other.locator('#pause').click()
+        previous=set(self.saved_record()['sessions']);self.assertEqual(2,len(previous))
+        self.page.locator('#dashboard').click();self.page.once('dialog',lambda d:d.accept());self.page.locator('#reset').click()
+        other.locator('#start').click();expect(other.locator('#pause')).to_be_enabled();expect(other.locator('#clock')).to_have_text('25:00')
+        other.locator('#pause').click();saved=self.saved_record()
+        self.assertEqual(1,saved['generation']);self.assertEqual({},saved['marks']);self.assertEqual(1,len(saved['sessions']))
+        self.assertTrue(previous.isdisjoint(saved['sessions']))
+    def test_28_pending_timer_does_not_activate_after_the_record_changes(self):
+        for change in ('reset','remove','replace'):
+            with self.subTest(change=change):
+                self.seed_record();other=self.context.new_page()
+                other.add_init_script("""window.addEventListener('storage',event=>event.stopImmediatePropagation(),true);
+                    Object.defineProperty(navigator,'locks',{configurable:true,value:{request:(_key,_options,callback)=>new Promise((resolve,reject)=>{
+                        window.finishOSLock=()=>Promise.resolve(callback({name:'delayed-test-lock'})).then(resolve,reject);
+                    })}});""")
+                other.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1,other);other.locator('#start').click()
+                other.wait_for_function("typeof window.finishOSLock==='function'");expect(other.locator('#start')).to_be_disabled()
+                if change=='reset':
+                    self.page.locator('#dashboard').click();self.page.once('dialog',lambda d:d.accept());self.page.locator('#reset').click()
+                else:
+                    self.page.evaluate("localStorage.removeItem('smartkea.os.study.v1')")
+                    if change=='replace':
+                        self.page.reload();self.wait_view('OS-C01',0);self.page.locator('#dashboard').click();self.page.locator('#remember').check()
+                other.evaluate("{window.finishOSLock();}")
+                expect(other.locator('#start')).to_be_enabled();expect(other.locator('#pause')).to_be_disabled()
+                if change=='remove':self.assertIsNone(self.saved_record())
+                else:self.assertEqual({},self.saved_record()['sessions']);self.assertEqual({},self.saved_record()['marks'])
+                other.close()
+    def test_29_delayed_storage_events_cannot_replace_the_current_record_lifetime(self):
+        self.seed_record();old=json.dumps(self.saved_record());other=self.context.new_page()
+        other.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1,other)
+        self.page.locator('#dashboard').click();self.page.locator('#remember').uncheck()
+        expect(other.locator('#status')).to_contain_text('reiniciado')
+        self.page.locator('#remember').check();self.page.locator('#close-panel').click();self.page.locator('#blocked').click()
+        expected=self.saved_record();other.locator('#dashboard').click();other.locator('#remember').check()
+        for payload in (None,old):
+            other.evaluate("raw=>window.dispatchEvent(new StorageEvent('storage',{key:'smartkea.os.study.v1',newValue:raw}))",payload)
+            self.assertEqual(expected['recordId'],self.saved_record()['recordId']);self.assertEqual(expected['marks'],self.saved_record()['marks'])
+        other.locator('#review').click();saved=self.saved_record()
+        self.assertEqual(expected['recordId'],saved['recordId']);self.assertEqual({'OS-C01:0','OS-L01:1'},set(saved['marks']))
+    def test_30_remote_reset_keeps_the_resumed_lesson_without_a_url_hash(self):
+        self.seed_record();self.page.goto(self.url+'?lang=es#OS-L01/1');self.wait_view('OS-L01',1)
+        other=self.context.new_page();other.add_init_script("window.addEventListener('storage',event=>event.stopImmediatePropagation(),true)")
+        other.goto(self.url+'?lang=es');expect(other.locator('#position')).to_contain_text('OS-L01 ·');self.assertNotIn('#',other.url)
+        other.locator('#dashboard').click();other.locator('details').filter(has=other.locator('#external-min')).locator('summary').click()
+        other.locator('#external-min').fill('7')
+        self.page.locator('#dashboard').click();self.page.once('dialog',lambda d:d.accept());self.page.locator('#reset').click()
+        other.locator('#external-add').click();saved=self.saved_record()
+        self.assertEqual(1,saved['generation']);self.assertEqual({},saved['marks']);self.assertEqual(1,len(saved['sessions']))
+        declared=next(iter(saved['sessions'].values()));self.assertEqual(('OS-L01','declared',420000),(declared['lesson'],declared['kind'],declared['ms']))
+        expect(other.locator('#position')).to_contain_text('OS-L01 ·');expect(other.locator('#position')).to_contain_text('· 2 /')
+        self.assertNotIn('#',other.url);self.assertEqual('OS-L01/1',saved['last'])
 
 if __name__=='__main__':unittest.main(verbosity=2)

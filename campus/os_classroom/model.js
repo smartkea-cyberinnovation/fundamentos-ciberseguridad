@@ -3,13 +3,15 @@ export const KEY='smartkea.os.study.v1';
 export const MAX_BYTES=1024*1024;
 export const STATUSES=['done','review','blocked'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
-export function empty(){return {schema:1,course:'smartkea-os-study',generation:0,marks:{},sessions:{},last:'OS-C01/0',goal:2};}
-export function resetRecord(state){return {...empty(),generation:(state.generation??0)+1};}
+export function empty(){return {schema:1,course:'smartkea-os-study',recordId:'legacy',generation:0,marks:{},sessions:{},last:'OS-C01/0',goal:2};}
+export function resetRecord(state){return {...empty(),recordId:state.recordId??'legacy',generation:(state.generation??0)+1};}
 export function parse(raw,course,now=Date.now()){
   if(typeof raw!=='string'||new TextEncoder().encode(raw).length>MAX_BYTES)throw Error('SIZE');
   const x=JSON.parse(raw);if(!object(x)||x.schema!==1||x.course!=='smartkea-os-study'||!object(x.marks)||!object(x.sessions))throw Error('SCHEMA');
   const ids=new Set(course.lessons.flatMap(l=>l.views.map(v=>v.id))),lessons=new Set(course.lessons.map(l=>l.id));
   const clean=empty();
+  // Existing schema-1 records share a stable identity until explicitly removed.
+  if(x.recordId!==undefined){if(typeof x.recordId!=='string'||(x.recordId!=='legacy'&&!/^[a-zA-Z0-9-]{8,80}$/.test(x.recordId)))throw Error('RECORD_ID');clean.recordId=x.recordId;}
   if(x.generation!==undefined){if(!Number.isSafeInteger(x.generation)||x.generation<0)throw Error('GENERATION');clean.generation=x.generation;}
   if(Object.keys(x.marks).length>ids.size||Object.keys(x.sessions).length>1000)throw Error('LIMIT');
   for(const [k,v] of Object.entries(x.marks)){
@@ -31,6 +33,8 @@ export function parse(raw,course,now=Date.now()){
   return clean;
 }
 export function merge(a,b){
+  // A generation only orders resets within one persisted record's lifetime.
+  if((a.recordId??'legacy')!==(b.recordId??'legacy'))throw Error('RECORD_ID');
   if((a.generation??0)!==(b.generation??0))return structuredClone((a.generation??0)>(b.generation??0)?a:b);
   const out=structuredClone(a);
   for(const [k,v] of Object.entries(b.marks))if(!out.marks[k]||v.at>out.marks[k].at)out.marks[k]=structuredClone(v);
