@@ -38,7 +38,7 @@ class IntegralContentTests(unittest.TestCase):
         cls.raw={rid:editions(build.read_text(folder(build.COURSE)/name)) for rid,name in READINGS}
     def selected(self,data):return [r for r in data['resources'] if r['id'] in IDS]
     def test_stable_resource_order(self):
-        for data in (self.es,self.en):self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,41)])
+        for data in (self.es,self.en):self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,47)])
     def test_substantive_both_languages(self):
         for data in (self.es,self.en):
             for r in self.selected(data):
@@ -86,7 +86,9 @@ class IntegralContentTests(unittest.TestCase):
             sources=set(re.findall(r'^\| ([HTNWSIPCVR]\d{2}) \|',self.raw['D36'][language],re.M))
             self.assertGreaterEqual(len(sources),60)
             for rid,values in self.raw.items():
-                if rid=='D36':continue
+                # D41-D46 have direct primary references and T01-T12 syllabus
+                # topic IDs; those IDs are not entries in the older D36 registry.
+                if rid=='D36' or int(rid[1:])>=41:continue
                 refs=set(re.findall(r'\b([HTNWSIPCVR]\d{2})\b',values[language]))
                 self.assertTrue(refs<=sources,(rid,refs-sources))
     def test_no_institutional_brand(self):
@@ -94,7 +96,9 @@ class IntegralContentTests(unittest.TestCase):
             for raw in values.values():self.assertNotIn('nebrija',raw.lower())
     def test_source_links_point_to_maintained_repository(self):
         for data in (self.es,self.en):
-            for r in self.selected(data):self.assertTrue(r['source'].startswith(data['repository']+'/blob/main/formacion/itinerario-integral/'))
+            for r in self.selected(data):
+                folder='introduccion-informatica' if int(r['id'][1:])>=41 else 'itinerario-integral'
+                self.assertTrue(r['source'].startswith(data['repository']+'/blob/main/formacion/'+folder+'/'))
     def test_current_market_period_is_explicit(self):
         for language in ('es','en'):
             text=self.raw['D34'][language]

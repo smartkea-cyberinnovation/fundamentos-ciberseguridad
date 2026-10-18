@@ -72,6 +72,7 @@ class CurriculumTests(unittest.TestCase):
             (path/'operacion'/name).write_text(f'# {rid} fixture\nSynthetic operational lesson.\n',encoding='utf-8')
         extension=path.parent/'itinerario-integral';extension.mkdir()
         for rid,name in INTEGRAL_READINGS:
+            (extension/name).parent.mkdir(parents=True, exist_ok=True)
             (extension/name).write_text('<!-- ES -->\n# Prueba '+rid+'\n\nDatos sintéticos.\n<!-- EN -->\n# Test '+rid+'\n\nSynthetic data.\n',encoding='utf-8')
         mods=[];parts=[]
         for n in range(1,33):
@@ -88,7 +89,7 @@ class CurriculumTests(unittest.TestCase):
             self.assertEqual(len(data['modules']),32);self.assertEqual(data['hours'],480)
             self.assertEqual(sum(len(m['labs']) for m in data['modules']),96)
             self.assertEqual(sum(m['theoryHours'] for m in data['modules']),168)
-            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,41)])
+            self.assertEqual([r['id'] for r in data['resources']],[f'D{i:02}' for i in range(1,47)])
     def test_duplicate_catalog_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             path=Path(temp)/'formacion/sistemas-operativos';path.mkdir(parents=True);self.fixture(path);p=path/'planificacion/curriculo.json'

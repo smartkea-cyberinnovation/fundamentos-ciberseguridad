@@ -31,3 +31,9 @@ Consulta [DEPLOY.md](DEPLOY.md) para operación y recuperación.
 ## Alcance
 
 Este documento describe la política del proyecto. No constituye autorización para realizar pruebas de seguridad sobre terceros ni sustituye los procedimientos de divulgación responsable de los proveedores afectados.
+
+## Aula OS y test de práctica
+
+El aula y el simulador son aplicaciones estáticas. No ejecutan los comandos mostrados ni envían respuestas, notas o progreso a un servidor. El registro de OS y el intento del test utilizan claves locales independientes; la restauración valida formato, catálogo e identificadores antes de usar los datos. Bloquear almacenamiento no debe impedir practicar en memoria.
+
+El banco incluye respuestas y explicaciones como material docente público. No lo uses para evaluar identidad, certificación o calificaciones oficiales. Los ejemplos se ejecutan manualmente sobre datos de laboratorio; los enlaces de repaso del test se limitan a contenido del campus.

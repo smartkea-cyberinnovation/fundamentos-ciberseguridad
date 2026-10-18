@@ -1,10 +1,10 @@
-# Cloudflare deployment / Despliegue Cloudflare · Campus ES/EN 2.3
+# Cloudflare deployment / Despliegue Cloudflare · Campus ES/EN 3.1
 
 ## Select the correct application / Seleccionar la aplicación correcta
 
 The campus is a static site in `campus/dist`, generated with Python. The independent legacy Next.js application remains in the original repository and is excluded from this repository. **Do not select the Next.js preset or OpenNext for this campus.**
 
-The production entry point is **https://smartkea.com/introduccion-ciberseguridad/**, served by the `fundamentos-ciberseguridad` Worker. Its only production route is `smartkea.com/introduccion-ciberseguridad/*`; an exact zone redirect adds a missing trailing slash. See [Workers publication and recovery](WORKERS-RECOVERY.md) and [repository migration](../docs/MIGRATION.md).
+The production entry point is **https://smartkea.com/introduccion-ciberseguridad/**, served by the `fundamentos-ciberseguridad` Worker. The campus route is `smartkea.com/introduccion-ciberseguridad/*`; an exact zone redirect adds a missing trailing slash. The same Worker also serves TERM through the reviewed routes in `wrangler.jsonc`. The OS classroom and practice exam live inside the campus prefix at `sistemas/` and `examen/`. See [Workers publication and recovery](WORKERS-RECOVERY.md) and [repository migration](../docs/MIGRATION.md).
 
 Los logs históricos aportados del 16 de septiembre de 2026 mostraban Workers Builds autodetectando Next.js, un binding hacia `frontend` inexistente y otro intento sin entry-point/assets. No demuestran el estado actual de la cuenta. La configuración explícita siguiente evita mezclar aplicaciones, sin crear un Worker `frontend` innecesario ni desactivar controles.
 

@@ -24,6 +24,8 @@ def source_commit(root: Path) -> str | None:
                 return None
             if (name.startswith('campus/locales/')
                     or name.startswith('campus/assets/')
+                    or name.startswith('campus/exam/')
+                    or name.startswith('campus/os_classroom/')
                     or (len(parts) == 2 and parts[0] == 'campus' and path.suffix in {'.py', '.html'})):
                 return None
         head = subprocess.run(['git', 'rev-parse', 'HEAD'], **options).stdout.strip()
