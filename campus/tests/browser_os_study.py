@@ -105,7 +105,7 @@ class BrowserOS(unittest.TestCase):
     def test_12_import_rejects_bad_schema(self):
         self.open();self.page.locator('#dashboard').click()
         self.page.locator('#import').set_input_files({'name':'bad.json','mimeType':'application/json','buffer':b'{"schema":0}'})
-        self.assertIn('rechazada',self.page.locator('#import-preview').inner_text())
+        expect(self.page.locator('#import-preview')).to_contain_text('rechazada')
     def test_13_download_evidence(self):
         l=self.catalog['lessons'][0];n=next(i for i,v in enumerate(l['views']) if v['kind']=='handover')
         self.open(f'?lang=es#OS-C01/{n}')
