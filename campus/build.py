@@ -18,6 +18,7 @@ from publication import not_found_page
 from operations import add_resources, related_reading
 from os_classroom.build import build_into as build_os_classroom
 from exam_build import build_into as build_exam
+from learning_paths import render as render_learning_paths
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -309,6 +310,7 @@ def build() -> dict:
                 archive.writestr(info, path.read_bytes())
         os_report = build_os_classroom(stage)
         exam_report = build_exam(stage, {r['id'] for r in data['resources']})
+        route_report = render_learning_paths(stage, data)
         (stage/'.campus-generated').write_text('campus-v2\n')
         if out.exists(): shutil.rmtree(out)
         stage.rename(out)
@@ -325,6 +327,7 @@ def build() -> dict:
     report['sourceCommit']=commit
     report['osStudy']=os_report
     report['exam']=exam_report
+    report['learningPaths']=route_report
     report['englishCourseSha256']=hashlib.sha256((out/'course.en.json').read_bytes()).hexdigest()
     report['courseSha256']=hashlib.sha256((out/'course.json').read_bytes()).hexdigest()
     (out/'build-info.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

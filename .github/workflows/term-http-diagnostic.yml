@@ -1,0 +1,58 @@
+name: TERM - bounded public HTTP diagnosis
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.13'
+      - name: Read fixed public course resources without authentication
+        shell: bash
+        run: |
+          mkdir -p term/qa
+          python3 - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'term')
+          import verify_public as v
+          records=[]
+          m=v.fetch(v.BASE+'SHA256SUMS.txt')
+          manifest=v.parse_manifest(m['body'])
+          paths=list(manifest)+['__term_release_check_missing__','404','index.html','']
+          for name in paths:
+              try:
+                  r=v.fetch(v.BASE+name)
+                  expected=manifest.get(name)
+                  actual=v.sha(r['body'])
+                  record={'path':name,'url':r['url'],'status':r['status'],'bytes':len(r['body']),'expected':expected,'actual':actual,'matches':actual==expected if expected else None,'headers':{k:w for k,w in r['headers'].items() if k.lower() in ('content-type','content-encoding','content-length','content-security-policy','x-content-type-options','server','location','cf-cache-status')}}
+                  if expected and actual!=expected or name in ('404','__term_release_check_missing__'):
+                      record['bodyPreview']=r['body'][:2000].decode('utf-8',errors='replace')
+                  records.append(record)
+              except Exception as e:
+                  records.append({'path':name,'error':str(e)})
+          for host in sorted(v.HOSTS):
+              for suffix in ('','/'):
+                  url='https://'+host+v.PREFIX[:-1]+suffix
+                  try:
+                      r=v.fetch(url)
+                      records.append({'entry':url,'url':r['url'],'status':r['status'],'sha256':v.sha(r['body']),'indexMatches':v.sha(r['body'])==manifest['index.html']})
+                  except Exception as e:
+                      records.append({'entry':url,'error':str(e)})
+          result={'mode':'observation-not-acceptance','records':records}
+          Path('term/qa/http-observation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps(result,ensure_ascii=False,indent=2))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: term-http-observation
+          path: term/qa/http-observation.json
+          retention-days: 7

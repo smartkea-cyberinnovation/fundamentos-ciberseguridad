@@ -2,6 +2,8 @@
 
 La calidad se comprueba con criterios y evidencias; no se declara por emplear una marca de consultoría o por contar archivos. Este documento define los criterios de revisión y no afirma que todos los entornos posibles hayan sido probados.
 
+La revisión de octubre se desarrolla en [seguridad y mantenimiento](security/REVIEW-2026-10-18.md), [privacidad e IA](security/PRIVACY-AND-AI.md), [revisión y publicación](engineering/REVIEW-AND-RELEASE.md) y [el backlog](BACKLOG.md). Cada entrega debe vincular sus resultados al commit revisado y distinguir configuración preparada, ejecución e inspección de producción.
+
 ## Matriz de aceptación
 
 | Dimensión | Criterio comprobable |

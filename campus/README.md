@@ -1,10 +1,10 @@
 # Campus ES/EN · Fundamentos de ciberseguridad / Cybersecurity foundations
 
-**Wiktor Nykiel · 3.0.0 · Independent learning · Light interface.**
+**Wiktor Nykiel · 3.1.0 · Independent learning · Light interface.**
 
 ## Español
 
-Campus estático para estudiar, repasar en presentación y seguir prácticas guiadas. La edición activa conserva **32 módulos, 96 fichas, ocho guías ampliadas, 40 recursos y 480 horas planificadas**. Español e inglés conservan los mismos IDs, prerrequisitos y horas. D26-D36 son lecturas desarrolladas en ambos idiomas; D37-D40 son esquemas de estudio en español con resúmenes en inglés, cuya edición docente completa sigue pendiente. Las cifras no equivalen a asistencia ni ejecución de laboratorios.
+Campus estático para estudiar, repasar en presentación y seguir prácticas guiadas. La edición activa conserva **32 módulos, 96 fichas, ocho guías ampliadas, 46 recursos y 480 horas planificadas**. Español e inglés conservan los mismos IDs, prerrequisitos y horas. D26-D36 son lecturas desarrolladas en ambos idiomas; D37-D40 son esquemas de estudio en español con resúmenes en inglés, cuya edición docente completa sigue pendiente. D41–D46 desarrollan los doce temas de Introducción a la Informática en español e inglés. Las cifras no equivalen a asistencia ni ejecución de laboratorios.
 
 El selector ES/EN cambia interfaz, contenidos, fichas, autoevaluaciones y referencias sin reiniciar progreso. El índice filtra por texto, bloque y avance; la biblioteca y búsqueda conectan las lecturas. La presentación usa el contenido del módulo, no una segunda copia de diapositivas. Hay lectura continua sin JavaScript en `lectura.html` y `reading.en.html`.
 
@@ -16,7 +16,7 @@ El selector ES/EN cambia interfaz, contenidos, fichas, autoevaluaciones y refere
 
 ## English
 
-A static campus for reading, presentation-based review and guided lab work. The active course has **32 modules, 96 lab briefs, eight extended guides, 40 resources and 480 planned hours**. English and Spanish editions retain the same learning IDs, prerequisites and planned hours. D26-D36 contain developed readings in both languages; D37-D40 are Spanish study outlines with English summaries, whose full English teaching editions are still pending. These are not attendance or lab-execution records.
+A static campus for reading, presentation-based review and guided lab work. The active course has **32 modules, 96 lab briefs, eight extended guides, 46 resources and 480 planned hours**. English and Spanish editions retain the same learning IDs, prerequisites and planned hours. D26-D36 contain developed readings in both languages; D37-D40 are Spanish study outlines with English summaries, whose full English teaching editions are still pending. D41–D46 develop the twelve introductory computing topics in Spanish and English. These are not attendance or lab-execution records.
 
 The language selector changes the interface and learning material without resetting progress. Use the syllabus filters, internal index, search, library and previous/next navigation. Continuous reading is also available without JavaScript.
 
@@ -37,6 +37,12 @@ python3 campus/serve.py --port 8788
 ```
 
 Open `http://127.0.0.1:8788/?lang=es` or `http://127.0.0.1:8788/?lang=en`. No npm installation, account, database or API key is required for the static campus. Node and Playwright are test tools. The independent legacy Next.js application remains in the original repository; this repository contains the static campus and teaching materials.
+
+## Aula y autoevaluación / Classroom and self-assessment
+
+La edición 3.1 incluye `sistemas/`, con 28 lecciones y 84 conceptos ES/EN, y `examen/`, con un banco de 100 preguntas en español y 20 distintas por intento. La corrección es inmediata y explicada; el registro es local y formativo. El banco editable se mantiene en `formacion/introduccion-informatica/banco-preguntas.json` y sus reglas en [EXAMEN.md](EXAMEN.md).
+
+Version 3.1 includes the bilingual OS classroom and a Spanish formative test: 100 questions, 20 unique per attempt, immediate explanations and local progress. The question bank is public study material, not an authenticated examination.
 
 ## Documentation / Documentación
 

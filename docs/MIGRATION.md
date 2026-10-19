@@ -1,5 +1,11 @@
 # Migración del campus a SmartKEA
 
+Este documento conserva el registro de la migración inicial del **20 de septiembre de 2026**. La revisión ampliada del **19 de octubre**, con las ramas de ambos repositorios, las decisiones por archivo y la separación de Awesome DPD, está en la [matriz completa](maintenance/2026-10-19-migracion-repositorios.md) y su [manifiesto verificable](maintenance/2026-10-19-migracion-repositorios.json).
+
+Las cifras, exclusiones y pasos siguientes describen el snapshot histórico de septiembre. El informe de octubre distingue la integración actual, la preparación local y los pendientes de publicación y archivo.
+
+## Registro original · 20 de septiembre de 2026
+
 Fecha: 20 de septiembre de 2026.
 
 | Elemento | Referencia |

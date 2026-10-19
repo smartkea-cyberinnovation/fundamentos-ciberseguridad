@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build and validate the static campus before an explicit Cloudflare action.
 
-`build`, `check` and `plan` need no network or account. `dry-run` downloads the
-pinned Wrangler CLI when absent but does not upload. `deploy` changes production;
+`build`, `check` and `plan` need no network or account. `dry-run` installs the
+locked Wrangler toolchain but does not upload. `deploy` changes production;
 `preview` uploads a version without promoting it. No shell or content execution.
 The Wrangler custom build calls only `build`: it must never recursively call npx.
 """
@@ -21,14 +21,16 @@ from stage_worker import stage, validate_staging
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CONFIG = ROOT / 'wrangler.jsonc'
-WRANGLER = '4.132.0'
+WRANGLER = '4.151.1'
+TOOLING = HERE / 'tooling'
+WRANGLER_BIN = TOOLING / 'node_modules/wrangler/bin/wrangler.js'
 # Chokidar does not apply our Git ignore rules. Watch source paths explicitly:
 # watching campus/ or term/ would rebuild when logs or generated assets change.
 WATCH_PATHS = [
     'formacion', 'campus/assets', 'campus/locales', 'campus/index.html', 'campus/package.json',
     'campus/os_classroom', 'campus/exam', 'campus/exam_build.py',
     'campus/build.py', 'campus/bilingual.py', 'campus/check_release.py', 'campus/cloudflare.py',
-    'campus/content.py', 'campus/integral.py', 'campus/operations.py', 'campus/provenance.py',
+    'campus/content.py', 'campus/integral.py', 'campus/operations.py', 'campus/learning_paths.py', 'campus/provenance.py',
     'campus/publication.py', 'campus/release_inputs.py', 'campus/stage_worker.py', 'campus/term_integration.py',
     'campus/README.md', 'campus/DESIGN.md', 'campus/EDICION.md', 'campus/DEPLOY-CLOUDFLARE.md',
     'campus/INTEGRATION.md', 'campus/PUBLICACION-SEGURA.md',
@@ -68,7 +70,28 @@ def wrangler_args(action: str) -> list[str]:
                'deploy': ['deploy'], 'preview': ['versions', 'upload']}
     if action not in actions:
         raise ValueError('Acción de Wrangler no admitida.')
-    return ['--yes', f'wrangler@{WRANGLER}', *actions[action], '--config', str(CONFIG)]
+    return [*actions[action], '--config', str(CONFIG)]
+
+
+def install_tooling() -> str:
+    """Install the reviewed lockfile without lifecycle scripts, then verify the CLI.
+
+    This runs only for explicit Wrangler actions. In particular, the custom build
+    remains offline and cannot recursively install or invoke its own caller.
+    """
+    npm, node = shutil.which('npm'), shutil.which('node')
+    if not npm or not node:
+        raise ValueError('Node.js 22 y npm son necesarios para Wrangler, no para compilar el curso.')
+    package = json.loads((TOOLING / 'package.json').read_text(encoding='utf-8'))
+    lock = json.loads((TOOLING / 'package-lock.json').read_text(encoding='utf-8'))
+    if (package.get('devDependencies') != {'wrangler': WRANGLER}
+            or lock.get('packages', {}).get('node_modules/wrangler', {}).get('version') != WRANGLER):
+        raise ValueError('La versión de Wrangler y su lockfile deben actualizarse juntos.')
+    execute([npm, 'ci', '--prefix', str(TOOLING), '--ignore-scripts', '--no-audit', '--no-fund'])
+    installed = json.loads((TOOLING / 'node_modules/wrangler/package.json').read_text(encoding='utf-8'))
+    if installed.get('version') != WRANGLER or not WRANGLER_BIN.is_file():
+        raise ValueError('La instalación de Wrangler no coincide con la versión revisada.')
+    return node
 
 
 def execute(command: list[str], *, timeout: int = 900) -> None:
@@ -94,9 +117,10 @@ def run(action: str) -> int:
         print(json.dumps({'root': str(ROOT), 'assets': 'campus/worker-dist',
             'publicUrl': PUBLIC_URL, 'publicBasePath': PUBLIC_BASE_PATH,
             'productionRoutes': PRODUCTION_ROUTES, 'previewChangesRoutes': False,
-            'wrangler': WRANGLER, 'publishes': False,
-            'production': ['npx', *wrangler_args('deploy')],
-            'preview': ['npx', *wrangler_args('preview')]}, ensure_ascii=False, indent=2))
+            'wrangler': WRANGLER, 'toolchainLock': 'campus/tooling/package-lock.json', 'publishes': False,
+            'install': ['npm', 'ci', '--prefix', str(TOOLING), '--ignore-scripts', '--no-audit', '--no-fund'],
+            'production': ['node', str(WRANGLER_BIN), *wrangler_args('deploy')],
+            'preview': ['node', str(WRANGLER_BIN), *wrangler_args('preview')]}, ensure_ascii=False, indent=2))
         return 0
     if action == 'check':
         print(json.dumps(validate_staging(), ensure_ascii=False))
@@ -104,9 +128,7 @@ def run(action: str) -> int:
     if action == 'build':
         build_and_check()
         return 0
-    npx = shutil.which('npx')
-    if not npx:
-        raise ValueError('Node.js/npm con npx son necesarios para Wrangler, no para compilar el curso.')
+    node = install_tooling()
     if action == 'deploy':
         print('Acción solicitada: publicar el campus en producción.', flush=True)
     elif action == 'preview':
@@ -114,7 +136,7 @@ def run(action: str) -> int:
     # Wrangler runs the checked custom build exactly once before processing assets.
     # Do not build here as well: --no-bundle does not skip a custom build, and
     # deploy / versions upload have no --no-build switch in the pinned CLI.
-    execute([npx, *wrangler_args(action)])
+    execute([node, str(WRANGLER_BIN), *wrangler_args(action)])
     return 0
 
 

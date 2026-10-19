@@ -11,3 +11,7 @@ test('progress filter distinguishes pending and complete',()=>assert.ok(!matches
 test('combined filters work',()=>assert.ok(matches(row,{query:'M05',block:'linux',status:'pending'})));
 test('html-like input is inert text',()=>assert.ok(!matches(row,{...all,query:'<img src=x>'})));
 test('normalise handles accented input',()=>assert.equal(normalise('Práctica'),'practica'));
+
+test('complete module ID does not match prerequisite mentions',()=>assert.ok(!matches({module:'M06',search:'M06 Text; prerequisite M05',block:'linux',status:'pending'},{...all,query:'M05'})));
+test('exact ID is case-insensitive and combines with text',()=>assert.ok(matches({...row,module:'M05'},{...all,query:'m05 permisos'})));
+test('partial ID remains a free-text query',()=>assert.ok(matches(row,{...all,query:'m0'})));

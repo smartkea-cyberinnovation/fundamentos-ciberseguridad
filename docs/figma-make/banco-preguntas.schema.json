@@ -1,0 +1,348 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:smartkea:figma-make:question-bank:1.0.0",
+  "title": "Banco de 100 preguntas de introducción a la informática",
+  "description": "Esquema editorial de esta entrega. Completar con las reglas semánticas descritas en x-semanticRules y con los validadores del repositorio.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "version",
+    "title",
+    "topics",
+    "questions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "\\S"
+    },
+    "topics": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T01"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T02"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T03"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T04"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T05"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T06"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T07"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T08"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T09"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T10"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T11"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/topic",
+          "properties": {
+            "id": {
+              "const": "T12"
+            }
+          }
+        }
+      ],
+      "items": false
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 100,
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/question"
+      }
+    }
+  },
+  "$defs": {
+    "topic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^T(?:0[1-9]|1[0-2])$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "topic",
+        "difficulty",
+        "prompt",
+        "options",
+        "correctOptionId",
+        "explanation",
+        "study"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^INF-\\d{3}$"
+        },
+        "topic": {
+          "type": "string",
+          "enum": [
+            "T01",
+            "T02",
+            "T03",
+            "T04",
+            "T05",
+            "T06",
+            "T07",
+            "T08",
+            "T09",
+            "T10",
+            "T11",
+            "T12"
+          ]
+        },
+        "difficulty": {
+          "enum": [
+            "basico",
+            "intermedio",
+            "aplicacion"
+          ]
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3000,
+          "pattern": "\\S"
+        },
+        "options": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/option"
+          },
+          "allOf": [
+            {
+              "contains": {
+                "properties": {
+                  "id": {
+                    "const": "a"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "properties": {
+                  "id": {
+                    "const": "b"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "properties": {
+                  "id": {
+                    "const": "c"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "properties": {
+                  "id": {
+                    "const": "d"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            }
+          ]
+        },
+        "correctOptionId": {
+          "enum": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ]
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000,
+          "pattern": "\\S"
+        },
+        "study": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "url"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "pattern": "\\S"
+            },
+            "url": {
+              "type": "string",
+              "pattern": "^\\.\\./#/recurso/D\\d{2}$"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-semanticRules": [
+    "IDs de pregunta únicos por propiedad id; uniqueItems de objetos no sustituye esta comprobación.",
+    "Enunciados distintos tras recortar y normalizar mayúsculas/minúsculas.",
+    "Opciones distintas tras NFKC, minúsculas y normalización de espacios.",
+    "Los doce temas deben estar presentes en las preguntas.",
+    "Cada study.url debe resolver a un recurso existente en el catálogo del mismo build.",
+    "El reparto por tema de esta edición es 6,12,10,10,8,10,6,8,8,6,8,8.",
+    "La primera respuesta elegida se conserva; la posición barajada nunca determina la clave correcta."
+  ]
+}

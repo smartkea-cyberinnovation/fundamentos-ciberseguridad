@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "reviewed_at": "2026-09-18",
+  "source_commit": "5aba8b141d12507fad2d87a48cca98e8be433b88",
+  "sources": [
+    {
+      "id": "RGPD",
+      "title": "RGPD · texto del DOUE publicado en el BOE",
+      "url": "https://www.boe.es/buscar/doc.php?id=DOUE-L-2016-80807"
+    },
+    {
+      "id": "LOPDGDD",
+      "title": "LOPDGDD · BOE consolidado",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673"
+    },
+    {
+      "id": "DPD-ROL",
+      "title": "CEPD · directrices sobre DPD",
+      "url": "https://www.edpb.europa.eu/documents/guideline/data-protection-officer_en"
+    },
+    {
+      "id": "DPD-CERT",
+      "title": "AEPD · certificación de DPD",
+      "url": "https://www.aepd.es/derechos-y-deberes/cumple-tus-deberes/medidas-de-cumplimiento/delegado-de-proteccion-de-datos/certificacion"
+    },
+    {
+      "id": "DPD-ACCESO",
+      "title": "AEPD · acceso al examen",
+      "url": "https://www.aepd.es/preguntas-frecuentes/4-dpd/2-certificacion-de-dpd/FAQ-0419-como-se-puede-obtener-la-certificacion-de-dpd"
+    },
+    {
+      "id": "DPD-FORMACION",
+      "title": "AEPD · formación reconocida",
+      "url": "https://www.aepd.es/preguntas-frecuentes/4-dpd/2-certificacion-de-dpd/FAQ-0421-donde-puedo-formarme-para-el-examen"
+    },
+    {
+      "id": "DPD-REQUISITOS",
+      "title": "Bureau Veritas · prerrequisitos AEPD-DPD",
+      "url": "https://www.bureauveritas.es/certificacion/certificacion-personas/delegado-proteccion-datos"
+    },
+    {
+      "id": "RIESGO-AEPD",
+      "title": "AEPD · riesgos para derechos y libertades",
+      "url": "https://www.aepd.es/derechos-y-deberes/cumple-tus-deberes/medidas-de-cumplimiento/evaluacion-del-riesgo-que-un"
+    },
+    {
+      "id": "PIA-METODO",
+      "title": "CNIL · metodología y guías PIA",
+      "url": "https://www.cnil.fr/en/privacy-impact-assessment-pia"
+    },
+    {
+      "id": "PIA-TOOL",
+      "title": "CNIL · herramienta PIA",
+      "url": "https://www.cnil.fr/fr/outil-pia-telechargez-et-installez-le-logiciel-de-la-cnil"
+    },
+    {
+      "id": "BRECHAS",
+      "title": "AEPD · notificación de brechas",
+      "url": "https://www.aepd.es/derechos-y-deberes/cumple-tus-deberes/medidas-de-cumplimiento/brechas-de-datos-personales-notificacion"
+    },
+    {
+      "id": "BRECHAS-FAQ",
+      "title": "AEPD · a quién y cuándo notificar",
+      "url": "https://www.aepd.es/preguntas-frecuentes/2-tus-obligaciones-como-responsable-del-tratamiento/11-brechas-de-datos-personales/FAQ-0233-a-quien-hay-que-notificar-las-brechas-de-datos-personales"
+    },
+    {
+      "id": "SCC",
+      "title": "Comisión Europea · dos conjuntos de cláusulas tipo",
+      "url": "https://commission.europa.eu/law/law-topic/data-protection/international-dimension-data-protection/new-standard-contractual-clauses-questions-and-answers-overview_en"
+    },
+    {
+      "id": "SCC-ART28",
+      "title": "Comisión Europea · cláusulas responsable-encargado",
+      "url": "https://commission.europa.eu/publications/standard-contractual-clauses-controllers-and-processors-eueea_en"
+    },
+    {
+      "id": "IA-CALENDARIO",
+      "title": "Comisión Europea · AI Act y calendario",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai"
+    },
+    {
+      "id": "IA-TRANSPARENCIA",
+      "title": "Comisión Europea · transparencia artículo 50",
+      "url": "https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act"
+    },
+    {
+      "id": "ECSF",
+      "title": "ENISA · European Cybersecurity Skills Framework",
+      "url": "https://www.enisa.europa.eu/topics/skills-and-competences/skills-development/european-cybersecurity-skills-framework-ecsf"
+    },
+    {
+      "id": "ECSF-PERFILES",
+      "title": "ENISA · publicación de perfiles ECSF",
+      "url": "https://www.enisa.europa.eu/publications/european-cybersecurity-skills-framework-role-profiles"
+    },
+    {
+      "id": "IAPP",
+      "title": "IAPP · catálogo de certificaciones",
+      "url": "https://iapp.org/certify"
+    },
+    {
+      "id": "IAPP-PROCESO",
+      "title": "IAPP · proceso de certificación",
+      "url": "https://iapp.org/certify/certification-process"
+    },
+    {
+      "id": "CIPPE",
+      "title": "IAPP · CIPP y especialidad europea",
+      "url": "https://iapp.org/certify/cipp"
+    },
+    {
+      "id": "CC",
+      "title": "ISC2 · Certified in Cybersecurity",
+      "url": "https://www.isc2.org/certifications/cc"
+    },
+    {
+      "id": "SC900",
+      "title": "Microsoft · Security, Compliance and Identity Fundamentals",
+      "url": "https://learn.microsoft.com/en-us/credentials/certifications/security-compliance-and-identity-fundamentals/"
+    },
+    {
+      "id": "LPI",
+      "title": "LPI · Linux Essentials",
+      "url": "https://www.lpi.org/es/our-certifications/linux-essentials-overview/"
+    },
+    {
+      "id": "CCNA",
+      "title": "Cisco · CCNA",
+      "url": "https://www.cisco.com/site/us/en/learn/training-certifications/certifications/enterprise/ccna/index.html"
+    },
+    {
+      "id": "CDPSE",
+      "title": "ISACA · CDPSE",
+      "url": "https://www.isaca.org/credentialing/cdpse"
+    },
+    {
+      "id": "CDPSE-REQUISITOS",
+      "title": "ISACA · requisitos de CDPSE",
+      "url": "https://www.isaca.org/credentialing/cdpse/get-cdpse-certified"
+    },
+    {
+      "id": "CISA",
+      "title": "ISACA · CISA",
+      "url": "https://www.isaca.org/credentialing/cisa"
+    },
+    {
+      "id": "CISM",
+      "title": "ISACA · CISM",
+      "url": "https://www.isaca.org/credentialing/cism"
+    },
+    {
+      "id": "CRISC",
+      "title": "ISACA · CRISC",
+      "url": "https://www.isaca.org/credentialing/crisc"
+    },
+    {
+      "id": "GH-TRANSFER",
+      "title": "GitHub · transferencia de repositorios",
+      "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository"
+    },
+    {
+      "id": "GH-LICENSE",
+      "title": "GitHub · licencias de repositorios",
+      "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository"
+    }
+  ]
+}
