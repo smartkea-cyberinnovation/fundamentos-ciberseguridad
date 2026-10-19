@@ -37,6 +37,7 @@ jobs:
             --cap-drop ALL --security-opt no-new-privileges --pids-limit 64 \
             --memory 128m --cpus 0.5 --tmpfs /tmp:rw,nosuid,nodev,noexec,size=16m \
             --entrypoint /bin/sh c99-dfir-lab:ci -c '
+              set -eu
               test "$(id -u)" = 10001
               if touch /lab/evidencias/NO-DEBE-CREARSE 2>/dev/null; then exit 1; fi
               python3 -c "import socket; assert {name for _, name in socket.if_nameindex()} == {\"lo\"}"
@@ -49,6 +50,7 @@ jobs:
           path: |
             formacion/casos/c99-forense/
             !**/trabajo/**
+            !**/salidas/**
             !**/__pycache__/**
             !**/*.pyc
           include-hidden-files: true
