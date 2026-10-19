@@ -253,4 +253,24 @@ class RoutesAcceptance(unittest.TestCase):
         self.go();self.page.evaluate('key=>localStorage.setItem(key,"{broken json")',KEY);self.page.reload()
         self.page.once('dialog',lambda d:d.accept());self.page.locator('#clear-paths').click();self.wait_absent()
         expect(self.page.locator('#path-status')).to_contain_text('Marcas de rutas borradas')
+
+    def test_25_pending_wave_preserves_every_phase_across_processes(self):
+        self.go()
+        self.page.locator('#remember-paths').check()
+        self.wait_completed([])
+        other=self.peer(ignore_storage=True)
+        ids=self.page.locator('[data-phase]').evaluate_all('(nodes)=>nodes.map(node=>node.dataset.phase)')
+        self.hold_storage_lock()
+        # Queue real alternating UI changes behind a lock, then drain them together.
+        # A longer burst exposes WebKit granting a lock before prior storage IPC.
+        for index,phase in enumerate(ids):
+            page=other if index%2 else self.page
+            page.locator(f'[data-phase="{phase}"]').check()
+        self.wait_pending(len(ids))
+        self.release_storage_lock()
+        self.wait_completed(ids)
+        self.wait_completed(ids,other)
+        # A new document must also read every persisted mark, not just a UI draft.
+        fresh=self.peer()
+        self.wait_completed(ids,fresh)
 if __name__=='__main__':unittest.main(verbosity=2)

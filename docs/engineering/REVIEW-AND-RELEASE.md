@@ -48,6 +48,7 @@ Python genera el sitio; el runtime de producción no necesita npm. CI utiliza Py
 |---|---|
 | Markdown, catálogo, traducción | Build, validación de enlaces/IDs, pruebas Python afectadas, navegación del recurso en los idiomas declarados |
 | Modelo de progreso o examen | Pruebas JavaScript y regresiones de navegador: importación, almacenamiento bloqueado y varias pestañas |
+| Marcas de rutas | Regresiones de dos pestañas, ráfaga completa de 26 etapas, cancelación y borrado/recreación en Chromium, Firefox y WebKit |
 | Aula OS | Modelo, catálogo y navegador en Chromium, Firefox y WebKit; conservar atribución de tiempo y vida del registro |
 | CSS y navegación | Teclado, foco, contraste y reflujo; viewports usados por CI; no ocultar errores ni contenido obligatorio |
 | Worker, rutas o empaquetado | Runtime estático, clean build, 404, MIME, prefijo, manifiestos y prueba pública del SHA desplegado |
@@ -61,6 +62,7 @@ python3 -m unittest discover -s campus/tests -p 'test_*.py' -v
 node --test campus/tests/*.test.mjs
 python3 campus/tests/browser_bilingual.py
 python3 campus/tests/browser_exam.py
+python3 campus/tests/browser_routes.py
 python3 campus/tests/browser_os_study.py
 ```
 

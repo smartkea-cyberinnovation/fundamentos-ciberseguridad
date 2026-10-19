@@ -1,5 +1,7 @@
 # Migración completa de repositorios · 19 de octubre de 2026
 
+Este documento conserva el corte de 14 ramas y la base `c56d95a`. La [revisión posterior de cierre](2026-10-19-cierre-integracion.md) registra la publicación de PR #21, las cuatro propuestas posteriores de Actions, la corrección de rutas y el respaldo verificado del origen. No sustituye los SHA ni las decisiones históricas de este inventario.
+
 Esta revisión concilia las **13 ramas del repositorio personal**, sus **86 commits**, **248 rutas de archivo históricas** y **403 blobs Git** con las **14 ramas observadas de la organización**. Cada archivo tiene una decisión explícita: conservar contenido equivalente, adaptar la funcionalidad útil, trasladar DPD a su repositorio independiente o mantener la versión antigua como historia.
 
 **Estado del corte:** la base pública `main` ya incluye PR #12 y PR #18–20. Trece de los catorce heads de la organización son ancestros de esa base. El diagnóstico HTTP de TERM también está integrado en la consolidación local, cuya publicación se valida por separado. Awesome DPD está preparado; su nuevo repositorio público y su despliegue todavía no están verificados. El repositorio personal sigue pendiente de deprecación y archivo.
