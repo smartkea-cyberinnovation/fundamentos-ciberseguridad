@@ -188,6 +188,7 @@ docs/MIGRATION.md              Origen del snapshot y alcance del traslado
 |---|---|
 | Diseñar e implementar con Figma Make | [Paquete Markdown y JSON](docs/figma-make/README.md) |
 | Revisar ramas, código y despliegues | [Procedimiento de revisión y publicación](docs/engineering/REVIEW-AND-RELEASE.md) |
+| Consultar las ramas y la consolidación de octubre | [Inventario de migración](docs/maintenance/2026-10-19-migracion-repositorios.md) y [revisión de cierre](docs/maintenance/2026-10-19-cierre-integracion.md) |
 | Entender controles y hallazgos de seguridad | [Revisión técnica](docs/security/REVIEW-2026-10-18.md) |
 | Preparar privacidad y asistencia con IA | [Matriz de datos y decisiones](docs/security/PRIVACY-AND-AI.md) |
 | Continuar el trabajo pendiente | [Plan y backlog](docs/BACKLOG.md) |
