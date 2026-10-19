@@ -78,5 +78,61 @@ class ScriptTests(unittest.TestCase):
                 self.assertIn("root", result.stderr)
 
 
+class HostWorkspaceTests(unittest.TestCase):
+    """Exercise the native launcher's filesystem checks with a stub ttyd only."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.base = pathlib.Path(self.tmp.name)
+        self.base.chmod(0o755)
+        self.home = self.base / "student-home"
+        self.home.mkdir(mode=0o700)
+        self.bin = self.base / "bin"
+        self.bin.mkdir(mode=0o755)
+        stub = self.bin / "ttyd"
+        stub.write_text('#!/bin/sh\nif [ "$1" = --help ]; then printf "%s\\n" "--writable --check-origin"; else printf "%s\\n" "stub-terminal-invoked"; fi\n')
+        stub.chmod(0o755)
+        self.uid = 65534 if os.geteuid() == 0 else os.geteuid()
+        self.gid = 65534 if os.geteuid() == 0 else os.getegid()
+        if os.geteuid() == 0:
+            os.chown(self.home, self.uid, self.gid)
+
+    def run_host(self):
+        options = {"user": self.uid, "group": self.gid, "extra_groups": []} if os.geteuid() == 0 else {}
+        env = {**os.environ, "HOME": str(self.home), "PATH": str(self.bin) + os.pathsep + os.environ["PATH"]}
+        try:
+            return subprocess.run(["bash", str(SCRIPTS / "ttyd-host-start.sh"), "--read-only"],
+                                  env=env, text=True, capture_output=True, timeout=5, check=False, **options)
+        except PermissionError:
+            self.skipTest("Runner cannot start a subprocess with an unprivileged UID")
+
+    def test_owned_workspace_is_created_and_reused_with_private_permissions(self):
+        workspace = self.home / "term-workspace"
+        first = self.run_host()
+        self.assertEqual(first.returncode, 0, first.stderr)
+        self.assertIn("stub-terminal-invoked", first.stdout)
+        self.assertEqual(workspace.stat().st_mode & 0o777, 0o700)
+        workspace.chmod(0o755)
+        again = self.run_host()
+        self.assertEqual(again.returncode, 0, again.stderr)
+        self.assertEqual(workspace.stat().st_mode & 0o777, 0o700)
+
+    def test_symlink_or_file_workspace_is_rejected_without_modifying_target(self):
+        target = self.home / "keep-private"
+        target.mkdir(mode=0o750)
+        workspace = self.home / "term-workspace"
+        workspace.symlink_to(target, target_is_directory=True)
+        result = self.run_host()
+        self.assertEqual(result.returncode, 73, result.stderr)
+        self.assertNotIn("stub-terminal-invoked", result.stdout)
+        self.assertEqual(target.stat().st_mode & 0o777, 0o750)
+        workspace.unlink()
+        workspace.write_text("keep this content")
+        result = self.run_host()
+        self.assertEqual(result.returncode, 73, result.stderr)
+        self.assertEqual(workspace.read_text(), "keep this content")
+
+
 if __name__ == "__main__":
     unittest.main()

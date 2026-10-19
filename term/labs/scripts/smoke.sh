@@ -19,10 +19,14 @@ trap cleanup EXIT
 "${compose[@]}" build web toolbox
 "${compose[@]}" up --wait web
 "${compose[@]}" run --rm --no-deps -T toolbox /opt/lab/bin/http-check.sh
+# Expand this expression inside the container shell, not on the Docker host.
+# shellcheck disable=SC2016
 "${compose[@]}" run --rm --no-deps -T toolbox sh -c 'test "$(id -u)" = 10001 && test ! -S /var/run/docker.sock && test ! -w /etc && test -w /workspace'
 "${compose[@]}" run --rm --no-deps -T toolbox nmap -sT -Pn -sV --version-light --max-retries 1 --host-timeout 20s -p 8080 web
 "${compose[@]}" run --rm --no-deps -T toolbox /opt/lab/bin/make-fixtures.sh /workspace/evidence-smoke
 "${compose[@]}" run --rm --no-deps -T toolbox /opt/lab/bin/verify-evidence.sh /workspace/evidence-smoke
+# Expand this expression inside the container shell, not on the Docker host.
+# shellcheck disable=SC2016
 "${compose[@]}" run --rm --no-deps -T toolbox sh -c 'awk "/NoNewPrivs/{print; if (\$2 != 1) exit 1}" /proc/self/status'
 # `compose run` does not publish service ports unless --service-ports is given.
 # Both probes stay on 127.0.0.1 inside their disposable terminal container.

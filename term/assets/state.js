@@ -82,3 +82,56 @@ export function validLabUrl(config, campusOrigin) {
     return u.href;
   } catch {return null;}
 }
+
+/** Compare-and-save under an origin-wide Web Lock. Never silently replace a bad
+ * record, a newer tab's edit, or a reset. Legacy v1 JSON remains compatible.
+ * Without Web Locks/storage, learning continues in memory with explicit export.
+ */
+export function createProgressStore(storage, lessons, locks) {
+  let baseline, blocked = null;
+  const messages = {
+    invalid: 'La copia guardada no es válida. Se conserva intacta; exporta la sesión y descarga el original antes de recuperar o reiniciar.',
+    conflict: 'Otra pestaña ha cambiado el progreso. No se ha sobrescrito ninguna copia. Exporta esta sesión y recarga la copia guardada para continuar.',
+    unavailable: 'Guardado automático no disponible. Usa HTTPS o localhost y exporta la sesión antes de cerrar esta página.',
+    storage: 'No se pudo guardar el progreso. Tus cambios siguen en esta sesión; expórtalos antes de cerrar.'
+  };
+  function inspect() {
+    let raw;
+    try { raw = storage.getItem(STORAGE_KEY); }
+    catch { return {raw, state:EMPTY(), error:'storage'}; }
+    try { return {raw, state:raw === null ? EMPTY() : parseImport(raw, lessons), error:null}; }
+    catch { return {raw, state:EMPTY(), error:'invalid'}; }
+  }
+  function load() {
+    const result = inspect(); baseline = result.raw; blocked = result.error;
+    if (!blocked && !locks?.request) blocked = 'unavailable';
+    return {...result, error:blocked ? messages[blocked] : null};
+  }
+  function status() {
+    try { if (!blocked && storage.getItem(STORAGE_KEY) !== baseline) blocked = 'conflict'; }
+    catch { blocked = 'storage'; }
+    return blocked ? messages[blocked] : null;
+  }
+  async function save(input, options = {}) {
+    const replacing = own(options, 'expectedRaw');
+    let text;
+    try { text = JSON.stringify(validateProgress(input, lessons)); }
+    catch { return {ok:false, error:'La sesión no se puede guardar: estructura de progreso incompatible.'}; }
+    if (!locks?.request) { blocked='unavailable'; return {ok:false,error:messages[blocked]}; }
+    try {
+      // Bound lock acquisition so another same-origin page cannot stall the UI.
+      const signal = AbortSignal.timeout(5000);
+      return await locks.request(STORAGE_KEY + '.write', {signal}, () => {
+        if (blocked && !replacing) return {ok:false,error:messages[blocked]};
+        const expected = replacing ? options.expectedRaw : baseline;
+        if (expected === undefined || storage.getItem(STORAGE_KEY) !== expected) {
+          blocked='conflict'; return {ok:false,error:messages[blocked]};
+        }
+        storage.setItem(STORAGE_KEY, text);
+        baseline=text; blocked=null;
+        return {ok:true,error:null};
+      });
+    } catch { blocked='storage'; return {ok:false,error:messages[blocked]}; }
+  }
+  return {inspect, load, status, save};
+}
