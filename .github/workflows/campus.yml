@@ -2,9 +2,9 @@ name: Campus - build and acceptance
 on:
   push:
     branches: [main, 'feat/**']
-    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', 'formacion/casos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   pull_request:
-    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', 'formacion/casos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   workflow_dispatch:
 permissions:
   contents: read
@@ -97,6 +97,7 @@ jobs:
             formacion/sistemas-operativos/
             formacion/itinerario-integral/
             formacion/introduccion-informatica/
+            formacion/casos/
             README.md
             wrangler.jsonc
             .github/workflows/cloudflare.yml

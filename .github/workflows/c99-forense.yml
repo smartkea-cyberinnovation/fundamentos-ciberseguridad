@@ -1,0 +1,58 @@
+name: C99 - forensic classroom case
+on:
+  push:
+    branches: [main, 'feat/**']
+    paths: ['formacion/casos/**', 'campus/operations.py', 'campus/tests/test_c99_case.py', '.github/workflows/c99-forense.yml']
+  pull_request:
+    paths: ['formacion/casos/**', 'campus/operations.py', 'campus/tests/test_c99_case.py', '.github/workflows/c99-forense.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: c99-case-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Synthetic case acceptance tests
+        run: python3 -m unittest discover -s campus/tests -p 'test_c99_case.py' -v
+      - name: Compose validation and image build
+        working-directory: formacion/casos/c99-forense
+        run: |
+          docker compose -f compose.laboratorio.yaml config --quiet
+          docker build -f Dockerfile.laboratorio -t c99-dfir-lab:ci .
+      - name: Verify a legitimate unprivileged offline shell
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --network none --read-only --user 10001:10001 \
+            --cap-drop ALL --security-opt no-new-privileges --pids-limit 64 \
+            --memory 128m --cpus 0.5 --tmpfs /tmp:rw,nosuid,nodev,noexec,size=16m \
+            --entrypoint /bin/sh c99-dfir-lab:ci -c '
+              set -eu
+              test "$(id -u)" = 10001
+              if touch /lab/evidencias/NO-DEBE-CREARSE 2>/dev/null; then exit 1; fi
+              python3 -c "import socket; assert {name for _, name in socket.if_nameindex()} == {\"lo\"}"
+              python3 herramientas/forense.py timeline evidencias/escenario.json
+            '
+      - name: Classroom source bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: c99-forense-caso-practico
+          path: |
+            formacion/casos/c99-forense/
+            !**/trabajo/**
+            !**/salidas/**
+            !**/__pycache__/**
+            !**/*.pyc
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error

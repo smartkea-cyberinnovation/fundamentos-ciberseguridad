@@ -1,0 +1,6 @@
+SYNTHETIC CLASSROOM RECORD — INERT TEXT, NOT PHP SOURCE
+Original path in fictional scenario: /var/www/html/uploads/cache.php
+Owner in scenario: uid 33. Approved change: none supplied.
+Suspicious characteristics to investigate: opaque labels; goto; encoded literals; c99shcook; curl_exec.
+This is a teaching inventory card. It cannot execute commands, accept uploads, or contact a receiver.
+Do not infer actual infection from a keyword hit on this card.

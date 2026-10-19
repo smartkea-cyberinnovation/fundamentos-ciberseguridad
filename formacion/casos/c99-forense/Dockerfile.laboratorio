@@ -1,0 +1,9 @@
+# Build with an approved digest through BASE_IMAGE for reproducible classroom use.
+ARG BASE_IMAGE=python:3.13-slim
+FROM ${BASE_IMAGE}
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+WORKDIR /lab
+COPY herramientas/forense.py /lab/herramientas/forense.py
+COPY evidencias/ /lab/evidencias/
+USER 10001:10001
+CMD ["python3", "herramientas/forense.py", "timeline", "evidencias/escenario.json"]
