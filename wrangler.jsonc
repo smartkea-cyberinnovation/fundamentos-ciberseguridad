@@ -36,6 +36,7 @@
       "campus/content.py",
       "campus/integral.py",
       "campus/operations.py",
+      "campus/learning_paths.py",
       "campus/provenance.py",
       "campus/publication.py",
       "campus/release_inputs.py",

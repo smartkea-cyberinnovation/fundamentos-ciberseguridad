@@ -1,0 +1,2714 @@
+{
+  "$schema": "./producto.schema.json",
+  "schemaVersion": 1,
+  "contractVersion": "1.0.0",
+  "updatedOn": "2026-10-19",
+  "product": {
+    "id": "smartkea-learning-campus",
+    "title": "SmartKEA · Aprender informática, sistemas y terminal",
+    "defaultLanguage": "es",
+    "owner": "SmartKEA",
+    "purpose": "Aprendizaje guiado, práctica con evidencia y autoevaluación inmediata a partir del contenido real del repositorio.",
+    "deliveryType": "design_and_implementation_handoff",
+    "currentArchitecture": "Python build + static HTML/CSS/JavaScript; browser-local learning records",
+    "productionApiRequired": false,
+    "studentAccountsRequired": false
+  },
+  "provenance": {
+    "repository": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad",
+    "canonicalBranch": "main",
+    "snapshotCommit": null,
+    "snapshotVersion": "3.1.0",
+    "productionVerification": "Not performed by this documentation package; verify final main SHA after Workers deployment.",
+    "sourcesFile": "FUENTES.md",
+    "manifestFile": "manifest.json",
+    "publicBaselineCommit": "769c1ba947f5f092894a258974116e82a77a02f1",
+    "consolidationReviewStatus": "Reviewed local integration; remote publication and production acceptance are separate.",
+    "snapshotScope": "Maintained template. exportar.py fills build/head/public-ref only in the exported copy; exact source hashes are in manifest.json.",
+    "sourceHead": null,
+    "publicSourceRef": null
+  },
+  "make": {
+    "masterPromptFile": "FIGMA-MAKE.md",
+    "masterPrompt": "# SmartKEA · Instrucciones completas para Figma Make\n\n**Versión del encargo: 1.0.0 · Revisada el 19 de octubre de 2026.** Esta especificación sirve para diseñar, montar una versión revisable e integrar mejoras en el producto existente. El repositorio canónico es [smartkea-cyberinnovation/fundamentos-ciberseguridad](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad). Los contratos y el banco se adjuntan en JSON. El manifiesto identifica el snapshot utilizado; este documento no declara una publicación nueva ni sustituye la aceptación del despliegue.\n\n## Prompt de trabajo\n\nActúa como un equipo de diseño de producto educativo, frontend y revisión de calidad. Mejora SmartKEA para que un estudiante pueda entender qué estudiar, avanzar con guía concreta, practicar en su entorno y ensayar preguntas con corrección inmediata. Trabaja sobre el producto y los datos existentes. Conserva los identificadores, las rutas canónicas, las respuestas correctas, las explicaciones y la continuidad de los registros locales.\n\nEl resultado debe ser un campus profesional, claro y funcional en escritorio, tableta y móvil. Prioriza lectura, práctica y siguiente acción. Entrega pantallas con estados completos y comportamiento comprobable, un registro de cambios y una ruta de integración en Git. Utiliza esta especificación y `producto.json` como contrato de producto; `catalogo-publico.json` inventaría las unidades reales; `muestras-contenido.json` aporta contenido largo real; `banco-preguntas.json` contiene las cien preguntas completas. Si un archivo del repositorio no está disponible en el entorno Make, indícalo por su ruta y conserva su interfaz; no inventes contenido, respuestas, servicios ni resultados de pruebas.\n\n### Orden de autoridad\n\n1. La petición del propietario del producto y las correcciones aceptadas durante el trabajo.\n2. Contenido, contratos y comportamiento verificados del repositorio para el snapshot identificado.\n3. Esta especificación y `producto.json` para las mejoras propuestas.\n4. Preferencias genéricas del generador, únicamente donde no exista una decisión anterior.\n\nUna propuesta de interfaz no cambia por sí sola el currículo ni la evaluación. Si un cambio exige modificar el significado de un identificador, una clave de progreso, una ruta o el esquema de un banco, presenta primero la migración concreta y sus casos de prueba dentro de la revisión de código.\n\n## 1. Qué existe y qué se propone\n\n| Superficie | Producto real que se conserva | Mejora de experiencia propuesta |\n|---|---|---|\n| Campus general | 32 módulos, 96 fichas de laboratorio, 46 recursos, siete bloques y 480 horas planificadas; ES/EN; biblioteca, búsqueda, presentación y continuidad local | Mejorar la orientación inicial, el acceso a lo último estudiado y la siguiente acción contextual |\n| Aula de sistemas | 28 lecciones ES/EN: cuatro comunes, ocho Linux, ocho Windows y ocho macOS; 500 vistas; comprobaciones, guía de entorno, foco/pausa y registro opcional | Hacer más visible la relación entre objetivo, concepto, micropráctica, evidencia y recuperación |\n| Examen de informática | Banco público de 100 preguntas en español; 20 aleatorias por intento; cuatro opciones; corrección inmediata; explicación; resumen y repaso | Perfeccionar la jerarquía de progreso, el tratamiento de estados y el enlace al estudio posterior |\n| TERM | 16 módulos, 48 lecciones, 48 retos y 96 preguntas en español; aprender, practicar, resolver y comprobar; laboratorio opcional | Clarificar el paso actual, el contexto del comando y la diferencia entre ejemplo y resultado realmente observado |\n| Rutas por perfil | Seis rutas profesionales y 26 etapas con objetivos, evidencias, fuentes y prerrequisitos; integración local revisada | Facilitar la elección de perfil y la siguiente etapa sin mezclar horas ni progreso |\n| Asistencia | Guías, pistas, cuestionarios y orientación local, sin servicio de IA generativa | Añadir orientación por reglas sobre el contenido existente, explicando por qué sugiere cada siguiente paso |\n\nLas cifras proceden de los catálogos generados, no de texto promocional. Las 480 horas no son asistencia, tiempo realmente estudiado ni carga oficial de una asignatura distinta. Los recorridos se solapan: no sumar sus horas ni convertir sus porcentajes en un único índice de competencia. D37–D40 conservan resumen en inglés y edición docente completa EN pendiente. D41–D46 sí tienen lecturas desarrolladas ES/EN en el snapshot. El examen y TERM siguen en español. [R-CATALOG] [R-OS] [R-EXAM] [R-TERM]\n\n### Seis rutas profesionales de la integración revisada\n\nLa integración local ya incorpora `formacion/rutas/routes.json`, su validador `campus/learning_paths.py` y la página `rutas.html`. Se trata de una capacidad **existente en la integración revisada**; su publicación se confirma aparte con el SHA servido. El inventario generado incluye las seis rutas completas, sus 26 etapas, trece programas externos y 32 fuentes públicas. [R-PATHS] [R-PATHS-BUILD] [R-PATHS-TEST]\n\n| ID | Perfil real | Etapas | Dedicación orientativa |\n|---|---|---:|---|\n| `no-tecnico` | No técnico · negocio y personas | 4 | 8 semanas · 32 h |\n| `legal` | Jurídico · privacidad y contratación | 4 | 12 semanas · 72 h |\n| `dpd` | DPD · gobierno de privacidad | 6 | 16 semanas · 128 h |\n| `tecnico` | Técnico · soporte y operación | 4 | 14 semanas · 84 h |\n| `informatico` | Informático · desarrollo y arquitectura | 4 | 14 semanas · 112 h |\n| `ciber` | Ciberseguridad · defensa, GRC y auditoría | 4 | 14 semanas · 112 h |\n\nEstimaciones de dedicación al itinerario por actividades seleccionadas. No se suman a las 480 h del curso ni equivalen a completar los módulos enlazados o a formación reconocida. Los módulos completos conservan horas y prerrequisitos propios.\n\nConserva entrada, objetivo, trabajo y evidencia de cada etapa, consulta de prerrequisitos, fuentes oficiales, filtro por perfil, modo presentación e impresión. Un enlace a certificación o programa externo conduce a sus condiciones oficiales; no acredita que el alumno lo haya obtenido ni que SmartKEA expida esa credencial. Las marcas de evidencia son opcionales, usan `smartkea.learning-paths.v1`, no incluyen notas o identidad personal y no alteran el progreso del campus. Su identidad técnica `recordId` distingue vidas del registro para coordinar pestañas; no representa a un alumno. [R-PATHS-UI] [R-PATHS-BROWSER]\n\n### Ampliación existente: caso C99-DFIR\n\nLos módulos M27, M28 y M29 enlazan la práctica **C99-DFIR · Una shell con una llamada oculta** del repositorio. Conserva sus diez actividades, guía de alumno ES/EN, escenario sintético, herramientas offline, informe, soluciones y rúbrica. Sus doce preguntas públicas pertenecen al caso y no al banco de cien del examen. Es una ampliación de los módulos existentes: no añade horas, módulos, nuevas marcas ni una ruta de servidor propia. La actividad usa evidencias inertes y, opcionalmente, una shell legítima en un contenedor local; no presenta la muestra sospechosa como software que el campus ejecute. Enlaza las fuentes y los entregables reales, sin inventar un incidente ni una máquina conectada. [R-FORENSIC-CASE] [R-FORENSIC-PRACTICE] [R-FORENSIC-QUESTIONS] [R-FORENSIC-INTEGRATION]\n\n## 2. Usuarios y resultados de aprendizaje\n\nEl estudiante principiante necesita comprender vocabulario, relaciones y límites antes de ejecutar órdenes. Su éxito es explicar una idea con sus palabras, predecir un efecto y comprobarlo en un entorno adecuado. El estudiante con experiencia necesita localizar una laguna y practicarla sin recorrer de nuevo material que ya comprende. El docente necesita lecturas, retos, criterios y evidencia legible; la versión actual no recibe notas ni datos personales de alumnos.\n\nDiseña tres entradas visibles usando contenidos existentes: **Comprender informática**, **Practicar sistemas** y **Dominar la terminal**. El examen es un acceso de ensayo, con una invitación a estudiar después de los fallos. Usa los mismos términos en navegación, encabezados y acciones. Una etiqueta como «Comprobado por ti» es más precisa que «Dominado» cuando no hay verificación externa.\n\nNo bloquees el aprendizaje por crear una cuenta. No fuerces un diagnóstico previo ni un temporizador. El alumno puede leer sin guardar progreso, cambiar de recorrido, volver atrás o ensayar de nuevo.\n\n## 3. Recorrido guiado del estudiante\n\n### A. Primera visita: elegir una tarea concreta\n\nLa primera pantalla explica en una frase cada recorrido y ofrece una acción principal: «Empezar por los fundamentos». Como acciones secundarias, «Continuar sistemas», «Abrir TERM» y «Practicar 20 preguntas», según la superficie. Si existe continuidad válida, muestra «Continuar» con el nombre real de la unidad y una acción separada para ver el temario. Si no hay datos guardados, evita porcentajes simulados, rachas o horas ficticias.\n\nPara informática, enlaza la guía D46 y la secuencia D26/D27 → D41 → D42 → D43 → D44 → D45. La secuencia organiza el estudio; no convierte lecturas en obligaciones ni altera los prerrequisitos de los módulos. M01 sirve para preparar contexto y trabajo seguro. Conserva la biblioteca completa como salida directa.\n\n### B. Preparación: reconocer el entorno\n\nEn el aula OS, mantén «Mi entorno» con opciones reales de sistema y arquitectura: Mac Intel/Apple Silicon; Windows y Linux x64/ARM; tableta. Explica qué puede hacerse desde ese equipo y qué necesita una VM o laboratorio autorizado. Leer desde una tableta no acredita ejecutar una tarea nativa de Windows o macOS.\n\nEn TERM, distingue la terminal local del alumno y el endpoint ttyd opcional. El snapshot no tiene una máquina vinculada. Muestra la preparación del laboratorio y permite estudiar y copiar comandos mientras se configura. Un iframe cargado no demuestra autenticación ni ejecución correcta. [R-OS] [R-TERM-ARCH]\n\n### C. Aprender: una idea y una comprobación\n\nCada vista debe responder: «¿Qué voy a comprender?», «¿Qué ejemplo lo muestra?» y «¿Cómo compruebo que lo entendí?». Conserva el contenido docente y sus referencias. En las lecturas largas, usa tabla de contenidos y títulos anclables. En OS, respeta la alternancia de conceptos y microprácticas existente; no conviertas las 500 vistas en una pared de tarjetas. En TERM, mantén la fase Aprender y su paginación por concepto.\n\nUn ejemplo trabajado explica su supuesto, la acción y el resultado. Las pistas se revelan progresivamente con botones claros. La solución no reemplaza la oportunidad de intentarlo. El apoyo propuesto puede pedir una explicación breve o una predicción, conservada únicamente en memoria de la pestaña si el alumno decide escribirla.\n\n### D. Practicar: contexto → predicción → acción → evidencia\n\nLa práctica presenta el entorno, requisitos, comando o pasos, efecto esperado, precauciones, verificación y reversión. Copiar es explícito; la web no ejecuta instrucciones ni se conecta a hosts por iniciativa propia. Identifica toda salida de muestra con «Resultado orientativo». La comprobación del alumno y la evidencia de laboratorio se muestran como declaraciones, sin sello de ejecución remota.\n\nAnte un bloqueo, ofrece «Revisar entorno», «Ver una pista», «Anotar lo observado» y «Volver a la explicación». Conserva la separación entre el texto de ayuda y los datos introducidos por el estudiante. Las notas se tratan como texto; nunca se interpretan como HTML ni se añaden a comandos.\n\n### E. Ensayar: veinte preguntas y corrección inmediata\n\nLa portada del examen explica: «20 preguntas al azar de un banco de 100. Tu primera respuesta queda registrada. Verás la explicación al elegir». Ofrece «Empezar 20 preguntas» o «Reanudar intento» cuando corresponda. Una nueva sesión que sustituye un intento activo requiere confirmación concreta, indicando que reemplaza esa selección.\n\nEn una pregunta muestra tema, posición, enunciado, cuatro opciones y progreso de respuestas. Al elegir, corrige inmediatamente, bloquea las cuatro opciones para puntuación y presenta: resultado textual, opción correcta, explicación y enlace de estudio. El alumno puede navegar hacia atrás; volver no permite sumar otro acierto. No introduzcas un botón «Corregir» que retrase el feedback, porque cambiaría la experiencia solicitada.\n\nEl resultado muestra aciertos, errores, pendientes y nota sobre diez; añade tabla por tema del intento, «Repasar fallos», «Revisar todo» y «Nueva sesión aleatoria». La nota es `10 × aciertos / 20`: diez aciertos y diez errores producen 5,0. Las no respondidas no suman puntos. No se aplica penalización negativa. No llamar aprobado/suspenso a un umbral que no está acordado.\n\n### F. Continuar: una recomendación explicable\n\nPropuesta local: después de un fallo, presentar la lectura ya vinculada y una acción concreta, por ejemplo «Repasar representación en D41». Si se añade un plan de repaso por reglas, utilizar solo fallos y pendientes del intento actual y declarar ese alcance. Orden estable: primero un tema con errores; después sus pendientes; a igualdad, orden T01–T12. No inferir una capacidad global con una o dos preguntas del tema. No hacer aparecer una puntuación histórica que no existe.\n\n## 4. Arquitectura de navegación y enlaces\n\nConserva estas bases públicas:\n\n| Producto | Base canónica |\n|---|---|\n| Campus | `https://smartkea.com/introduccion-ciberseguridad/` |\n| Aula OS | `https://smartkea.com/introduccion-ciberseguridad/sistemas/` |\n| Examen | `https://smartkea.com/introduccion-ciberseguridad/examen/` |\n| TERM | `https://www.smartkea.com/fundamentos-ciberseguridad/term/` |\n| Rutas por perfil | `https://smartkea.com/introduccion-ciberseguridad/rutas.html` |\n\nLas rutas profesionales usan `rutas.html#ruta-no-tecnico`, `#ruta-legal`, `#ruta-dpd`, `#ruta-tecnico`, `#ruta-informatico` y `#ruta-ciber`; conserva esos IDs. El campus usa fragmentos como `?lang=es#/modulo/M02`, `#/recurso/D41` y `#/temario`. OS usa `?lang=es#OS-L01/0`, con índice de vista desde cero. TERM usa `#/leccion/m01-l01/concepto/0`; sus fases de URL son `concepto`, `practica`, `reto` y `test`. No sustituir esos segmentos por etiquetas traducidas. El examen tiene estado interno de intento y conserva su base sin inventar rutas de servidor para cada pregunta. `producto.json` contiene todas las plantillas de rutas y `catalogo-publico.json` los destinos concretos. [R-NAV] [R-OS-UI] [R-TERM-UI]\n\nLa página inglesa puede mantener su interfaz EN y enlazar a un recurso español identificado. No sustituir silenciosamente una lectura inglesa que no carga por la española. Al cambiar de idioma, conservar identificadores y progreso. Una nueva sesión del examen no afecta las claves del campus, OS o TERM.\n\nLas sugerencias nuevas se integran en las pantallas actuales. No crear una nueva aplicación en la raíz del dominio, ni capturar todo `/fundamentos-ciberseguridad/*`, ni cambiar a rutas history sin un plan de servidor. La navegación por fragmentos permite conservar 404 reales para archivos ausentes.\n\n## 5. Sistema visual\n\n### Identidad y jerarquía\n\nMantén una interfaz editorial clara, con fondo blanco, superficies discretas, texto sólido y un acento dominante por superficie. Campus y examen utilizan rojo profundo; OS conserva su rojo actual; TERM mantiene su azul. La consistencia debe venir de la tipografía, ritmo, jerarquía, estados y componentes compartidos, no de recolorear todo de una vez. [R-DESIGN] [R-CSS] [R-OS-CSS] [R-EXAM-CSS] [R-TERM-CSS]\n\n| Token | Campus y examen | OS | TERM |\n|---|---|---|---|\n| Fondo principal | `#ffffff` | `#ffffff` | `#ffffff` |\n| Superficie secundaria | `#f7f6f4` | `#f5f6f8` | `#f4f7fb` |\n| Texto | `#23252b` | `#20242b` | `#152c43` |\n| Texto secundario | `#555b66` | `#565e69` | `#53677c` |\n| Acento | `#b0142f` | `#a61932` | `#075cc6` |\n| Enlace/hover profundo | `#870b23` | conservar contraste del componente | `#084a9a` |\n| Borde de superficie | `#dedfe3` | `#dce0e5` | `#dbe4ed` |\n\nUsa fuentes del sistema y la pila existente. TERM enumera Inter como preferencia, pero no debe añadir una descarga de fuente remota. El código usa monospace local. No incorporar logotipos universitarios, sellos de certificación, fotografías de alumnos, neón, lluvia de código ni recursos de terceros sin licencia y atribución verificadas.\n\nPropuesta de escala común: espaciado 4/8/12/16/24/32/48/64 px; texto de lectura 16–18 px, interlineado 1,65–1,8, ancho aproximado 68–76 caracteres; títulos H1 fluidos entre 32 y 52 px; H2 entre 24 y 32 px; H3 entre 20 y 24 px. Usa el tamaño mayor solo cuando la longitud del título y el viewport lo permitan. Conserva radios moderados de 5–10 px. Una sombra ligera puede separar un panel flotante; no sustituye un borde ni la jerarquía.\n\nCada vista tiene una acción principal identificable. Las secundarias usan borde o estilo discreto. Las acciones que reemplazan o eliminan datos quedan separadas del avance normal. Los números siempre llevan unidad: «7 de 20 respondidas», «25:00 de foco», «3 de 18 vistas revisadas». El porcentaje solo resume el registro que lo calcula.\n\n### Componentes que deben quedar definidos\n\n| Componente | Variantes y estados necesarios |\n|---|---|\n| Cabecera y navegación | ES/EN donde exista, ruta actual, menú cerrado/abierto, foco visible, texto largo |\n| Tarjeta de recorrido o módulo | Sin comenzar, en curso y completado por el alumno; título, objetivo y CTA |\n| Navegación de lección | Anterior, siguiente, posición, fin de lección; volver al índice |\n| Bloque de lectura | Encabezados, listas, tablas, código, enlaces internos, fuentes y contenido largo |\n| Bloque de práctica | Entorno, orden copiable, explicación, resultado orientativo, verificación, reversión |\n| Panel de guía | Cerrado, abierto, ayuda disponible, sin guía para la duda, entorno incompatible |\n| Opción de examen | Normal, hover, foco, elegida, correcta, incorrecta y bloqueada |\n| Feedback | Correcta/incorrecta/sin responder, explicación y enlace; texto además de color |\n| Progreso | Vacío, parcial, finalizado; distintas unidades y superficies sin mezclarlas |\n| Guardado local | Disponible, pendiente, memoria temporal, copia corrupta y cambio en otra pestaña |\n| Diálogo | Confirmar sustitución, finalizar con pendientes, importar, cancelar y devolver foco |\n| Laboratorio TERM | No configurado, enlace externo autorizado y, solo si se habilita, iframe autorizado |\n| Estado de carga/error | Cargando, archivo no disponible, datos inválidos, recurso inexistente y reintentar |\n\n## 6. Pantallas de referencia y adaptación\n\nConstruye y revisa una muestra real de cada superficie antes de extender estilos. Usa `M02`, `D41`, `OS-L01` y `m01-l01`, con sus cuerpos reales, y las preguntas adjuntas. No recortes explicaciones largas para que encajen en una composición.\n\nEn escritorio a 1440 px, conserva navegación lateral y una columna de lectura limitada. Un panel de ayuda puede ocupar una columna secundaria si no comprime el enunciado o el código. A 1024 y 768 px, la navegación puede plegarse y la ayuda se convierte en panel accesible. A 390 y 320 px, usa una columna, botones de altura mínima 44 px, opciones a ancho completo y tablas/código con desplazamiento dentro del bloque. Evita dos barras fijas que oculten contenido o teclado.\n\nMantén la ruta y el estado al abrir/cerrar un panel o girar la pantalla. Las cabeceras adaptables necesitan margen de desplazamiento según su altura real. Un título enfocado debe quedar visible. En presentación, conserva desplazamiento interno para contenido largo y una salida accesible aunque el navegador deniegue fullscreen.\n\n## 7. Accesibilidad como criterio de aceptación\n\nEl objetivo es cumplir los criterios aplicables de WCAG 2.2 AA; una maqueta, un cálculo de contraste o unas pruebas automáticas no constituyen certificación. Diseña semántica y comportamiento desde el principio. [F-WCAG]\n\nUsa `header`, `nav`, `main`, títulos jerárquicos y un enlace para saltar al contenido. Marca ruta actual con `aria-current`. El examen usa `fieldset`, `legend`, radios nativos y etiquetas completas: se responde con teclado, sin arrastrar ni depender del ratón. Comunica feedback en una región `aria-live` y lleva el foco de forma previsible al resultado de la selección. No hagas que el lector de pantalla anuncie el temporizador cada segundo.\n\nLos diálogos tienen título, descripción, foco inicial seguro, cierre por Escape cuando corresponda y devolución al control que los abrió. Nunca dejar el foco detrás de un panel modal. Al bloquear opciones tras la primera respuesta, conserva una representación textual legible de la elección y la correcta.\n\nComprueba contraste de texto normal al menos 4,5:1 y texto grande al menos 3:1, con sus excepciones aplicables. Controles y estados esenciales necesitan contraste no textual adecuado. El foco será claramente visible. Mantén el producto usable a 200 % de texto, con reflujo a 320 px y con reducción de movimiento. Los objetivos táctiles de 44 px son una decisión de diseño del producto; no los describas como el umbral único de WCAG 2.2 AA.\n\n## 8. Contrato del examen de 100/20\n\nLa única fuente editable del banco está en `formacion/introduccion-informatica/banco-preguntas.json`. El archivo adjunto es una copia íntegra de esa fuente para el handoff. Cuando se integre una edición, modifica la fuente canónica y regenera; no mantengas dos bancos editables. `banco-preguntas.schema.json` describe el formato y enumera reglas semánticas adicionales.\n\n| Tema | Preguntas | Lectura principal |\n|---|---:|---|\n| T01 · Informática, evolución y aplicaciones | 6 | D26 y D27 |\n| T02 · Representación y aritmética binaria | 12 | D41 |\n| T03 · Codificación y compresión multimedia | 10 | D41 |\n| T04 · Lógica digital y álgebra de Boole | 10 | D42 |\n| T05 · Arquitectura, CPU e instrucciones | 8 | D43 |\n| T06 · Memoria, almacenamiento e integridad | 10 | D43 |\n| T07 · Buses, periféricos y entrada/salida | 6 | D43 |\n| T08 · Sistemas operativos y procesos | 8 | D44 |\n| T09 · Memoria virtual, archivos y permisos | 8 | D44 |\n| T10 · Software, licencias y mantenimiento | 6 | D44 |\n| T11 · Redes, protocolos y protección | 8 | D45 |\n| T12 · Virtualización, cloud y tecnologías actuales | 8 | D45 |\n\nLa aplicación valida 100 IDs únicos `INF-001`…`INF-100` en esta edición, los doce temas, cuatro IDs de opción a/b/c/d, textos distintos, una clave correcta, explicación y enlace interno válido. El muestreo usa Fisher–Yates con aleatoriedad criptográfica y selecciona veinte sin reemplazo dentro del intento. Las opciones se barajan preservando su ID. Intentos diferentes pueden compartir preguntas; veinte preguntas al azar no garantizan cubrir los doce temas. No introducir muestreo por cuotas bajo la misma etiqueta «aleatorio» sin documentar el cambio.\n\nEl estado tiene `schemaVersion`, `bankRevision`, `questionIds`, `optionOrders`, `answers`, `currentIndex`, `status`, `startedAt` y `finishedAt`. La corrección se deriva del banco, nunca de una puntuación persistida. La revisión del banco es una comprobación de compatibilidad, no una firma contra manipulación. El banco y las soluciones son públicos porque este es un ensayo formativo. [R-EXAM-MODEL]\n\nPreserva la coordinación entre pestañas: combinar respuestas compatibles, conservar la primera guardada ante conflicto, no reabrir un intento finalizado y no permitir que una pestaña antigua sobrescriba una selección nueva o resucite una eliminada. La implementación actual usa Web Locks y un cambio explícito de tarea antes de liberar la escritura de localStorage. No simplificarlo a read/merge/write sin coordinación. Si faltan almacenamiento o coordinación, informar y continuar en memoria, sin sobrescribir la copia compartida.\n\n## 9. Persistencia y privacidad\n\nLa política mantenida está en [Privacidad y asistencia con IA](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/security/PRIVACY-AND-AI.md) y la revisión técnica en [Security review](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/security/REVIEW-2026-10-18.md). Esta sección concreta sus consecuencias para la interfaz; los cambios de proveedor, finalidades y controles se documentan allí. [R-PRIVACY] [R-SECURITY]\n\n| Superficie | Clave actual | Naturaleza |\n|---|---|---|\n| Campus | `fundamentos-ciberseguridad:progress:v1` | Lecturas, revisión, prácticas y notas; exportación/importación JSON |\n| Aula OS | `smartkea.os.study.v1` | Persistencia opcional; marcas, sesiones declaradas/medidas y objetivo |\n| Examen | `fundamentos-ciberseguridad:exam:v1` | Un intento y su selección/respuestas; reanudación explícita |\n| TERM | `smartkea.term.progress.v1` | Lecciones, pasos, quiz, evidencia autodeclarada y notas |\n| Rutas por perfil | `smartkea.learning-paths.v1` | IDs de etapas y `recordId` técnico; guardado opcional, sin notas ni identidad personal |\n\nLas claves son independientes y dependen del origen. TERM usa canónicamente `www.smartkea.com`, mientras el campus usa `smartkea.com`; el almacenamiento no se comparte entre esos orígenes aunque aparezcan bajo una misma marca. La navegación en una pestaña no debe llevar a otra a una lección diferente. El registro OS diferencia identidad de vida (`recordId`) y reinicio dentro de esa vida (`generation`); borrar y recrear no permite recuperar sesiones obsoletas. Una importación es una decisión explícita del alumno con revisión previa. Conserva límites de tamaño y validaciones del código. [R-STATE] [R-OS-MODEL] [R-TERM-STATE]\n\n**Rutas por perfil.** Conserva `schema: 1` y añade únicamente la identidad técnica de vida `recordId`: una copia anterior sin ese campo se interpreta como `legacy`; crear una copia tras su eliminación genera un UUID. Cada marca o desmarca se reconcilia con el registro vigente bajo Web Lock exclusivo, conservado hasta un cambio de tarea para publicar el almacenamiento de Firefox. La última intención local de cada etapa sigue visible mientras terminan las escrituras anteriores. Cancelar el guardado invalida callbacks pendientes; una eliminación antigua solo puede retirar la vida que conocía. Si otra pestaña elimina o recrea el registro, las marcas pendientes quedan en la visita y requieren activar el guardado otra vez. Una pestaña que no lo ha activado no adquiere ese consentimiento por un evento remoto. Sin Web Locks o almacenamiento, muestra que el borrador es temporal; no sobrescribas la copia compartida ni afirmes haberla eliminado si no fue posible. [R-PATHS-UI] [R-PATHS-BROWSER]\n\n**TERM.** Mantén el modelo `createProgressStore`: compara los bytes guardados con el snapshot leído por la pestaña y escribe bajo Web Lock, con adquisición limitada a cinco segundos. Si detecta una copia diferente o corrupta, conserva ambos estados y muestra «Exportar esta sesión», «Descargar copia guardada» y «Recargar copia guardada». No inventes una mezcla automática de notas o respuestas: la recuperación se decide explícitamente. Importar o reiniciar usa los bytes `expectedRaw` observados al abrir la confirmación; un cambio posterior impide sustituir la copia. Las notas y mensajes indican si el guardado tuvo éxito o si los cambios solo existen en memoria. Sin almacenamiento o Web Locks, el alumno puede seguir y exportar. La navegación actualiza `lastLesson` en memoria y lo incorpora en la siguiente edición o exportación; abrir una lección no exige escribir todo el registro. [R-TERM-STATE] [R-TERM-UI] [R-TERM-PERSISTENCE] [R-TERM-VALIDATION]\n\nNo recopilar correos, nombres, identificadores académicos, claves, capturas privadas o telemetría. No incluir conversaciones, Gmail, Drive ni propuestas privadas dentro del repositorio o los adjuntos públicos. Los archivos de progreso que exporta un alumno pueden contener sus notas: no adjuntarlos a Make como datos de demostración. Usa un contexto limpio y datos sintéticos en pruebas.\n\nUn enlace de lección comparte una ruta. La transferencia de progreso del campus es otra función y puede transportar un snapshot sin notas; no equivale a una cuenta ni a autenticación. No extender esa transferencia al registro OS, al examen o TERM sin un contrato separado. Eliminar un registro debe indicar cuál elimina y no ejecutar `localStorage.clear()` para borrar todos los recorridos.\n\n## 10. Guía asistida: alcance implementable ahora\n\nLa opción preferente es una **Guía de estudio local**, integrada en la lección, con acciones acotadas: «Explicar el concepto», «Dar una pista», «Revisar el entorno», «Qué evidencia necesito» y «Qué repasar». Las respuestas proceden del contenido y reglas explícitas; muestran el título y enlace de la fuente. No simular conversación con un modelo ni escribir «la IA ha comprobado tu equipo».\n\nPropuesta de contrato: entrada con superficie, idioma disponible, ID de unidad, fase y acción solicitada; salida con texto curado, referencias y una siguiente acción. Puede utilizar los fallos del intento actual para ordenar lecturas. Ante contexto inválido, guía ausente o idioma no disponible, devuelve una explicación honesta y un enlace de estudio. No generar órdenes desde el texto libre del estudiante. No guardar nuevas preferencias sin explicarlas.\n\nUna futura asistencia generativa queda fuera de esta entrega activa. Requeriría un servicio real, manejo de credenciales en servidor, controles de acceso y coste, consentimiento específico y evaluación pedagógica. Su diseño no habilita cuentas, endpoints, tokens ni envío de notas. Cualquier interfaz exploratoria de esa opción debe figurar como propuesta y permanecer desactivada en la versión actual.\n\n## 11. Datos e implementación\n\nEl campus de producción es HTML/CSS/JavaScript estático, generado mediante Python. No requiere base de datos, API key ni dependencias de producción. Reutiliza los modelos, validadores y estilos antes de duplicar lógica. Si Make utiliza React en su preview, considera esa representación un adaptador de prototipo: no reemplaza automáticamente el generador Python, los módulos vanilla, el staging o el esquema de progreso.\n\nLos catálogos del build son `course.json`, `course.en.json`, `sistemas/course.es.json`, `sistemas/course.en.json`, `examen/questions.json` y el `course.json` de TERM. Usa archivos locales al producto desplegado, sin fetch a GitHub desde el navegador como dependencia de ejecución. Mantén IDs y semántica; deriva la UI de los datos. El inventario adjunto tiene títulos y enlaces de todas las unidades, pero no pretende reemplazar esos cuerpos completos. Las muestras reales sirven para revisar contenido largo mientras se incorpora el conjunto completo desde el repositorio.\n\nMantén el tratamiento de entradas: validar JSON y longitudes, rechazar IDs desconocidos, representar notas como texto, impedir URLs `javascript:` y evitar HTML de usuario. No añadir CDN, fuentes remotas, analítica, `eval`, ejecución de comandos ni una clave de proveedor en el frontend. La CSP actual limita scripts, estilos y conexiones al propio origen; cualquier cambio necesita una justificación concreta dentro del PR. [R-CATALOG] [R-INTEGRATION]\n\n## 12. Trabajo por entregas en Make\n\n**Primera entrega: orientación y diseño.** Lee los adjuntos. Presenta el mapa de las cuatro superficies, las decisiones existentes que se conservan y las mejoras concretas. Construye la portada, el temario y una lección real con los tokens actuales. Revisa 1440/768/390/320 px. No declarar el curso completo hasta incorporar sus catálogos.\n\n**Segunda entrega: aprendizaje y práctica.** Completa una lectura larga D41, el recorrido OS-L01 y las fases de m01-l01. Incluye entorno, pistas, evidencia, reversión y estados de laboratorio no configurado. Prueba teclado, contenido largo y cambio de idioma donde exista.\n\n**Tercera entrega: examen completo.** Incorpora las cien preguntas adjuntas y reutiliza el modelo. Demuestra selección de veinte, opciones barajadas, corrección, bloqueo, reanudación, nota, repaso, enlaces y nueva sesión. Añade los estados de memoria, copia inválida y pestaña antigua.\n\n**Cuarta entrega: revisión e integración.** Revisa cambios de archivos, rutas, accesibilidad y persistencia. Devuelve el código y el registro de cambios para integrarlo mediante una rama y PR del repositorio canónico. Mantén las pruebas que protegen las decisiones anteriores.\n\nMake permite adjuntar Markdown y JSON como contexto. Para este paquete, comienza con este documento, `producto.json`, `banco-preguntas.json` y `catalogo-publico.json`; incorpora esquema y muestras en la iteración correspondiente. Todos los adjuntos de texto del paquete se mantienen por debajo de 1 MB. [F-ATTACH]\n\nLa integración estándar «Push to GitHub» documentada por Figma crea y actualiza repositorios propios de Make, empuja a la rama por defecto y es unidireccional. No puede tratarse como sincronización con este repositorio existente. Utiliza exportación o importación de proyecto por la capacidad disponible y revisa el resultado mediante PR al repositorio canónico. No publicar un repositorio alternativo como si fuera la fuente oficial. Un enlace de preview Make es una revisión de diseño, no el despliegue en Cloudflare. [F-GITHUB]\n\n## 13. Publicación correcta en Cloudflare Workers\n\nEl procedimiento mantenido de integración y release está en [REVIEW-AND-RELEASE.md](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/engineering/REVIEW-AND-RELEASE.md). Aplica sus gates y registra allí o en el PR la evidencia; esta especificación no crea un proceso alternativo. [R-ENGINEERING]\n\nConserva el Worker `fundamentos-ciberseguridad`, el `wrangler.jsonc` de la raíz y `campus/cloudflare.py`. El campo `assets.directory` es `./campus/worker-dist`; el hook de compilación ejecuta `python3 campus/cloudflare.py build`. Los prefijos del campus y TERM se componen en staging. La aplicación es estática: no seleccionar preset Next.js, OpenNext ni inventar un binding `frontend`. [R-WRANGLER] [R-WRAPPER]\n\nDesde la raíz del repositorio, preparar y comprobar sin publicar:\n\n```sh\npython3 campus/cloudflare.py plan\npython3 campus/cloudflare.py build\npython3 campus/cloudflare.py check\npython3 campus/cloudflare.py dry-run\n```\n\nLa preview usa `python3 campus/cloudflare.py preview`; producción usa `python3 campus/cloudflare.py deploy`, cuando el proceso de revisión del repositorio autorice publicar. Las credenciales se gestionan en el entorno del proveedor, nunca en adjuntos, código, JSON del producto o navegador del alumno. La revisión de consolidación fija Wrangler 4.151.1 y su lockfile dedicado en `campus/tooling/package-lock.json`. El wrapper instala con `npm ci --ignore-scripts` y ejecuta el binario local; plan/build/check siguen funcionando offline. Conserva estos wrappers y el lockfile, sin recuperar instrucciones antiguas de npx ni actualizar dependencias incidentalmente durante un retoque visual.\n\nEl staging debe conservar lectores sin JavaScript, descargas, catálogos, examen y TERM. `assets.not_found_handling` se mantiene en `404-page`: un archivo ausente devuelve 404, no HTML 200 que parezca un JSON válido. Las cabeceras del campus se aplican a su prefijo y las de TERM al suyo. Solo una configuración explícita del operador puede admitir el origen de la terminal opcional; no abrir `frame-src *`. [R-INTEGRATION] [F-WORKERS]\n\nTras publicar, verificar la URL real y el `sourceCommit` de `build-info.json` contra el SHA final de main, además de los hashes de los catálogos y banco. Abrir campus, aula OS, examen, TERM y rutas profesionales, ambas lenguas donde existan, lectores, un recurso nuevo, ensayo completo, progreso y descargas. Una compilación local o una preview exitosa no demuestra que producción haya servido esa versión.\n\nTERM incorpora `python3 term/verify_public.py --expected-commit COMMIT_COMPLETO --output term/qa/public-release.json`. Conserva esta auditoría de GET HTTPS: compara el commit limpio, todos los activos del manifiesto, 16 módulos, 48 lecciones, 194 pasos y 96 preguntas, cabeceras, entradas con y sin barra y un 404 real; relee metadatos al terminar para detectar una publicación concurrente. Comprueba los bytes de los activos públicos, no solo el nombre de un archivo o el éxito del build. El verificador no abre ttyd ni acredita acceso a una máquina. [R-TERM-VERIFY] [R-TERM-VALIDATION]\n\nGuardar el commit y artefactos de la versión aceptada para poder volver a publicarla. Una reversión no debe limpiar el almacenamiento del alumno. Cambiar de dominio u origen altera el alcance del almacenamiento: antes debe existir una vía explícita de exportación.\n\n## 14. Criterios de aceptación\n\nLa entrega se acepta cuando sus cambios cumplen los siguientes resultados observables, junto con las pruebas actuales del repositorio:\n\n1. Las bases canónicas y rutas.html abren su aplicación y cada enlace del inventario conserva su ID.\n2. Se conservan 32 módulos, 96 fichas, 46 recursos, 28 lecciones OS, 48 lecciones TERM, el banco de 100, seis rutas profesionales y 26 etapas; no se mezclan sus métricas. El caso C99-DFIR mantiene sus diez actividades y doce preguntas como ampliación separada.\n3. La siguiente acción es visible en cada pantalla y utiliza título y destino reales.\n4. Un alumno puede completar aprender → practicar → comprobar → repasar sin depender de cuenta, IA externa o laboratorio aún no vinculado.\n5. Cada intento contiene veinte preguntas únicas, opciones a/b/c/d sin pérdida de identidad y una única solución por pregunta.\n6. Elegir corrige inmediatamente; una segunda selección, navegación atrás o una pestaña obsoleta no suma puntos.\n7. Diez aciertos de veinte producen 5,0; pendientes, fallos y desglose por tema concuerdan con los IDs del intento.\n8. Reanudar, sustituir y finalizar tienen estados claros; las confirmaciones necesarias son concretas y cancelables.\n9. Dos pestañas no pierden respuestas compatibles ni resucitan un intento eliminado; sin coordinación se usa memoria temporal avisada.\n10. Reinicios, borrados, recreaciones e importaciones OS no recuperan sesiones antiguas ni atribuyen una acción a otra lección.\n11. Cambiar idioma o abrir un panel conserva ruta y registro; EN no oculta una carga fallida sustituyendo contenidos.\n12. Todo el flujo funciona con teclado y foco visible; los diálogos y el feedback se anuncian de forma útil.\n13. A 320 px no hay desplazamiento horizontal del documento; tablas y código se desplazan dentro de su bloque.\n14. No aparecen solicitudes de analítica, fuentes remotas, API de IA ni conexiones a máquinas no configuradas.\n15. Las notas y JSON inválidos no se interpretan como HTML; importaciones respetan los límites y muestran revisión previa.\n16. El laboratorio sin endpoint muestra su estado real; una salida orientativa o una marca del alumno no se presenta como ejecución comprobada.\n17. La compilación y dry-run funcionan desde checkout limpio; no dependen de carpetas dist ya presentes.\n18. La versión real publicada acredita SHA y hashes correctos, cabeceras previstas, MIME adecuado y 404 reales.\n19. Dos pestañas de rutas conservan sus marcas compatibles; cancelaciones y borrados no resucitan otra vida del registro. Sin coordinación, las marcas quedan en memoria con aviso.\n20. TERM conserva el original ante corrupción o conflicto, distingue el guardado efectivo de la sesión temporal e invalida un reemplazo si cambia la copia durante la confirmación.\n\nDocumenta qué pruebas se ejecutaron, sobre qué commit, motor y viewport, y qué limitaciones quedan. No describas una prueba escrita como si hubiera pasado ni una propuesta como función ya desplegada. `producto.json` amplía estos criterios con casos concretos y prioridades.\n\n## 15. Prioridades de mejora\n\nEl seguimiento canónico está en [docs/BACKLOG.md](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/BACKLOG.md) y el [issue4 de UX y aprendizaje](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/issues/4). Las prioridades siguientes especifican el trabajo en Make; enlaza sus resultados al backlog existente para evitar dos trackers divergentes. [R-BACKLOG]\n\n**P0 · Integridad.** Mantener rutas, bancos, idiomas, guardado y validadores; resolver cualquier regresión de navegación, teclado o corrección antes de pulir decoración. Todas estas protecciones son condiciones de integración.\n\n**P1 · Orientación.** Mostrar continuación real, objetivo de la sesión, enlace a la guía D46 y próximos pasos por recorrido. Agrupar acciones secundarias para reducir ruido. Añadir guía local por reglas solo cuando su contenido y fallback estén completos.\n\n**P1 · Claridad de práctica.** Dar más visibilidad a entorno, predicción, evidencia y recuperación. Mantener «Resultado orientativo» junto a cada salida y estado honesto de ttyd.\n\n**P2 · Consistencia visual.** Compartir escala de espacio, foco, controles y composición; preservar las paletas actuales. Mejorar densidad de tablas, navegación móvil y tipografía de bloques largos mediante cambios acotados.\n\n**Fuera del alcance actual.** Cuentas, OTP, sincronización entre dispositivos, calificaciones oficiales, certificados, vigilancia de estudiantes, asistentes generativos, ejecución automática y nuevos backends. Estas opciones necesitan un encargo y contrato propios; no son requisitos para completar el campus actual.\n\n## 16. Entrega que debes devolver\n\nDevuelve el resultado visible o preview de Make, el mapa de pantallas implementadas y una lista breve de cambios respecto al producto existente. Aporta código exportable y explica cómo trasladarlo a los archivos del repositorio; distingue adaptadores del preview y cambios listos para integración. Incluye evidencias de pruebas, defectos pendientes y el procedimiento de compilación/publicación preservado. No declares que Cloudflare ha cambiado hasta comprobar la URL final y su SHA.\n\n### Fuentes públicas y trazabilidad\n\nLos identificadores `[R-…]` y `[F-…]` resuelven en `producto.json → sources` y en `FUENTES.md`. La plantilla identifica el baseline público 769c1ba y las fuentes nuevas de la consolidación mediante rutas main. El producto JSON exportado registra build, head y referencia pública específicos de cada entrega; el manifiesto conserva las huellas de origen. Los commits locales del manifiesto no son enlaces publicados. Las referencias F apuntan a documentación oficial consultada el 18 de octubre de 2026. Los adjuntos no incluyen mensajes privados ni archivos de progreso de estudiantes.\n",
+    "suggestedFirstAttachments": [
+      "FIGMA-MAKE.md",
+      "producto.json",
+      "banco-preguntas.json",
+      "catalogo-publico.json"
+    ],
+    "laterAttachments": [
+      "banco-preguntas.schema.json",
+      "producto.schema.json",
+      "muestras-contenido.json"
+    ],
+    "integrationMode": "Review prototype/export and integrate changes through a PR in the existing canonical repository.",
+    "githubLimit": "The documented Make Push to GitHub flow writes only repositories created by Make, is one-way, and uses their default branch. Do not assume bidirectional sync or direct writes to the existing canonical repo.",
+    "previewIsProduction": false,
+    "iterationOrder": [
+      "orientation-and-tokens",
+      "guided-study-and-practice",
+      "complete-100-20-exam",
+      "review-and-integration"
+    ],
+    "sourceRefs": [
+      "F-MAKE",
+      "F-ATTACH",
+      "F-GITHUB"
+    ]
+  },
+  "statusVocabulary": {
+    "existing": "Supported by the inspected repository snapshot; production needs its own release check.",
+    "proposed": "Specified improvement, not asserted as implemented.",
+    "out_of_scope": "Requires a separate explicit product and technical contract."
+  },
+  "capabilities": [
+    {
+      "id": "campus",
+      "status": "existing",
+      "summary": "32 módulos,96 fichas,46 recursos,480 horas planificadas; ES/EN.",
+      "evidence": [
+        "R-CATALOG",
+        "R-NAV"
+      ]
+    },
+    {
+      "id": "os-classroom",
+      "status": "existing",
+      "summary": "28 lecciones ES/EN y500 vistas; entorno, microprácticas, marcas, foco y recuperación.",
+      "evidence": [
+        "R-OS",
+        "R-OS-UI"
+      ]
+    },
+    {
+      "id": "informatics-exam",
+      "status": "existing",
+      "summary": "100 preguntas ES;20 por intento; corrección inmediata, resumen, repaso y continuidad local.",
+      "evidence": [
+        "R-EXAM",
+        "R-EXAM-MODEL"
+      ]
+    },
+    {
+      "id": "term",
+      "status": "existing",
+      "summary": "16 módulos, 48 lecciones, 48 retos y 96 preguntas ES; recuperación explícita de guardado y verificación de activos públicos; laboratorio ttyd opcional.",
+      "evidence": [
+        "R-TERM",
+        "R-TERM-ARCH",
+        "R-TERM-STATE",
+        "R-TERM-VALIDATION",
+        "R-TERM-VERIFY"
+      ]
+    },
+    {
+      "id": "local-guidance",
+      "status": "existing",
+      "summary": "Ayuda contextual, pistas y comprobaciones curadas en el contenido; sin modelo generativo.",
+      "evidence": [
+        "R-OS",
+        "R-TERM"
+      ]
+    },
+    {
+      "id": "unified-next-action",
+      "status": "proposed",
+      "summary": "Orientación coherente entre superficies sin fusionar sus registros.",
+      "evidence": [
+        "R-NAV",
+        "R-OS-UI",
+        "R-TERM-UI"
+      ]
+    },
+    {
+      "id": "local-review-planner",
+      "status": "proposed",
+      "summary": "Ordenar lecturas por fallos del intento actual, con regla visible y sin inferir competencia global.",
+      "evidence": [
+        "R-EXAM",
+        "R-BANK"
+      ]
+    },
+    {
+      "id": "six-role-pathways",
+      "status": "existing",
+      "summary": "Seis rutas y 26 etapas existentes en la integración local revisada; la aceptación de producción se comprueba por separado. Horas orientativas, evidencias y marcas locales opcionales.",
+      "evidence": [
+        "R-PATHS",
+        "R-PATHS-BUILD",
+        "R-PATHS-UI",
+        "R-PATHS-TEST",
+        "R-PATHS-BROWSER"
+      ]
+    },
+    {
+      "id": "c99-dfir-case",
+      "status": "existing",
+      "summary": "Ampliación de M27–M29: diez actividades forenses, guía de alumno ES/EN, evidencias sintéticas y doce preguntas propias. Sin módulos, horas o marcas nuevas.",
+      "evidence": [
+        "R-FORENSIC-CASE",
+        "R-FORENSIC-PRACTICE",
+        "R-FORENSIC-QUESTIONS",
+        "R-FORENSIC-INTEGRATION"
+      ]
+    },
+    {
+      "id": "generative-ai-backend",
+      "status": "out_of_scope",
+      "summary": "No existe servicio de IA, autenticación de alumnos ni envío de notas.",
+      "evidence": [
+        "R-CATALOG",
+        "R-OS",
+        "R-TERM-ARCH"
+      ]
+    },
+    {
+      "id": "automatic-command-execution",
+      "status": "out_of_scope",
+      "summary": "El curso no ejecuta comandos ni actúa como proxy SSH; ttyd requiere laboratorio autorizado separado.",
+      "evidence": [
+        "R-TERM-ARCH"
+      ]
+    }
+  ],
+  "audiences": [
+    {
+      "id": "beginner",
+      "goal": "Comprender una idea, predecir un efecto y contrastarlo con una evidencia.",
+      "entryRouteId": "campus-start"
+    },
+    {
+      "id": "returning-learner",
+      "goal": "Reanudar una unidad y repasar una laguna sin perder contexto.",
+      "entryRouteId": "campus-progress"
+    },
+    {
+      "id": "os-learner",
+      "goal": "Elegir un entorno compatible y completar práctica nativa verificable.",
+      "entryRouteId": "os-home"
+    },
+    {
+      "id": "terminal-learner",
+      "goal": "Operar Linux y explicar el efecto, contexto y recuperación de cada comando.",
+      "entryRouteId": "term-home"
+    },
+    {
+      "id": "teacher",
+      "goal": "Usar retos y rúbricas con evidencia contrastada fuera de la web.",
+      "entryRouteId": "term-teacher"
+    }
+  ],
+  "journey": [
+    {
+      "step": 1,
+      "name": "Orientarse",
+      "studentAction": "Elegir informática, sistemas o terminal; reanudar si existe estado válido.",
+      "systemResponse": "Objetivo y destino reales; sin cuenta ni diagnóstico obligatorio.",
+      "status": "proposed"
+    },
+    {
+      "step": 2,
+      "name": "Preparar",
+      "studentAction": "Identificar SO, arquitectura, cuenta y laboratorio.",
+      "systemResponse": "Opciones compatibles y límites explícitos; tableta permite lectura, no acredita operación nativa.",
+      "status": "existing"
+    },
+    {
+      "step": 3,
+      "name": "Comprender",
+      "studentAction": "Leer una idea, un ejemplo y explicar o predecir.",
+      "systemResponse": "Contenido original, fuentes y micropráctica.",
+      "status": "existing"
+    },
+    {
+      "step": 4,
+      "name": "Practicar",
+      "studentAction": "Ejecutar manualmente en su entorno y contrastar el resultado.",
+      "systemResponse": "Comando, efecto, salida orientativa, verificación y reversión.",
+      "status": "existing"
+    },
+    {
+      "step": 5,
+      "name": "Ensayar",
+      "studentAction": "Responder veinte preguntas del banco de cien.",
+      "systemResponse": "Corrección inmediata y primera respuesta bloqueada.",
+      "status": "existing"
+    },
+    {
+      "step": 6,
+      "name": "Repasar",
+      "studentAction": "Revisar fallos y abrir la lectura enlazada.",
+      "systemResponse": "Explicación y resumen del intento; propuesta opcional de orden por reglas.",
+      "status": "existing"
+    },
+    {
+      "step": 7,
+      "name": "Continuar",
+      "studentAction": "Exportar cuando cambie de equipo o avanzar a la siguiente unidad.",
+      "systemResponse": "Registros separados y continuidad explícita.",
+      "status": "existing"
+    }
+  ],
+  "routes": [
+    {
+      "id": "campus-home",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/curso",
+      "title": "Inicio del campus",
+      "status": "existing"
+    },
+    {
+      "id": "campus-start",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/empezar",
+      "title": "Cómo empezar",
+      "status": "existing"
+    },
+    {
+      "id": "campus-syllabus",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/temario",
+      "title": "Temario filtrable",
+      "status": "existing"
+    },
+    {
+      "id": "campus-theory",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/modulo/{moduleId}",
+      "title": "Teoría del módulo",
+      "status": "existing"
+    },
+    {
+      "id": "campus-labs",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/modulo/{moduleId}/practicas",
+      "title": "Prácticas del módulo",
+      "status": "existing"
+    },
+    {
+      "id": "campus-lab",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/modulo/{moduleId}/practica/{labId}",
+      "title": "Asistente de práctica",
+      "status": "existing"
+    },
+    {
+      "id": "campus-review",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/modulo/{moduleId}/revision",
+      "title": "Autoevaluación del módulo",
+      "status": "existing"
+    },
+    {
+      "id": "campus-library",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/recursos",
+      "title": "Biblioteca",
+      "status": "existing"
+    },
+    {
+      "id": "campus-resource",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/recurso/{resourceId}",
+      "title": "Lectura ampliada",
+      "status": "existing"
+    },
+    {
+      "id": "campus-search",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/buscar?q={encodedQuery}",
+      "title": "Buscar en el campus",
+      "status": "existing"
+    },
+    {
+      "id": "campus-progress",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/progreso",
+      "title": "Progreso del campus",
+      "status": "existing"
+    },
+    {
+      "id": "campus-share",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/?lang=es#/compartir",
+      "title": "Compartir continuidad",
+      "status": "existing"
+    },
+    {
+      "id": "campus-reader-es",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/lectura.html",
+      "title": "Lectura continua en español",
+      "status": "existing"
+    },
+    {
+      "id": "campus-reader-en",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/reading.en.html",
+      "title": "Lectura continua en inglés",
+      "status": "existing"
+    },
+    {
+      "id": "os-home",
+      "surface": "os",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/sistemas/?lang=es",
+      "title": "Aula de sistemas y continuación local",
+      "status": "existing"
+    },
+    {
+      "id": "os-view",
+      "surface": "os",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/sistemas/?lang=es#{lessonId}/{viewIndex}",
+      "title": "Una vista de la lección OS",
+      "status": "existing"
+    },
+    {
+      "id": "os-reader-es",
+      "surface": "os",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/sistemas/reading.es.html",
+      "title": "Lectura OS en español",
+      "status": "existing"
+    },
+    {
+      "id": "os-reader-en",
+      "surface": "os",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/sistemas/reading.en.html",
+      "title": "Lectura OS en inglés",
+      "status": "existing"
+    },
+    {
+      "id": "exam",
+      "surface": "exam",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/examen/",
+      "title": "Autoevaluación de informática",
+      "status": "existing"
+    },
+    {
+      "id": "exam-bank",
+      "surface": "exam",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/examen/questions.json",
+      "title": "Banco público del examen",
+      "status": "existing"
+    },
+    {
+      "id": "term-home",
+      "surface": "term",
+      "origin": "https://www.smartkea.com",
+      "pathTemplate": "/fundamentos-ciberseguridad/term/#/inicio",
+      "title": "Itinerario TERM",
+      "status": "existing"
+    },
+    {
+      "id": "term-lesson",
+      "surface": "term",
+      "origin": "https://www.smartkea.com",
+      "pathTemplate": "/fundamentos-ciberseguridad/term/#/leccion/{lessonId}/{phase}/{index}",
+      "title": "Lección y fase TERM",
+      "status": "existing"
+    },
+    {
+      "id": "term-commands",
+      "surface": "term",
+      "origin": "https://www.smartkea.com",
+      "pathTemplate": "/fundamentos-ciberseguridad/term/#/comandos",
+      "title": "Buscador de comandos con contexto",
+      "status": "existing"
+    },
+    {
+      "id": "term-search",
+      "surface": "term",
+      "origin": "https://www.smartkea.com",
+      "pathTemplate": "/fundamentos-ciberseguridad/term/#/buscar/{encodedQuery}",
+      "title": "Buscar una lección TERM",
+      "status": "existing"
+    },
+    {
+      "id": "term-lab",
+      "surface": "term",
+      "origin": "https://www.smartkea.com",
+      "pathTemplate": "/fundamentos-ciberseguridad/term/#/laboratorio",
+      "title": "Preparación o conexión del laboratorio",
+      "status": "existing"
+    },
+    {
+      "id": "term-progress",
+      "surface": "term",
+      "origin": "https://www.smartkea.com",
+      "pathTemplate": "/fundamentos-ciberseguridad/term/#/progreso",
+      "title": "Progreso TERM",
+      "status": "existing"
+    },
+    {
+      "id": "term-teacher",
+      "surface": "term",
+      "origin": "https://www.smartkea.com",
+      "pathTemplate": "/fundamentos-ciberseguridad/term/#/docente",
+      "title": "Guía docente pública",
+      "status": "existing"
+    },
+    {
+      "id": "term-reader",
+      "surface": "term",
+      "origin": "https://www.smartkea.com",
+      "pathTemplate": "/fundamentos-ciberseguridad/term/manual.html",
+      "title": "Manual TERM sin JavaScript",
+      "status": "existing"
+    },
+    {
+      "id": "build-info",
+      "surface": "deployment",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/build-info.json",
+      "title": "Identidad verificable de la publicación",
+      "status": "existing"
+    },
+    {
+      "id": "campus-paths",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/rutas.html",
+      "title": "Seis rutas profesionales",
+      "status": "existing"
+    },
+    {
+      "id": "campus-path",
+      "surface": "campus",
+      "origin": "https://smartkea.com",
+      "pathTemplate": "/introduccion-ciberseguridad/rutas.html#ruta-{routeId}",
+      "title": "Ruta profesional por perfil",
+      "status": "existing"
+    }
+  ],
+  "routingRules": {
+    "canonicalOrigins": [
+      "https://smartkea.com",
+      "https://www.smartkea.com"
+    ],
+    "campusBasePath": "/introduccion-ciberseguridad/",
+    "termBasePath": "/fundamentos-ciberseguridad/term/",
+    "campusModuleIdPattern": "^M\\d{2}$",
+    "campusLabIdPattern": "^L\\d{2}[ABC]$",
+    "resourceIdPattern": "^D\\d{2}$",
+    "osLessonIdPattern": "^OS-[CLWA]\\d{2}$",
+    "osViewIndexBase": 0,
+    "termLessonIdPattern": "^m\\d{2}-l\\d{2}$",
+    "termPhaseValues": [
+      "concepto",
+      "practica",
+      "reto",
+      "test"
+    ],
+    "termIndexBase": 0,
+    "languageSelection": "Query parameter before the hash; only es/en on campus and OS.",
+    "unknownFiles": "404 HTTP; preserve assets.not_found_handling=404-page.",
+    "unknownLearningIds": "Explain missing item and link back to the current product index.",
+    "newServerRoutesRequired": false
+  },
+  "content": {
+    "inventoryFile": "catalogo-publico.json",
+    "realSamplesFile": "muestras-contenido.json",
+    "bankFile": "banco-preguntas.json",
+    "counts": {
+      "campusModules": 32,
+      "campusLabs": 96,
+      "campusResources": 46,
+      "campusPlannedHours": 480,
+      "osLessons": 28,
+      "osViews": 500,
+      "termModules": 16,
+      "termLessons": 48,
+      "termChallenges": 48,
+      "termQuestions": 96,
+      "examQuestions": 100,
+      "learningPaths": 6,
+      "learningPathStages": 26
+    },
+    "generatedDataFiles": [
+      {
+        "surface": "campus",
+        "language": "es",
+        "file": "campus/dist/course.json",
+        "publicUrl": "https://smartkea.com/introduccion-ciberseguridad/course.json"
+      },
+      {
+        "surface": "campus",
+        "language": "en",
+        "file": "campus/dist/course.en.json",
+        "publicUrl": "https://smartkea.com/introduccion-ciberseguridad/course.en.json"
+      },
+      {
+        "surface": "os",
+        "language": "es",
+        "file": "campus/dist/sistemas/course.es.json",
+        "publicUrl": "https://smartkea.com/introduccion-ciberseguridad/sistemas/course.es.json"
+      },
+      {
+        "surface": "os",
+        "language": "en",
+        "file": "campus/dist/sistemas/course.en.json",
+        "publicUrl": "https://smartkea.com/introduccion-ciberseguridad/sistemas/course.en.json"
+      },
+      {
+        "surface": "exam",
+        "language": "es",
+        "file": "campus/dist/examen/questions.json",
+        "publicUrl": "https://smartkea.com/introduccion-ciberseguridad/examen/questions.json"
+      },
+      {
+        "surface": "term",
+        "language": "es",
+        "file": "term/dist/course.json",
+        "publicUrl": "https://www.smartkea.com/fundamentos-ciberseguridad/term/course.json"
+      }
+    ],
+    "recommendedInformaticsSequence": [
+      "M01",
+      "D26",
+      "D27",
+      "D41",
+      "D42",
+      "D43",
+      "D44",
+      "D45",
+      "D46"
+    ],
+    "englishPartialResources": [
+      "D37",
+      "D38",
+      "D39",
+      "D40"
+    ],
+    "fullEnglishNewResources": [
+      "D41",
+      "D42",
+      "D43",
+      "D44",
+      "D45",
+      "D46"
+    ],
+    "translationRules": [
+      "Preserve IDs, prerequisites and planned hours.",
+      "Do not substitute ES on an EN load failure.",
+      "Mark partial English editions honestly.",
+      "Do not offer EN exam or TERM without translated, reviewed content."
+    ],
+    "countingRules": [
+      "Las 480 horas son planificación del itinerario base; no son asistencia ni carga oficial de otra asignatura.",
+      "No sumar automáticamente campus, OS y TERM: los recorridos reutilizan contenidos y tienen finalidades distintas.",
+      "500 vistas OS no equivalen a 500 lecciones: pertenecen a 28 lecciones.",
+      "Las 96 preguntas de TERM no pertenecen al banco independiente de 100 preguntas del examen de informática.",
+      "Los documentos D37–D40 mantienen resumen EN y edición docente completa EN pendiente.",
+      "Las horas orientativas de seis rutas profesionales no se suman a las 480 del curso ni acreditan módulos completos o formación reconocida.",
+      "Las diez actividades y doce preguntas de C99-DFIR son una ampliación de M27–M29; no amplían horas, módulos ni el banco de cien del examen."
+    ],
+    "editingRules": [
+      "Keep the repository content as source of truth.",
+      "Change bank version when questions or scoring meaning changes.",
+      "Do not edit a generated dist file as the permanent solution.",
+      "Never import private correspondence or learner notes into public content."
+    ],
+    "rolePathways": {
+      "status": "existing",
+      "scope": "Reviewed local integration; production acceptance is separate.",
+      "sourcePath": "formacion/rutas/routes.json",
+      "sourcesPath": "formacion/rutas/sources.json",
+      "credentialsPath": "formacion/rutas/credentials.json",
+      "builderPath": "campus/learning_paths.py",
+      "uiPath": "campus/assets/routes.js",
+      "inventorySection": "learningPaths",
+      "routeCount": 6,
+      "phaseCount": 26,
+      "language": "es",
+      "publicUrl": "https://smartkea.com/introduccion-ciberseguridad/rutas.html",
+      "storageKey": "smartkea.learning-paths.v1",
+      "hoursNotice": "Estimaciones de dedicación al itinerario por actividades seleccionadas. No se suman a las 480 h del curso ni equivalen a completar los módulos enlazados o a formación reconocida. Los módulos completos conservan horas y prerrequisitos propios.",
+      "catalog": [
+        {
+          "id": "no-tecnico",
+          "title": "No técnico · negocio y personas",
+          "weeks": 8,
+          "estimatedHours": 32,
+          "phaseIds": [
+            "no-tecnico-1",
+            "no-tecnico-2",
+            "no-tecnico-3",
+            "no-tecnico-4"
+          ],
+          "url": "https://smartkea.com/introduccion-ciberseguridad/rutas.html#ruta-no-tecnico"
+        },
+        {
+          "id": "legal",
+          "title": "Jurídico · privacidad y contratación",
+          "weeks": 12,
+          "estimatedHours": 72,
+          "phaseIds": [
+            "legal-1",
+            "legal-2",
+            "legal-3",
+            "legal-4"
+          ],
+          "url": "https://smartkea.com/introduccion-ciberseguridad/rutas.html#ruta-legal"
+        },
+        {
+          "id": "dpd",
+          "title": "DPD · gobierno de privacidad",
+          "weeks": 16,
+          "estimatedHours": 128,
+          "phaseIds": [
+            "dpd-1",
+            "dpd-2",
+            "dpd-3",
+            "dpd-4",
+            "dpd-5",
+            "dpd-6"
+          ],
+          "url": "https://smartkea.com/introduccion-ciberseguridad/rutas.html#ruta-dpd"
+        },
+        {
+          "id": "tecnico",
+          "title": "Técnico · soporte y operación",
+          "weeks": 14,
+          "estimatedHours": 84,
+          "phaseIds": [
+            "tecnico-1",
+            "tecnico-2",
+            "tecnico-3",
+            "tecnico-4"
+          ],
+          "url": "https://smartkea.com/introduccion-ciberseguridad/rutas.html#ruta-tecnico"
+        },
+        {
+          "id": "informatico",
+          "title": "Informático · desarrollo y arquitectura",
+          "weeks": 14,
+          "estimatedHours": 112,
+          "phaseIds": [
+            "informatico-1",
+            "informatico-2",
+            "informatico-3",
+            "informatico-4"
+          ],
+          "url": "https://smartkea.com/introduccion-ciberseguridad/rutas.html#ruta-informatico"
+        },
+        {
+          "id": "ciber",
+          "title": "Ciberseguridad · defensa, GRC y auditoría",
+          "weeks": 14,
+          "estimatedHours": 112,
+          "phaseIds": [
+            "ciber-1",
+            "ciber-2",
+            "ciber-3",
+            "ciber-4"
+          ],
+          "url": "https://smartkea.com/introduccion-ciberseguridad/rutas.html#ruta-ciber"
+        }
+      ],
+      "sourceRefs": [
+        "R-PATHS",
+        "R-PATHS-BUILD",
+        "R-PATHS-UI",
+        "R-PATHS-TEST",
+        "R-PATHS-BROWSER"
+      ]
+    },
+    "caseStudies": [
+      {
+        "id": "C99-DFIR-LAB",
+        "status": "existing",
+        "title": "C99-DFIR · Una shell con una llamada oculta",
+        "scope": "Reviewed source integration; deployment acceptance is separate.",
+        "sourcePath": "formacion/casos/c99-forense/README.md",
+        "publicUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/casos/c99-forense/README.md",
+        "studentGuides": {
+          "es": "formacion/casos/c99-forense/PRACTICA.md",
+          "en": "formacion/casos/c99-forense/PRACTICA.en.md"
+        },
+        "teacherGuide": "formacion/casos/c99-forense/DOCENTE.md",
+        "reportTemplate": "formacion/casos/c99-forense/INFORME.md",
+        "scenarioPath": "formacion/casos/c99-forense/evidencias/escenario.json",
+        "questionSourcePath": "formacion/casos/c99-forense/preguntas.json",
+        "linkedModules": [
+          "M27",
+          "M28",
+          "M29"
+        ],
+        "activityCount": 10,
+        "questionCount": 12,
+        "questionLanguage": "es",
+        "publicAnswers": true,
+        "syntheticEvidence": true,
+        "addedModules": 0,
+        "addedHours": 0,
+        "newProgressMarks": false,
+        "ownServerRoute": false,
+        "includedInInformaticsExamBank": false,
+        "execution": "Offline analysis of supplied inert evidence; optional legitimate /bin/sh in a local classroom container. No malware execution by the campus.",
+        "sourceRefs": [
+          "R-FORENSIC-CASE",
+          "R-FORENSIC-PRACTICE",
+          "R-FORENSIC-QUESTIONS",
+          "R-FORENSIC-INTEGRATION",
+          "R-FORENSIC-TEST"
+        ]
+      }
+    ]
+  },
+  "designSystem": {
+    "status": "existing",
+    "proposedStandardization": "Spacing, hierarchy, focus, controls and density; preserve each surface palette.",
+    "themes": {
+      "campus": {
+        "paper": "#ffffff",
+        "surface": "#f7f6f4",
+        "ink": "#23252b",
+        "muted": "#555b66",
+        "accent": "#b0142f",
+        "accentStrong": "#870b23",
+        "border": "#dedfe3",
+        "tint": "#fcf0f1"
+      },
+      "os": {
+        "paper": "#ffffff",
+        "surface": "#f5f6f8",
+        "ink": "#20242b",
+        "muted": "#565e69",
+        "accent": "#a61932",
+        "border": "#dce0e5",
+        "tint": "#fbf0f2"
+      },
+      "exam": {
+        "paper": "#ffffff",
+        "surface": "#f7f6f4",
+        "ink": "#23252b",
+        "muted": "#555b66",
+        "accent": "#b0142f",
+        "accentStrong": "#870b23",
+        "border": "#dedfe3",
+        "correct": "#17603d",
+        "correctSurface": "#eef8f1",
+        "incorrect": "#8c3d13",
+        "incorrectSurface": "#fff4eb"
+      },
+      "term": {
+        "paper": "#ffffff",
+        "surface": "#f4f7fb",
+        "ink": "#152c43",
+        "muted": "#53677c",
+        "accent": "#075cc6",
+        "accentStrong": "#084a9a",
+        "border": "#dbe4ed",
+        "tint": "#edf5ff",
+        "success": "#176446",
+        "warning": "#86570c"
+      }
+    },
+    "fontPolicy": "Existing system font stacks; local monospace for commands. Do not fetch Inter or any other font from a CDN.",
+    "proposedScale": {
+      "spacingPx": [
+        4,
+        8,
+        12,
+        16,
+        24,
+        32,
+        48,
+        64
+      ],
+      "bodyPx": [
+        16,
+        17,
+        18
+      ],
+      "bodyLineHeight": [
+        1.65,
+        1.8
+      ],
+      "readingWidthCh": [
+        68,
+        76
+      ],
+      "h1Px": [
+        32,
+        52
+      ],
+      "h2Px": [
+        24,
+        32
+      ],
+      "h3Px": [
+        20,
+        24
+      ],
+      "controlMinHeightPx": 44,
+      "radiusPx": [
+        5,
+        6,
+        8,
+        10
+      ]
+    },
+    "viewportChecksPx": [
+      320,
+      390,
+      768,
+      1024,
+      1440
+    ],
+    "layoutRules": [
+      "One primary action per view.",
+      "Limit reading width; do not limit document height.",
+      "Collapse navigation and secondary help on smaller screens.",
+      "Scroll code/tables internally.",
+      "Preserve route and focus with wrapped headers.",
+      "Keep presentation scrollable when fullscreen is unavailable."
+    ],
+    "avoid": [
+      "Institutional logos or endorsement claims",
+      "Unlicensed assets",
+      "Hacker-neon aesthetic",
+      "Simulated student metrics",
+      "Decorative content that hides the next action"
+    ],
+    "sourceRefs": [
+      "R-DESIGN",
+      "R-CSS",
+      "R-OS-CSS",
+      "R-EXAM-CSS",
+      "R-TERM-CSS"
+    ]
+  },
+  "components": [
+    {
+      "id": "app-header",
+      "title": "Cabecera y menú",
+      "states": [
+        "default",
+        "mobile-open",
+        "mobile-closed",
+        "long-title",
+        "focused"
+      ]
+    },
+    {
+      "id": "path-card",
+      "title": "Recorrido y módulo",
+      "states": [
+        "not-started",
+        "in-progress",
+        "self-reported-complete"
+      ]
+    },
+    {
+      "id": "lesson-pager",
+      "title": "Anterior/siguiente",
+      "states": [
+        "first",
+        "middle",
+        "last",
+        "disabled"
+      ]
+    },
+    {
+      "id": "reading",
+      "title": "Lectura y fuentes",
+      "states": [
+        "short",
+        "long",
+        "table",
+        "code",
+        "anchor-target"
+      ]
+    },
+    {
+      "id": "practice-step",
+      "title": "Práctica contextual",
+      "states": [
+        "ready",
+        "environment-blocked",
+        "hint-open",
+        "self-reported-verified"
+      ]
+    },
+    {
+      "id": "study-guide",
+      "title": "Guía local",
+      "states": [
+        "closed",
+        "open",
+        "known-context",
+        "unsupported-context",
+        "unavailable-language"
+      ]
+    },
+    {
+      "id": "question-option",
+      "title": "Opción del examen",
+      "states": [
+        "idle",
+        "hover",
+        "focus",
+        "selected-correct",
+        "selected-incorrect",
+        "correct-revealed",
+        "locked"
+      ]
+    },
+    {
+      "id": "answer-feedback",
+      "title": "Corrección",
+      "states": [
+        "correct",
+        "incorrect",
+        "unanswered"
+      ]
+    },
+    {
+      "id": "attempt-progress",
+      "title": "Progreso de intento",
+      "states": [
+        "empty",
+        "partial",
+        "all-answered",
+        "finished"
+      ]
+    },
+    {
+      "id": "storage-notice",
+      "title": "Guardado",
+      "states": [
+        "saved",
+        "saving",
+        "memory-only",
+        "corrupt",
+        "superseded"
+      ]
+    },
+    {
+      "id": "confirmation-dialog",
+      "title": "Confirmación",
+      "states": [
+        "replace-active",
+        "finish-pending",
+        "import-preview",
+        "cancelled"
+      ]
+    },
+    {
+      "id": "terminal-connection",
+      "title": "Laboratorio",
+      "states": [
+        "unconfigured",
+        "authorized-external-link",
+        "explicit-embed-enabled"
+      ]
+    },
+    {
+      "id": "data-state",
+      "title": "Carga y error",
+      "states": [
+        "loading",
+        "loaded",
+        "network-failed",
+        "invalid-data",
+        "not-found"
+      ]
+    }
+  ],
+  "screens": [
+    {
+      "id": "S01",
+      "title": "Inicio y continuación",
+      "routeIds": [
+        "campus-home",
+        "campus-start"
+      ],
+      "primaryAction": "Empezar por los fundamentos o continuar la unidad real",
+      "sampleId": "M01",
+      "status": "proposed"
+    },
+    {
+      "id": "S02",
+      "title": "Temario y búsqueda",
+      "routeIds": [
+        "campus-syllabus",
+        "campus-search"
+      ],
+      "primaryAction": "Abrir un módulo con objetivo y prerrequisitos",
+      "sampleId": "M02",
+      "status": "existing"
+    },
+    {
+      "id": "S03",
+      "title": "Lectura ampliada",
+      "routeIds": [
+        "campus-resource"
+      ],
+      "primaryAction": "Leer, navegar por secciones y abrir práctica relacionada",
+      "sampleId": "D41",
+      "status": "existing"
+    },
+    {
+      "id": "S04",
+      "title": "Práctica del campus",
+      "routeIds": [
+        "campus-lab"
+      ],
+      "primaryAction": "Completar la siguiente fase y registrar evidencia declarada",
+      "sampleId": "L02A",
+      "status": "existing"
+    },
+    {
+      "id": "S05",
+      "title": "Entorno OS",
+      "routeIds": [
+        "os-home"
+      ],
+      "primaryAction": "Elegir contexto compatible",
+      "sampleId": "OS-C02",
+      "status": "existing"
+    },
+    {
+      "id": "S06",
+      "title": "Lección OS",
+      "routeIds": [
+        "os-view"
+      ],
+      "primaryAction": "Comprender una vista, comprobar y avanzar",
+      "sampleId": "OS-L01",
+      "status": "existing"
+    },
+    {
+      "id": "S07",
+      "title": "Examen inicio/reanudación",
+      "routeIds": [
+        "exam"
+      ],
+      "primaryAction": "Empezar20 o reanudar intento",
+      "sampleId": "INF-001",
+      "status": "existing"
+    },
+    {
+      "id": "S08",
+      "title": "Examen pregunta/feedback",
+      "routeIds": [
+        "exam"
+      ],
+      "primaryAction": "Elegir una respuesta y estudiar su explicación",
+      "sampleId": "INF-001",
+      "status": "existing"
+    },
+    {
+      "id": "S09",
+      "title": "Examen resultado/repaso",
+      "routeIds": [
+        "exam"
+      ],
+      "primaryAction": "Repasar fallos y abrir lectura",
+      "sampleId": "D41",
+      "status": "existing"
+    },
+    {
+      "id": "S10",
+      "title": "TERM aprender/practicar/resolver/comprobar",
+      "routeIds": [
+        "term-lesson"
+      ],
+      "primaryAction": "Completar el siguiente paso con verificación",
+      "sampleId": "m01-l01",
+      "status": "existing"
+    },
+    {
+      "id": "S11",
+      "title": "TERM laboratorio",
+      "routeIds": [
+        "term-lab"
+      ],
+      "primaryAction": "Preparar entorno o abrir endpoint autorizado",
+      "sampleId": "m01-l01",
+      "status": "existing"
+    },
+    {
+      "id": "S12",
+      "title": "Progreso y copias",
+      "routeIds": [
+        "campus-progress",
+        "term-progress",
+        "os-home"
+      ],
+      "primaryAction": "Continuar o exportar el registro de esa superficie",
+      "sampleId": "M02",
+      "status": "existing"
+    },
+    {
+      "id": "S13",
+      "title": "Rutas profesionales por perfil",
+      "routeIds": [
+        "campus-paths",
+        "campus-path"
+      ],
+      "primaryAction": "Elegir un perfil y producir la evidencia de la primera etapa",
+      "sampleId": "no-tecnico",
+      "status": "existing",
+      "designRequirements": [
+        "Mostrar entrada, objetivo, semanas, horas orientativas y etapas reales.",
+        "Conservar filtro, presentación, impresión y enlaces de fuentes y prerrequisitos.",
+        "Explicar guardado opcional de marcas y su separación del campus.",
+        "No presentar los programas externos como certificación obtenida o incluida."
+      ]
+    }
+  ],
+  "exam": {
+    "status": "existing",
+    "title": "Introducción a la informática · Autoevaluación",
+    "language": "es",
+    "sourcePath": "formacion/introduccion-informatica/banco-preguntas.json",
+    "bankSchemaFile": "banco-preguntas.schema.json",
+    "bankVersion": "2026.10",
+    "bankSchemaVersion": 1,
+    "bankSize": 100,
+    "sessionLength": 20,
+    "optionsPerQuestion": 4,
+    "topicDistribution": [
+      {
+        "id": "T01",
+        "title": "Informática, evolución y aplicaciones",
+        "questionCount": 6,
+        "studyResources": [
+          "D26",
+          "D27"
+        ]
+      },
+      {
+        "id": "T02",
+        "title": "Representación y aritmética binaria",
+        "questionCount": 12,
+        "studyResources": [
+          "D41"
+        ]
+      },
+      {
+        "id": "T03",
+        "title": "Codificación y compresión multimedia",
+        "questionCount": 10,
+        "studyResources": [
+          "D41"
+        ]
+      },
+      {
+        "id": "T04",
+        "title": "Lógica digital y álgebra de Boole",
+        "questionCount": 10,
+        "studyResources": [
+          "D42"
+        ]
+      },
+      {
+        "id": "T05",
+        "title": "Arquitectura, CPU e instrucciones",
+        "questionCount": 8,
+        "studyResources": [
+          "D43"
+        ]
+      },
+      {
+        "id": "T06",
+        "title": "Memoria, almacenamiento e integridad",
+        "questionCount": 10,
+        "studyResources": [
+          "D43"
+        ]
+      },
+      {
+        "id": "T07",
+        "title": "Buses, periféricos y entrada/salida",
+        "questionCount": 6,
+        "studyResources": [
+          "D43"
+        ]
+      },
+      {
+        "id": "T08",
+        "title": "Sistemas operativos y procesos",
+        "questionCount": 8,
+        "studyResources": [
+          "D44"
+        ]
+      },
+      {
+        "id": "T09",
+        "title": "Memoria virtual, archivos y permisos",
+        "questionCount": 8,
+        "studyResources": [
+          "D44"
+        ]
+      },
+      {
+        "id": "T10",
+        "title": "Software, licencias y mantenimiento",
+        "questionCount": 6,
+        "studyResources": [
+          "D44"
+        ]
+      },
+      {
+        "id": "T11",
+        "title": "Redes, protocolos y protección",
+        "questionCount": 8,
+        "studyResources": [
+          "D45"
+        ]
+      },
+      {
+        "id": "T12",
+        "title": "Virtualización, cloud y tecnologías actuales",
+        "questionCount": 8,
+        "studyResources": [
+          "D45"
+        ]
+      }
+    ],
+    "correctOptionDistributionBeforeShuffle": {
+      "a": 25,
+      "b": 25,
+      "c": 25,
+      "d": 25
+    },
+    "randomization": {
+      "algorithm": "Fisher–Yates",
+      "source": "crypto.getRandomValues with rejection sampling",
+      "questionsWithoutReplacementWithinAttempt": true,
+      "shuffleOptions": true,
+      "preserveOptionIds": true,
+      "crossAttemptRepeatsAllowed": true,
+      "allTopicsGuaranteedPerAttempt": false
+    },
+    "correction": {
+      "trigger": "radio selection",
+      "firstAnswerWins": true,
+      "feedbackImmediate": true,
+      "answerChangesCanAddPoints": false,
+      "showCorrectOption": true,
+      "showExplanation": true,
+      "studyLinkFromBank": true
+    },
+    "scoring": {
+      "formula": "10 * correct / 20",
+      "denominator": 20,
+      "incorrectPoints": 0,
+      "unansweredPoints": 0,
+      "negativePenalty": false,
+      "gradeLocale": "es-ES",
+      "example": {
+        "correct": 10,
+        "incorrect": 10,
+        "unanswered": 0,
+        "grade": 5
+      },
+      "officialPassThreshold": null,
+      "certification": false
+    },
+    "attemptFields": {
+      "schemaVersion": "integer=1",
+      "bankRevision": "bank version plus compatibility checksum",
+      "questionIds": "20 unique known INF IDs in order",
+      "optionOrders": "map from each selected INF ID to a permutation of a/b/c/d",
+      "answers": "map from answered selected INF IDs to first accepted option ID",
+      "currentIndex": "integer0..19",
+      "status": "active|finished",
+      "startedAt": "UTC ISO date-time",
+      "finishedAt": "null when active; UTC ISO date-time when finished"
+    },
+    "persistence": {
+      "key": "fundamentos-ciberseguridad:exam:v1",
+      "maxStoredCharacters": 50000,
+      "coordinator": "Web Locks exclusive write lock + localStorage checkpoint task boundary",
+      "compatibleUpdate": "Union new answers while preserving first stored answer.",
+      "conflict": "Stored first answer wins.",
+      "finish": "Committed finished attempt rejects later answers.",
+      "replace": "Compare expected immutable identity before replacing.",
+      "unavailable": "Memory-only attempt with explicit notice; no uncoordinated shared writes."
+    },
+    "requiredStates": [
+      "loading",
+      "ready-new",
+      "ready-resume",
+      "answering",
+      "correct-feedback",
+      "incorrect-feedback",
+      "saving",
+      "memory-only",
+      "invalid-saved-state",
+      "replacement-confirmation",
+      "finish-pending-confirmation",
+      "results",
+      "mistake-review",
+      "all-review",
+      "superseded",
+      "load-error"
+    ],
+    "semanticRules": [
+      "IDs de pregunta únicos por propiedad id; uniqueItems de objetos no sustituye esta comprobación.",
+      "Enunciados distintos tras recortar y normalizar mayúsculas/minúsculas.",
+      "Opciones distintas tras NFKC, minúsculas y normalización de espacios.",
+      "Los doce temas deben estar presentes en las preguntas.",
+      "Cada study.url debe resolver a un recurso existente en el catálogo del mismo build.",
+      "El reparto por tema de esta edición es 6,12,10,10,8,10,6,8,8,6,8,8.",
+      "La primera respuesta elegida se conserva; la posición barajada nunca determina la clave correcta."
+    ],
+    "sourceRefs": [
+      "R-EXAM",
+      "R-EXAM-MODEL",
+      "R-BANK",
+      "R-EXAM-TEST"
+    ]
+  },
+  "localAssistance": {
+    "status": "proposed",
+    "label": "Guía de estudio",
+    "implementation": "Curated content + deterministic rules in the browser. No external model or API.",
+    "existingFoundation": "OS hints, environment guidance, local marks and timer; TERM explanations, hints, verification, recovery; exam explanations and study links.",
+    "input": {
+      "surface": "campus|os|exam|term",
+      "language": "available language of the current content",
+      "unitId": "known ID from the active catalog",
+      "phase": "existing phase/view kind",
+      "intent": "explain|hint|environment|evidence|review",
+      "attemptSummary": "optional current-attempt summary in memory"
+    },
+    "output": {
+      "status": "ready|unsupported_context|unavailable_language",
+      "title": "short Spanish or existing EN heading",
+      "body": "curated text from the course",
+      "sourceIds": "known unit/resource/reference IDs",
+      "nextAction": "label plus validated existing URL"
+    },
+    "reviewRule": {
+      "scope": "current attempt only",
+      "order": [
+        "topics with errors descending",
+        "unanswered descending within ties",
+        "topic ID ascending within ties"
+      ],
+      "target": "the study URLs already attached to those questions",
+      "inferenceLimit": "Does not estimate overall mastery or a historical grade."
+    },
+    "fallbackCopy": "No hay una guía específica para esta duda en la unidad. Revisa la lectura o anota qué esperabas y qué has observado.",
+    "freeText": "Optional reflection stays as plain text in tab memory; never interpreted as instructions or command input.",
+    "networkRequestsRequired": false,
+    "studentDataSent": false
+  },
+  "persistence": {
+    "originScoped": true,
+    "cloudSync": false,
+    "combineProducts": false,
+    "records": [
+      {
+        "surface": "campus",
+        "key": "fundamentos-ciberseguridad:progress:v1",
+        "schema": 1,
+        "optionalPersistence": false,
+        "maxImportBytes": 1048576,
+        "maxNoteCharacters": 3000,
+        "modelPath": "campus/assets/state.js"
+      },
+      {
+        "surface": "os",
+        "key": "smartkea.os.study.v1",
+        "schema": 1,
+        "optionalPersistence": true,
+        "maxImportBytes": 1048576,
+        "modelPath": "campus/os_classroom/model.js",
+        "lifetimeIdentity": "recordId",
+        "resetCounter": "generation",
+        "legacyIdentity": "legacy",
+        "newPersistenceIdentity": "crypto.randomUUID()"
+      },
+      {
+        "surface": "exam",
+        "key": "fundamentos-ciberseguridad:exam:v1",
+        "schema": 1,
+        "optionalPersistence": false,
+        "maxStoredCharacters": 50000,
+        "modelPath": "campus/exam/model.mjs"
+      },
+      {
+        "surface": "term",
+        "key": "smartkea.term.progress.v1",
+        "schema": 1,
+        "optionalPersistence": false,
+        "maxImportBytes": 2000000,
+        "maxNoteCharacters": 6000,
+        "modelPath": "term/assets/state.js",
+        "storeFactory": "createProgressStore",
+        "contains": [
+          "completed lesson IDs",
+          "steps",
+          "quiz",
+          "notes",
+          "evidence",
+          "lastLesson",
+          "updatedAt"
+        ],
+        "coordinator": "Web Lock compare-and-save against the exact last observed localStorage bytes",
+        "lockName": "smartkea.term.progress.v1.write",
+        "lockAcquisitionTimeoutMs": 5000,
+        "mergePolicy": "No automatic merge of conflicting tabs; preserve both the local session and the saved copy for explicit recovery.",
+        "corruptedRecordPolicy": "Preserve original bytes and prevent ordinary autosave from replacing them.",
+        "recoveryActions": [
+          "Exportar esta sesión",
+          "Descargar copia guardada",
+          "Recargar copia guardada"
+        ],
+        "replacementGuard": "Import/reset confirms expectedRaw; if stored bytes change while confirmation is open, replacement is refused and the current session remains exportable.",
+        "missingStorageOrCoordinator": "Continue in memory with a visible warning and session export; never label a failed write as persistently saved.",
+        "navigationPolicy": "Update lastLesson in memory on navigation; save it with the next edit or include it in the next export.",
+        "sourceRefs": [
+          "R-TERM-STATE",
+          "R-TERM-UI",
+          "R-TERM-PERSISTENCE",
+          "R-TERM-STATE-TEST",
+          "R-TERM-VALIDATION"
+        ]
+      },
+      {
+        "surface": "learningPaths",
+        "key": "smartkea.learning-paths.v1",
+        "schema": 1,
+        "optionalPersistence": true,
+        "maxStoredCharactersExclusive": 20000,
+        "contains": [
+          "completed phase IDs",
+          "technical record lifetime ID"
+        ],
+        "notes": false,
+        "importExport": false,
+        "modelPath": "campus/assets/routes.js",
+        "independentFromCampusProgress": true,
+        "concurrencyAcceptance": "Use simultaneous queued writes and a deterministic read/write interleave in two tabs; test cancellation, missed delete/recreate events, legacy data and explicit fallback.",
+        "lifetimeIdentity": "recordId",
+        "lifetimeIdentityOptionalInLegacyRecords": true,
+        "legacyIdentity": "legacy",
+        "newPersistenceIdentity": "crypto.randomUUID()",
+        "identityRepresentsPerson": false,
+        "coordinator": "Exclusive Web Lock + localStorage checkpoint task boundary",
+        "lockName": "smartkea.learning-paths.v1:write",
+        "mergePolicy": "Apply each deliberate phase change to the current record under the lock; preserve the latest pending local intent per phase.",
+        "cancellationPolicy": "Invalidate callbacks from the cancelled opt-in session; a queued deletion removes only the record lifetime it observed.",
+        "remoteLifetimeChange": "Stop saving, retain pending marks in the visit and require a new explicit opt-in before merging them.",
+        "remoteOptIn": "Does not enable saving in a tab that has not opted in.",
+        "missingStorageOrCoordinator": "Keep a clearly labelled in-memory draft; do not overwrite or claim deletion of a shared copy without coordination.",
+        "sourceRefs": [
+          "R-PATHS-UI",
+          "R-PATHS-BROWSER"
+        ]
+      }
+    ],
+    "rules": [
+      "Preserve existing validation and storage failure handling.",
+      "Do not migrate state implicitly during a visual update.",
+      "Do not use localStorage.clear() for a single product reset.",
+      "Keep per-tab navigation independent.",
+      "Do not reintroduce old OS sessions after delete/recreate/reset.",
+      "Explain the contents before importing or sharing an exported record.",
+      "Preserve the additive lifetime ID of learning paths and require explicit opt-in after a remote delete/recreate.",
+      "Keep TERM conflict recovery explicit; do not replace its compare-and-save strategy with an uncoordinated merge."
+    ]
+  },
+  "accessibility": {
+    "target": "Applicable WCAG2.2 AA criteria; not a conformance claim.",
+    "textContrastMinimum": 4.5,
+    "largeTextContrastMinimum": 3,
+    "textZoomPercent": 200,
+    "minimumViewportCssPx": 320,
+    "productControlMinHeightPx": 44,
+    "requirements": [
+      "Semantic landmarks and headings",
+      "Skip link",
+      "Native radios with fieldset and legend",
+      "Visible unobscured focus",
+      "Keyboard-only completion",
+      "Dialog title/description, initial focus, Escape and focus return",
+      "Meaningful aria-live feedback",
+      "No color-only status",
+      "Reduced motion",
+      "No per-second timer announcements",
+      "Scrollable tables/code inside their block",
+      "Clear loading, empty and error states"
+    ],
+    "sourceRefs": [
+      "F-WCAG",
+      "R-DESIGN"
+    ]
+  },
+  "privacyAndSecurity": {
+    "studentAuthentication": "none",
+    "analytics": "none",
+    "externalAi": "none",
+    "commandExecutionFromCourse": "none",
+    "personalDataRequested": [],
+    "publicArtifactExclusions": [
+      "Private emails",
+      "Drive documents with non-public data",
+      "Student progress exports",
+      "Credentials",
+      "API keys",
+      "Real student notes or identifiers"
+    ],
+    "networkPolicy": "Same-origin course assets; external reference links open only when chosen. Lab connections only from explicit operator configuration.",
+    "untrustedInput": "JSON, notes, URLs and stored state remain validated data, never code or unsanitized HTML.",
+    "terminalSnapshot": {
+      "configured": false,
+      "embed": false,
+      "allowedOrigins": [],
+      "emptyState": "Ninguna máquina está vinculada en esta publicación."
+    },
+    "labBoundary": "Static course and optional ttyd host are separate; Access does not create Linux users or isolate a shared VM by itself.",
+    "notClaims": [
+      "Certification",
+      "Attendance measurement",
+      "Verified native OS execution",
+      "Institutional endorsement",
+      "Automatic cross-device synchronization",
+      "Production deployment from a local preview"
+    ]
+  },
+  "deployment": {
+    "provider": "Cloudflare Workers Static Assets",
+    "workerName": "fundamentos-ciberseguridad",
+    "configPath": "wrangler.jsonc",
+    "assetsDirectory": "./campus/worker-dist",
+    "notFoundHandling": "404-page",
+    "buildHook": "python3 campus/cloudflare.py build",
+    "rootDirectory": "repository root",
+    "runtime": "static site; Python3.11+ build and Node22+ for tooling/tests",
+    "productionBranch": "main",
+    "frameworkPreset": "none",
+    "existingRoutes": [
+      "smartkea.com/introduccion-ciberseguridad/*",
+      "smartkea.com/fundamentos-ciberseguridad/term*",
+      "www.smartkea.com/fundamentos-ciberseguridad/term*"
+    ],
+    "commands": {
+      "plan": "python3 campus/cloudflare.py plan",
+      "build": "python3 campus/cloudflare.py build",
+      "check": "python3 campus/cloudflare.py check",
+      "dryRun": "python3 campus/cloudflare.py dry-run",
+      "preview": "python3 campus/cloudflare.py preview",
+      "deploy": "python3 campus/cloudflare.py deploy"
+    },
+    "noPublishCommands": [
+      "plan",
+      "build",
+      "check",
+      "dryRun"
+    ],
+    "publishingCommands": [
+      "preview",
+      "deploy"
+    ],
+    "gateBeforeProduction": [
+      "Review exact code changes in a PR.",
+      "Pass build/content/state/browser/clean-checkout gates required for the change.",
+      "Use the provider-authorized build environment for deployment."
+    ],
+    "gateAfterProduction": {
+      "buildInfoUrl": "https://smartkea.com/introduccion-ciberseguridad/build-info.json",
+      "expectedCommit": "Final main SHA of the accepted release, supplied at publication time.",
+      "bankUrl": "https://smartkea.com/introduccion-ciberseguridad/examen/questions.json",
+      "bankHashField": "exam.bankSha256",
+      "verify": [
+        "sourceCommit",
+        "courseSha256",
+        "englishCourseSha256",
+        "exam.bankSha256",
+        "canonical routes",
+        "MIME and CSP",
+        "real404",
+        "exam complete flow",
+        "readers and downloads",
+        "six professional routes and26 stages",
+        "TERM exact public asset manifest and bounded release verifier"
+      ]
+    },
+    "rollback": "Republish the last accepted commit/artifact through provider deployment history; do not clear learner local storage.",
+    "secretsInProductJson": false,
+    "sourceRefs": [
+      "R-WRANGLER",
+      "R-WRAPPER",
+      "R-DEPLOY",
+      "R-INTEGRATION",
+      "R-CLEAN-BUILD",
+      "F-WORKERS",
+      "R-TOOLCHAIN",
+      "R-TERM-VERIFY",
+      "R-TERM-VALIDATION"
+    ],
+    "toolchain": {
+      "wranglerVersion": "4.151.1",
+      "manifestPath": "campus/tooling/package.json",
+      "lockfilePath": "campus/tooling/package-lock.json",
+      "installCommand": "npm ci --prefix campus/tooling --ignore-scripts --no-audit --no-fund",
+      "localBinary": "campus/tooling/node_modules/wrangler/bin/wrangler.js",
+      "offlineCommands": [
+        "plan",
+        "build",
+        "check"
+      ],
+      "status": "pending_consolidation",
+      "note": "El wrapper instala desde el lockfile y ejecuta el binario local para dry-run, preview y deploy; no usar versiones npx antiguas."
+    },
+    "termReleaseVerification": {
+      "status": "existing",
+      "scriptPath": "term/verify_public.py",
+      "command": "python3 term/verify_public.py --expected-commit COMMIT_COMPLETO --output term/qa/public-release.json",
+      "methods": [
+        "GET"
+      ],
+      "scope": "HTTPS TERM assets on smartkea.com and www.smartkea.com only.",
+      "checks": [
+        "Exact final main SHA and sourceDirty false",
+        "Every public asset byte hash in SHA256SUMS.txt",
+        "Course and configuration consistency",
+        "16 modules, 48 lessons, 194 steps, 96 questions",
+        "Entry routes with and without trailing slash",
+        "Security headers and a real missing-route 404",
+        "Unchanged build metadata at the end of verification"
+      ],
+      "opensTerminal": false,
+      "verifiesStudentIdentity": false,
+      "sourceRefs": [
+        "R-TERM-VERIFY",
+        "R-TERM-VALIDATION"
+      ]
+    }
+  },
+  "acceptanceCriteria": [
+    {
+      "id": "AC-01",
+      "priority": "P0",
+      "title": "Rutas canónicas",
+      "procedure": "Abrir campus, OS, examen y TERM en sus prefijos reales; validar enlaces de M02, D41, OS-L01 y m01-l01.",
+      "expected": "Ningún enlace cambia de aplicación por perder su prefijo.",
+      "sourceRefs": [
+        "R-NAV",
+        "R-OS-UI",
+        "R-TERM-UI"
+      ]
+    },
+    {
+      "id": "AC-02",
+      "priority": "P0",
+      "title": "Inventario y contenido",
+      "procedure": "Comparar el catálogo con catalogo-publico.json y leer muestras completas.",
+      "expected": "32 módulos, 96 fichas, 46 recursos, 28 lecciones OS y 48 TERM; textos y IDs preservados.",
+      "sourceRefs": [
+        "R-CATALOG",
+        "R-OS",
+        "R-TERM"
+      ]
+    },
+    {
+      "id": "AC-03",
+      "priority": "P0",
+      "title": "Banco semántico",
+      "procedure": "Validar JSON Schema y reglas semánticas con los validadores reales.",
+      "expected": "100 IDs únicos, 12 temas, cuatro opciones distintas y una solución válida por pregunta.",
+      "sourceRefs": [
+        "R-BANK",
+        "R-EXAM-MODEL"
+      ]
+    },
+    {
+      "id": "AC-04",
+      "priority": "P0",
+      "title": "Selección y barajado",
+      "procedure": "Crear múltiples intentos y comprobar cada conjunto de questionIds y optionOrders.",
+      "expected": "20 IDs sin repetir por intento; a/b/c/d permanecen asociados a su texto.",
+      "sourceRefs": [
+        "R-EXAM-MODEL"
+      ]
+    },
+    {
+      "id": "AC-05",
+      "priority": "P0",
+      "title": "Corrección inmediata",
+      "procedure": "Elegir un radio por teclado y por ratón.",
+      "expected": "Feedback, explicación y solución aparecen al elegir; las opciones quedan bloqueadas para puntuación.",
+      "sourceRefs": [
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-06",
+      "priority": "P0",
+      "title": "Puntuación",
+      "procedure": "Completar un intento con diez aciertos y diez fallos; finalizar otro con pendientes.",
+      "expected": "Primer intento 5,0; total20; pendientes no puntúan ni generan penalización negativa.",
+      "sourceRefs": [
+        "R-EXAM-MODEL"
+      ]
+    },
+    {
+      "id": "AC-07",
+      "priority": "P0",
+      "title": "Reanudación",
+      "procedure": "Responder, recargar y seleccionar Reanudar.",
+      "expected": "Misma selección, opciones, respuestas y posición; no reinicio silencioso.",
+      "sourceRefs": [
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-08",
+      "priority": "P0",
+      "title": "Sustitución explícita",
+      "procedure": "Solicitar Nueva sesión con un intento activo y cancelar, luego aceptar.",
+      "expected": "Cancelar conserva el intento; aceptar crea uno nuevo sin tocar otros registros.",
+      "sourceRefs": [
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-09",
+      "priority": "P0",
+      "title": "Escrituras simultáneas",
+      "procedure": "Retener el Web Lock, encolar dos respuestas de pestañas con snapshot antiguo y liberarlo.",
+      "expected": "Ambas respuestas compatibles se conservan. El ensayo no depende de haber procesado antes storage events.",
+      "sourceRefs": [
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-10",
+      "priority": "P0",
+      "title": "Conflicto de primera respuesta",
+      "procedure": "Encolar opciones diferentes para la misma pregunta desde dos pestañas.",
+      "expected": "La primera respuesta guardada prevalece, sin doble puntuación.",
+      "sourceRefs": [
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-11",
+      "priority": "P0",
+      "title": "Pestaña obsoleta",
+      "procedure": "Finalizar, reemplazar o eliminar un intento desde otra pestaña y actuar con el snapshot anterior.",
+      "expected": "No reabre el finalizado, no sobrescribe el nuevo ni resucita el eliminado.",
+      "sourceRefs": [
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-12",
+      "priority": "P0",
+      "title": "Almacenamiento denegado",
+      "procedure": "Denegar localStorage o eliminar Web Locks en un contexto nuevo.",
+      "expected": "La sesión funciona en memoria con aviso; no escribe una copia compartida sin coordinación.",
+      "sourceRefs": [
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-13",
+      "priority": "P0",
+      "title": "Datos corruptos",
+      "procedure": "Probar JSON roto, versiones incompatibles, IDs desconocidos y opciones inexistentes.",
+      "expected": "Rechazo claro; la UI sigue ofreciendo una salida válida para estudiar.",
+      "sourceRefs": [
+        "R-EXAM-MODEL",
+        "R-STATE",
+        "R-TERM-STATE"
+      ]
+    },
+    {
+      "id": "AC-14",
+      "priority": "P0",
+      "title": "Vida del registro OS",
+      "procedure": "Borrar/recrear el registro mientras otra pestaña ignora el evento; actuar en ella.",
+      "expected": "El recordId nuevo es autoridad; no recupera marcas o sesiones de otra vida.",
+      "sourceRefs": [
+        "R-OS-MODEL",
+        "R-OS-TEST"
+      ]
+    },
+    {
+      "id": "AC-15",
+      "priority": "P0",
+      "title": "Acción OS tras reset",
+      "procedure": "Reanudar OS-L01/1 sin hash, resetear remotamente y registrar7min como primera acción.",
+      "expected": "Conserva OS-L01/1 y atribuye420000ms a OS-L01.",
+      "sourceRefs": [
+        "R-OS-TEST"
+      ]
+    },
+    {
+      "id": "AC-16",
+      "priority": "P0",
+      "title": "Inicio pendiente OS",
+      "procedure": "Retener un callback de inicio; resetear/eliminar/recrear; liberar el callback antiguo.",
+      "expected": "El temporizador anterior no se activa ni añade tiempo a la nueva vida.",
+      "sourceRefs": [
+        "R-OS-TEST"
+      ]
+    },
+    {
+      "id": "AC-17",
+      "priority": "P0",
+      "title": "Idiomas",
+      "procedure": "Cambiar ES/EN en campus y OS; abrir D41–D46 en ambos idiomas.",
+      "expected": "IDs y progreso iguales; ausencia EN expresada; examen y TERM siguen marcados ES.",
+      "sourceRefs": [
+        "R-NAV",
+        "R-OS-UI"
+      ]
+    },
+    {
+      "id": "AC-18",
+      "priority": "P0",
+      "title": "Teclado y anuncios",
+      "procedure": "Completar navegación, radios y diálogos sin ratón; escuchar feedback con tecnología de apoyo.",
+      "expected": "Foco visible y útil, sin trampas, cierre y retorno correctos; color no es el único indicador.",
+      "sourceRefs": [
+        "F-WCAG",
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-19",
+      "priority": "P0",
+      "title": "Reflujo y texto",
+      "procedure": "Revisar320/390/768/1024/1440px, texto200% y contenido largo real.",
+      "expected": "No overflow horizontal de página; tablas/código internos; encabezado no oculta foco.",
+      "sourceRefs": [
+        "R-DESIGN",
+        "F-WCAG"
+      ]
+    },
+    {
+      "id": "AC-20",
+      "priority": "P0",
+      "title": "Práctica honesta",
+      "procedure": "Visitar TERM sin configuración de laboratorio y revisar un paso con salida de ejemplo.",
+      "expected": "Ninguna máquina vinculada y Resultado orientativo; no éxito de conexión inferido del iframe.",
+      "sourceRefs": [
+        "R-TERM-ARCH"
+      ]
+    },
+    {
+      "id": "AC-21",
+      "priority": "P0",
+      "title": "Privacidad",
+      "procedure": "Observar solicitudes de red y revisar datos que se exportan.",
+      "expected": "Sin analítica, IA, fuentes remotas ni PII añadida; únicamente datos locales y recursos autorizados.",
+      "sourceRefs": [
+        "R-CATALOG",
+        "R-TERM-ARCH"
+      ]
+    },
+    {
+      "id": "AC-22",
+      "priority": "P0",
+      "title": "Importación",
+      "procedure": "Importar copia válida tras vista previa y copias hostiles/sobredimensionadas.",
+      "expected": "Respeta límites por producto; notas como texto; nunca borra registros de otra superficie.",
+      "sourceRefs": [
+        "R-STATE",
+        "R-OS-MODEL",
+        "R-TERM-STATE"
+      ]
+    },
+    {
+      "id": "AC-23",
+      "priority": "P0",
+      "title": "Build limpio",
+      "procedure": "Ejecutar build/check/dry-run desde checkout sin dist.",
+      "expected": "Se generan los dos prefijos y pasan manifiestos sin secretos de aplicación.",
+      "sourceRefs": [
+        "R-CLEAN-BUILD"
+      ]
+    },
+    {
+      "id": "AC-24",
+      "priority": "P0",
+      "title": "Producción",
+      "procedure": "Después de publicar, comparar build-info.sourceCommit con SHA final y bankSha256 con bytes del banco servido.",
+      "expected": "Versión y contenido coinciden; no sustituir este paso por preview o pruebas locales.",
+      "sourceRefs": [
+        "R-DEPLOY"
+      ]
+    },
+    {
+      "id": "AC-25",
+      "priority": "P0",
+      "title": "Entrega HTTP",
+      "procedure": "Pedir JSON, JS, CSS, lector, descargas y un archivo ausente en cada prefijo.",
+      "expected": "MIME y cabeceras correctos; ausente404; sin captura accidental de la raíz del dominio.",
+      "sourceRefs": [
+        "R-WRANGLER",
+        "R-INTEGRATION",
+        "F-WORKERS"
+      ]
+    },
+    {
+      "id": "AC-26",
+      "priority": "P1",
+      "title": "Orientación",
+      "procedure": "Empezar sin progreso y con una copia válida en cada superficie.",
+      "expected": "Objetivo y siguiente acción reales; Continuar lleva a la unidad guardada; no métricas simuladas.",
+      "sourceRefs": [
+        "R-NAV",
+        "R-OS-UI",
+        "R-TERM-UI"
+      ]
+    },
+    {
+      "id": "AC-27",
+      "priority": "P1",
+      "title": "Guía local",
+      "procedure": "Solicitar pista, entorno, evidencia y repaso para una unidad conocida; repetir con ID desconocido.",
+      "expected": "Respuesta curada con fuente; fallback honesto para contexto inválido; sin generar comandos.",
+      "sourceRefs": [
+        "R-OS",
+        "R-TERM"
+      ]
+    },
+    {
+      "id": "AC-28",
+      "priority": "P1",
+      "title": "Repaso por reglas",
+      "procedure": "Dar fallos de T02 y T11 al planificador local propuesto.",
+      "expected": "Enlaza D41 y D45; explica que usa el intento actual; no afirma dominio global.",
+      "sourceRefs": [
+        "R-BANK",
+        "R-EXAM"
+      ]
+    },
+    {
+      "id": "AC-29",
+      "priority": "P1",
+      "title": "Continuidad de lectura",
+      "procedure": "Abrir panel, cambiar orientación y volver a una pregunta o vista anterior.",
+      "expected": "Posición y progreso conservados; no nueva puntuación ni atribución a otra lección.",
+      "sourceRefs": [
+        "R-NAV",
+        "R-OS-UI",
+        "R-EXAM-TEST"
+      ]
+    },
+    {
+      "id": "AC-30",
+      "priority": "P2",
+      "title": "Consistencia visual",
+      "procedure": "Comparar componentes equivalentes en las cuatro superficies.",
+      "expected": "Mismo ritmo, foco y jerarquía; paletas de cada superficie preservadas salvo cambio explícito.",
+      "sourceRefs": [
+        "R-DESIGN",
+        "R-CSS",
+        "R-TERM-CSS"
+      ]
+    },
+    {
+      "id": "AC-31",
+      "priority": "P0",
+      "title": "Seis rutas profesionales y 26 etapas fieles a las fuentes",
+      "procedure": "Exportar y abrir rutas.html; contrastar IDs, nombres, etapas, semanas, horas, fuentes y módulos con formacion/rutas/routes.json y el validador learning_paths.",
+      "expected": "Los seis IDs reales y 26 etapas coinciden. Las horas orientativas quedan separadas de las 480 del curso. No hay rutas o acreditaciones inventadas.",
+      "sourceRefs": [
+        "R-PATHS",
+        "R-PATHS-BUILD",
+        "R-PATHS-TEST"
+      ]
+    },
+    {
+      "id": "AC-32",
+      "priority": "P0",
+      "title": "Marcas de rutas opcionales y separadas",
+      "procedure": "Marcar sin guardar, activar guardado, retener el Web Lock y encolar cambios de dos pestañas; probar cancelación, borrado/recreación con eventos perdidos, copia v1 antigua y almacenamiento/coordinación no disponibles.",
+      "expected": "Se conservan marcas compatibles y la última intención por etapa. schema1 y la clave son compatibles; recordId distingue vidas sin identificar personas. No revive una copia eliminada ni borra una nueva. El fallback temporal es explícito y los otros registros no cambian.",
+      "sourceRefs": [
+        "R-PATHS-UI",
+        "R-PATHS-BROWSER",
+        "R-PRIVACY"
+      ]
+    },
+    {
+      "id": "AC-33",
+      "priority": "P0",
+      "title": "Persistencia y recuperación de TERM",
+      "procedure": "Ejecutar las regresiones de createProgressStore y dos pestañas; probar datos corruptos, almacenamiento denegado, original descargable, conflicto y cambio de la copia durante una confirmación de importación o reinicio.",
+      "expected": "Guardado efectivo y sesión temporal se distinguen. Un conflicto conserva ambas copias; el alumno exporta o recarga explícitamente. expectedRaw impide reemplazar una copia cambiada después de abrir el diálogo.",
+      "sourceRefs": [
+        "R-TERM-STATE",
+        "R-TERM-UI",
+        "R-TERM-PERSISTENCE",
+        "R-TERM-STATE-TEST",
+        "R-TERM-VALIDATION"
+      ]
+    },
+    {
+      "id": "AC-34",
+      "priority": "P0",
+      "title": "Activos públicos exactos de TERM",
+      "procedure": "Tras Workers success ejecutar term/verify_public.py con el SHA completo de main aceptado, conservar su JSON y revisar las regresiones offline del verificador.",
+      "expected": "Commit limpio, hashes de todos los activos, 16/48/194/96, entradas, cabeceras y 404 coinciden; un despliegue concurrente invalida la comprobación. No se abre ttyd.",
+      "sourceRefs": [
+        "R-TERM-VERIFY",
+        "R-TERM-VALIDATION"
+      ]
+    },
+    {
+      "id": "AC-35",
+      "priority": "P1",
+      "title": "Ampliación forense fiel a sus fuentes",
+      "procedure": "Abrir las ampliaciones de M27, M28 y M29 en ES/EN; revisar fuentes, diez actividades, evidencia sintética y doce preguntas del caso C99-DFIR.",
+      "expected": "Se mantienen los enlaces reales a GitHub y los entregables; el caso no suma módulos, horas, marcas ni preguntas al examen general, ni se presenta como incidente real o malware ejecutado.",
+      "sourceRefs": [
+        "R-FORENSIC-CASE",
+        "R-FORENSIC-PRACTICE",
+        "R-FORENSIC-QUESTIONS",
+        "R-FORENSIC-INTEGRATION",
+        "R-FORENSIC-TEST"
+      ]
+    }
+  ],
+  "backlog": [
+    {
+      "id": "B01",
+      "priority": "P0",
+      "status": "proposed",
+      "title": "Proteger integridad al integrar el diseño",
+      "scope": "Conservar rutas, validadores, modelo100/20, idiomas y registros.",
+      "acceptanceIds": [
+        "AC-01",
+        "AC-02",
+        "AC-03",
+        "AC-09",
+        "AC-10",
+        "AC-11",
+        "AC-14",
+        "AC-15",
+        "AC-16",
+        "AC-17"
+      ]
+    },
+    {
+      "id": "B02",
+      "priority": "P1",
+      "status": "proposed",
+      "title": "Orientación y continuación reales",
+      "scope": "Accesos claros a los tres recorridos, D46, último punto válido y siguiente acción.",
+      "acceptanceIds": [
+        "AC-26",
+        "AC-29"
+      ]
+    },
+    {
+      "id": "B03",
+      "priority": "P1",
+      "status": "proposed",
+      "title": "Guía local con fuentes y fallback",
+      "scope": "Acciones acotadas sobre contenido curado; ninguna API externa.",
+      "acceptanceIds": [
+        "AC-27",
+        "AC-21"
+      ]
+    },
+    {
+      "id": "B04",
+      "priority": "P1",
+      "status": "proposed",
+      "title": "Plan de repaso del intento",
+      "scope": "Orden determinista de lecturas vinculadas a errores y pendientes del intento actual.",
+      "acceptanceIds": [
+        "AC-28",
+        "AC-06"
+      ]
+    },
+    {
+      "id": "B05",
+      "priority": "P1",
+      "status": "proposed",
+      "title": "Práctica con contexto más visible",
+      "scope": "Entorno, predicción, evidencia y recuperación; estado real de ttyd.",
+      "acceptanceIds": [
+        "AC-20",
+        "AC-27"
+      ]
+    },
+    {
+      "id": "B06",
+      "priority": "P2",
+      "status": "proposed",
+      "title": "Consistencia de componentes y móvil",
+      "scope": "Espacio, foco, tipografía, densidad y paneles; conservar paletas.",
+      "acceptanceIds": [
+        "AC-18",
+        "AC-19",
+        "AC-30"
+      ]
+    },
+    {
+      "id": "B07",
+      "priority": "P2",
+      "status": "out_of_scope",
+      "title": "Evaluar asistencia generativa futura",
+      "scope": "Solo un contrato separado puede habilitar backend, credenciales, consentimiento, evaluación y límites de coste.",
+      "acceptanceIds": []
+    }
+  ],
+  "handoff": {
+    "deliverables": [
+      "Reviewable Make preview or equivalent design states",
+      "Exportable code or scoped patch",
+      "File-by-file integration notes",
+      "Validation evidence tied to commit and browser",
+      "Known limitations",
+      "Preserved build and production verification commands"
+    ],
+    "doneMeans": "Required changes are implemented and tested; proposed capabilities remain labeled; publication status is verified separately.",
+    "reviewOrder": [
+      "Student task completion",
+      "Content and scoring integrity",
+      "Accessibility and mobile",
+      "Persistence and privacy",
+      "Deployment identity",
+      "Visual consistency"
+    ],
+    "maintainedProjectDocuments": {
+      "security": "docs/security/REVIEW-2026-10-18.md",
+      "privacyAndAi": "docs/security/PRIVACY-AND-AI.md",
+      "engineeringRelease": "docs/engineering/REVIEW-AND-RELEASE.md",
+      "backlog": "docs/BACKLOG.md",
+      "uxIssue": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/issues/4"
+    }
+  },
+  "sources": [
+    {
+      "id": "R-CATALOG",
+      "kind": "repository",
+      "path": "campus/build.py",
+      "description": "Generación del campus, catálogos, lectores, cabeceras y metadatos de versión.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/build.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/build.py",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-NAV",
+      "kind": "repository",
+      "path": "campus/assets/app.js",
+      "description": "Rutas y flujo real del campus general.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/assets/app.js",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/assets/app.js",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-STATE",
+      "kind": "repository",
+      "path": "campus/assets/state.js",
+      "description": "Identificadores, marcas, límites y contrato de progreso del campus.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/assets/state.js",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/assets/state.js",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-DESIGN",
+      "kind": "repository",
+      "path": "campus/DESIGN.md",
+      "description": "Identidad editorial, fuentes locales y alcance de accesibilidad.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/DESIGN.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/DESIGN.md",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-CSS",
+      "kind": "repository",
+      "path": "campus/assets/styles.css",
+      "description": "Tokens y puntos de adaptación del campus.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/assets/styles.css",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/assets/styles.css",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-OS",
+      "kind": "repository",
+      "path": "campus/os_classroom/README.md",
+      "description": "Aprendizaje guiado y alcance real del aula de sistemas.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/os_classroom/README.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/os_classroom/README.md",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-OS-MODEL",
+      "kind": "repository",
+      "path": "campus/os_classroom/model.js",
+      "description": "Persistencia por vida del registro, generaciones y temporizador.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/os_classroom/model.js",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/os_classroom/model.js",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-OS-UI",
+      "kind": "repository",
+      "path": "campus/os_classroom/study.js",
+      "description": "Asistente local, entorno, rutas y reconciliación de pestañas del aula.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/os_classroom/study.js",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/os_classroom/study.js",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-OS-CSS",
+      "kind": "repository",
+      "path": "campus/os_classroom/study.css",
+      "description": "Estilo actual del aula OS.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/os_classroom/study.css",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/os_classroom/study.css",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-EXAM",
+      "kind": "repository",
+      "path": "campus/EXAMEN.md",
+      "description": "Alcance formativo, doce temas, 100/20 y edición del banco.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/EXAMEN.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/EXAMEN.md",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-EXAM-MODEL",
+      "kind": "repository",
+      "path": "campus/exam/model.mjs",
+      "description": "Validación, muestreo, corrección, resumen y persistencia del intento.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/exam/model.mjs",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/exam/model.mjs",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-EXAM-CSS",
+      "kind": "repository",
+      "path": "campus/exam/exam.css",
+      "description": "Tokens y estados visuales del examen.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/exam/exam.css",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/exam/exam.css",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-BANK",
+      "kind": "repository",
+      "path": "formacion/introduccion-informatica/banco-preguntas.json",
+      "description": "Única fuente editorial de las cien preguntas de informática.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/formacion/introduccion-informatica/banco-preguntas.json",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/introduccion-informatica/banco-preguntas.json",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-TERM",
+      "kind": "repository",
+      "path": "term/README.md",
+      "description": "Dieciséis módulos, 48 lecciones, retos, cuestionarios y laboratorio TERM.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/term/README.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/README.md",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-TERM-UI",
+      "kind": "repository",
+      "path": "term/assets/app.js",
+      "description": "Interfaz TERM y recuperación explícita: sesión, original, recarga e importación/reinicio con guardia de reemplazo.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/assets/app.js",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/assets/app.js",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-TERM-STATE",
+      "kind": "repository",
+      "path": "term/assets/state.js",
+      "description": "Contrato TERM, límites, compare-and-save bajo Web Lock y conservación de originales ante conflicto o corrupción.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/assets/state.js",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/assets/state.js",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-TERM-CSS",
+      "kind": "repository",
+      "path": "term/assets/styles.css",
+      "description": "Identidad azul y estructura actual de TERM.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/term/assets/styles.css",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/assets/styles.css",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-TERM-ARCH",
+      "kind": "repository",
+      "path": "term/docs/ARQUITECTURA.md",
+      "description": "Límite entre curso estático, navegador y terminal real opcional.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/term/docs/ARQUITECTURA.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/docs/ARQUITECTURA.md",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-WRANGLER",
+      "kind": "repository",
+      "path": "wrangler.jsonc",
+      "description": "Worker, prefijos públicos, assets y hook de compilación.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/wrangler.jsonc",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/wrangler.jsonc",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-DEPLOY",
+      "kind": "repository",
+      "path": "campus/DEPLOY-CLOUDFLARE.md",
+      "description": "Comandos de compilación, preview, publicación y comprobación.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/DEPLOY-CLOUDFLARE.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/DEPLOY-CLOUDFLARE.md",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-WRAPPER",
+      "kind": "repository",
+      "path": "campus/cloudflare.py",
+      "description": "Wrapper con Wrangler 4.151.1, lockfile dedicado, npm ci --ignore-scripts y binario local; plan/build/check offline.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/cloudflare.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/cloudflare.py",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-INTEGRATION",
+      "kind": "repository",
+      "path": "campus/term_integration.py",
+      "description": "Staging conjunto y separación de cabeceras entre los dos prefijos.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/term_integration.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/term_integration.py",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-EXAM-TEST",
+      "kind": "repository",
+      "path": "campus/tests/browser_exam.py",
+      "description": "Aceptación funcional, móvil y concurrencia del examen.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/tests/browser_exam.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tests/browser_exam.py",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-OS-TEST",
+      "kind": "repository",
+      "path": "campus/tests/browser_os_study.py",
+      "description": "Regresiones del aula, entorno, tiempo, importación y pestañas.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/769c1ba947f5f092894a258974116e82a77a02f1/campus/tests/browser_os_study.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tests/browser_os_study.py",
+      "publicRef": "769c1ba947f5f092894a258974116e82a77a02f1",
+      "publicationStatus": "verified_at_published_baseline"
+    },
+    {
+      "id": "R-CI",
+      "kind": "repository",
+      "path": ".github/workflows/campus.yml",
+      "description": "Puertas de aceptación del campus en CI.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/.github/workflows/campus.yml",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/.github/workflows/campus.yml",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-CLEAN-BUILD",
+      "kind": "repository",
+      "path": ".github/workflows/workers-clean-build.yml",
+      "description": "Prueba desde checkout limpio de versions upload y deploy con dry-run.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/.github/workflows/workers-clean-build.yml",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/.github/workflows/workers-clean-build.yml",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-SECURITY",
+      "kind": "repository",
+      "path": "docs/security/REVIEW-2026-10-18.md",
+      "description": "Revisión técnica vigente; los hallazgos y pruebas se mantienen aquí.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/security/REVIEW-2026-10-18.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/security/REVIEW-2026-10-18.md",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-PRIVACY",
+      "kind": "repository",
+      "path": "docs/security/PRIVACY-AND-AI.md",
+      "description": "Privacidad del alumno y condiciones para cualquier asistencia generativa futura.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/security/PRIVACY-AND-AI.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/security/PRIVACY-AND-AI.md",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-ENGINEERING",
+      "kind": "repository",
+      "path": "docs/engineering/REVIEW-AND-RELEASE.md",
+      "description": "Proceso de revisión, integración, publicación y comprobación de producción.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/engineering/REVIEW-AND-RELEASE.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/engineering/REVIEW-AND-RELEASE.md",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-BACKLOG",
+      "kind": "repository",
+      "path": "docs/BACKLOG.md",
+      "description": "Backlog mantenido y enlace a seguimiento de UX en issue4.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/BACKLOG.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/docs/BACKLOG.md",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "F-MAKE",
+      "kind": "official_documentation",
+      "url": "https://help.figma.com/hc/en-us/articles/31304412302231-Explore-Figma-Make",
+      "description": "Contexto, archivos, preview y revisión de cambios en Make.",
+      "checkedOn": "2026-10-18"
+    },
+    {
+      "id": "F-ATTACH",
+      "kind": "official_documentation",
+      "url": "https://help.figma.com/hc/en-us/articles/31304529835671-Attach-files-to-a-prompt-in-the-Figma-agent-and-Figma-Make",
+      "description": "Adjuntos Markdown/JSON; hasta diez por prompt y límite de 1 MB para archivos de texto.",
+      "checkedOn": "2026-10-18"
+    },
+    {
+      "id": "F-GITHUB",
+      "kind": "official_documentation",
+      "url": "https://help.figma.com/hc/en-us/articles/35463818346647-Push-from-Figma-Make-to-GitHub",
+      "description": "Push unidireccional a repositorios creados por Make; no sincroniza este repositorio existente.",
+      "checkedOn": "2026-10-18"
+    },
+    {
+      "id": "F-WORKERS",
+      "kind": "official_documentation",
+      "url": "https://developers.cloudflare.com/workers/static-assets/",
+      "description": "Entrega de Static Assets y comportamiento de archivos ausentes.",
+      "checkedOn": "2026-10-18"
+    },
+    {
+      "id": "F-WCAG",
+      "kind": "official_documentation",
+      "url": "https://www.w3.org/WAI/WCAG22/quickref/",
+      "description": "Referencia de requisitos de accesibilidad WCAG 2.2; objetivo de diseño, no certificación.",
+      "checkedOn": "2026-10-18"
+    },
+    {
+      "id": "R-PATHS",
+      "kind": "repository",
+      "path": "formacion/rutas/routes.json",
+      "description": "Fuente canónica de seis rutas profesionales y 26 etapas.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/rutas/routes.json",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/rutas/routes.json",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-PATHS-CREDENTIALS",
+      "kind": "repository",
+      "path": "formacion/rutas/credentials.json",
+      "description": "Trece programas externos enlazados; sus condiciones oficiales no son acreditación del campus.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/rutas/credentials.json",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/rutas/credentials.json",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-PATHS-SOURCES",
+      "kind": "repository",
+      "path": "formacion/rutas/sources.json",
+      "description": "Treinta y dos fuentes públicas de los itinerarios.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/rutas/sources.json",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/rutas/sources.json",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-PATHS-BUILD",
+      "kind": "repository",
+      "path": "campus/learning_paths.py",
+      "description": "Validación de IDs, horas, fuentes y prerrequisitos; generación de rutas.html.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/learning_paths.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/learning_paths.py",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-PATHS-UI",
+      "kind": "repository",
+      "path": "campus/assets/routes.js",
+      "description": "Filtro, presentación y marcas opcionales coordinadas bajo Web Lock; identidad por vida del registro y fallback temporal.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/assets/routes.js",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/assets/routes.js",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-PATHS-TEST",
+      "kind": "repository",
+      "path": "campus/tests/test_learning_paths.py",
+      "description": "Regresiones de integridad del catálogo y compilación independiente.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tests/test_learning_paths.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tests/test_learning_paths.py",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-PATHS-BROWSER",
+      "kind": "repository",
+      "path": "campus/tests/browser_routes.py",
+      "description": "Regresiones reales de dos pestañas: intercalado, escrituras pendientes, cancelaciones, borrado/recreación, compatibilidad y fallback.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tests/browser_routes.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tests/browser_routes.py",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-TOOLCHAIN",
+      "kind": "repository",
+      "path": "campus/tooling/package-lock.json",
+      "description": "Lockfile dedicado de Wrangler 4.151.1; instalación reproducible sin scripts de paquetes.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tooling/package-lock.json",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tooling/package-lock.json",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-TERM-PERSISTENCE",
+      "kind": "repository",
+      "path": "term/tests/persistence-browser.mjs",
+      "description": "Regresiones de navegador del guardado TERM, recuperación, dos pestañas y fallos de almacenamiento.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/tests/persistence-browser.mjs",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/tests/persistence-browser.mjs",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-TERM-STATE-TEST",
+      "kind": "repository",
+      "path": "term/tests/persistence.test.mjs",
+      "description": "Regresiones del modelo TERM: copia corrupta, conflicto, reemplazo explícito y guardado no disponible.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/tests/persistence.test.mjs",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/tests/persistence.test.mjs",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-TERM-VALIDATION",
+      "kind": "repository",
+      "path": "term/docs/VALIDACION.md",
+      "description": "Alcance vigente de persistencia, recuperación y auditoría de publicación de TERM.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/docs/VALIDACION.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/docs/VALIDACION.md",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-TERM-VERIFY",
+      "kind": "repository",
+      "path": "term/verify_public.py",
+      "description": "Verificador HTTPS acotado del commit limpio, manifiesto de activos, cabeceras, entradas y 404 de TERM.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/verify_public.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/term/verify_public.py",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-FORENSIC-CASE",
+      "kind": "repository",
+      "path": "formacion/casos/c99-forense/README.md",
+      "description": "Caso docente C99-DFIR: alcance, materiales sintéticos, diez actividades y ampliación sin horas nuevas.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/casos/c99-forense/README.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/casos/c99-forense/README.md",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-FORENSIC-PRACTICE",
+      "kind": "repository",
+      "path": "formacion/casos/c99-forense/PRACTICA.md",
+      "description": "Diez actividades del alumno con entregables; la guía inglesa se enlaza desde el índice del caso.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/casos/c99-forense/PRACTICA.md",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/casos/c99-forense/PRACTICA.md",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-FORENSIC-QUESTIONS",
+      "kind": "repository",
+      "path": "formacion/casos/c99-forense/preguntas.json",
+      "description": "Doce preguntas públicas del caso, separadas del banco de informática.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/casos/c99-forense/preguntas.json",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/casos/c99-forense/preguntas.json",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-FORENSIC-INTEGRATION",
+      "kind": "repository",
+      "path": "campus/operations.py",
+      "description": "Enlaces de ampliación C99-DFIR desde M27, M28 y M29, sin módulos, horas o marcas nuevos.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/operations.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/operations.py",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    },
+    {
+      "id": "R-FORENSIC-TEST",
+      "kind": "repository",
+      "path": "campus/tests/test_c99_case.py",
+      "description": "Validación de datos sintéticos, cronología, manifiesto, preguntas e integración del caso.",
+      "url": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tests/test_c99_case.py",
+      "mainUrl": "https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/campus/tests/test_c99_case.py",
+      "publicRef": "main",
+      "publicationStatus": "pending_consolidation"
+    }
+  ]
+}

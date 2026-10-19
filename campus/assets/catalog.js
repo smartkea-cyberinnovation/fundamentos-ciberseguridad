@@ -4,7 +4,14 @@ export function matches(row, filters) {
   const terms = normalise(filters.query || '').trim().split(/\s+/).filter(Boolean).slice(0, 12);
   return (filters.block === 'all' || row.block === filters.block)
     && (filters.status === 'all' || row.status === filters.status)
-    && terms.every(term => normalise(row.search).includes(term));
+    && terms.every(term => {
+      // A complete module ID selects that module, not mentions in prerequisites.
+      if (/^m\d{2}$/.test(term)) {
+        const id = row.module || String(row.search).match(/^M\d{2}\b/i)?.[0] || '';
+        return normalise(id) === term;
+      }
+      return normalise(row.search).includes(term);
+    });
 }
 export function applyFilters(root) {
   const query = root.querySelector('#outline-query');

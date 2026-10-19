@@ -34,7 +34,6 @@ class CloudflareTests(unittest.TestCase):
     def test_production_command(self):
         args=cloudflare.wrangler_args('deploy')
         self.assertIn('deploy',args);self.assertNotIn('versions',args)
-        self.assertIn('wrangler@4.132.0',args)
         self.assertEqual(args[-1],str(cloudflare.CONFIG))
     def test_preview_not_promoted(self):
         args=cloudflare.wrangler_args('preview')
@@ -55,11 +54,28 @@ class CloudflareTests(unittest.TestCase):
                 build.assert_called_once();execute.assert_not_called()
     def test_wrapper_delegates_one_build_to_wrangler(self):
         with patch.object(cloudflare,'build_and_check') as build:
-            with patch.object(cloudflare.shutil,'which',return_value='/usr/bin/npx'):
+            with patch.object(cloudflare,'install_tooling',return_value='/usr/bin/node'):
                 with patch.object(cloudflare,'execute') as execute:
                     cloudflare.run('preview')
         build.assert_not_called();execute.assert_called_once()
         self.assertIn('versions',execute.call_args.args[0])
+        self.assertIn(str(cloudflare.WRANGLER_BIN),execute.call_args.args[0])
+    def test_mismatched_lock_prevents_install_and_upload(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            tooling=Path(temporary)
+            (tooling/'package.json').write_text(json.dumps({'devDependencies':{'wrangler':cloudflare.WRANGLER}}))
+            (tooling/'package-lock.json').write_text(json.dumps({'packages':{'node_modules/wrangler':{'version':'0.0.0'}}}))
+            with patch.object(cloudflare,'TOOLING',tooling), patch.object(cloudflare.shutil,'which',return_value='/usr/bin/node'):
+                with patch.object(cloudflare,'execute') as execute:
+                    with self.assertRaisesRegex(ValueError,'lockfile'):
+                        cloudflare.run('deploy')
+                    execute.assert_not_called()
+    def test_failed_tool_install_prevents_upload(self):
+        with patch.object(cloudflare,'install_tooling',side_effect=ValueError('failed install')):
+            with patch.object(cloudflare,'execute') as execute:
+                with self.assertRaisesRegex(ValueError,'failed install'):
+                    cloudflare.run('preview')
+                execute.assert_not_called()
     def test_commands_never_use_shell(self):
         with patch.object(cloudflare.subprocess,'run') as run:
             cloudflare.execute(['python3','build.py'])

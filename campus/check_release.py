@@ -37,6 +37,7 @@ def validate(directory: Path, archive: Path) -> dict:
     required |= {'examen/index.html', 'examen/exam.js', 'examen/exam.css',
                  'examen/model.mjs', 'examen/questions.json',
                  'sistemas/index.html', 'sistemas/course.es.json', 'sistemas/course.en.json'}
+    required |= {'rutas.html','assets/routes.js','assets/routes.css'}
     files={p.relative_to(directory).as_posix():p for p in directory.rglob('*') if p.is_file() and not p.name.startswith('.')}
     if any(p.is_symlink() for p in directory.rglob('*')): raise ValueError('No se admiten enlaces simbólicos.')
     if not required <= files.keys(): raise ValueError('Faltan activos: '+', '.join(sorted(required-files.keys())))

@@ -182,6 +182,18 @@ docs/MIGRATION.md              Origen del snapshot y alcance del traslado
 
 [C99 · Interpretar código ofuscado y conservar evidencia](docs/casos/c99-20261018/README.md) conecta el aprendizaje de procesos, archivos y registros con un caso de análisis estático y triage offline. Incluye contexto, IOC y pruebas sintéticas; distingue capacidades del código de un incidente real demostrado.
 
+## Mantener y mejorar el campus
+
+| Necesidad | Documento |
+|---|---|
+| Diseñar e implementar con Figma Make | [Paquete Markdown y JSON](docs/figma-make/README.md) |
+| Revisar ramas, código y despliegues | [Procedimiento de revisión y publicación](docs/engineering/REVIEW-AND-RELEASE.md) |
+| Entender controles y hallazgos de seguridad | [Revisión técnica](docs/security/REVIEW-2026-10-18.md) |
+| Preparar privacidad y asistencia con IA | [Matriz de datos y decisiones](docs/security/PRIVACY-AND-AI.md) |
+| Continuar el trabajo pendiente | [Plan y backlog](docs/BACKLOG.md) |
+
+Las propuestas de diseño conservan la fuente docente, los identificadores de aprendizaje y el progreso existente. Una entrega se considera publicada cuando el commit de `main` coincide con la versión observada en Cloudflare.
+
 ## Seguridad y límites
 
 Practica únicamente en sistemas propios, laboratorios aislados o entornos para los que exista autorización explícita. No introduzcas secretos ni datos personales reales en repositorios, notas o laboratorios.

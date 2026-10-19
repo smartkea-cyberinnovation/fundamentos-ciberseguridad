@@ -2,9 +2,9 @@ name: Cloudflare - static deployment acceptance
 on:
   push:
     branches: [main, 'feat/**']
-    paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', '.github/workflows/cloudflare.yml']
+    paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', 'formacion/rutas/**', '.github/workflows/cloudflare.yml']
   pull_request:
-    paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', '.github/workflows/cloudflare.yml']
+    paths: ['term/**', 'wrangler.jsonc', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', 'formacion/rutas/**', '.github/workflows/cloudflare.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,13 +19,13 @@ jobs:
       WRANGLER_SEND_METRICS: 'false'
       CI: 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.13'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
       - name: Validate Wrangler configuration without upload
@@ -35,17 +35,22 @@ jobs:
           mkdir -p campus/qa
           python3 campus/cloudflare.py dry-run 2>&1 | tee campus/qa/wrangler-dry-run.log
           python3 campus/cloudflare.py check
+      - name: Audit the locked deployment dependencies
+        run: npm audit --prefix campus/tooling --audit-level=high --json > "$RUNNER_TEMP/npm-audit.json"
       - name: Exercise local Workers Static Assets runtime
         shell: bash
         run: |
-          npx --yes wrangler@4.132.0 dev --config wrangler.jsonc --local --ip 127.0.0.1 --port 8789 >campus/qa/wrangler-local.log 2>&1 &
+          set -euo pipefail
+          node campus/tooling/node_modules/wrangler/bin/wrangler.js dev --config wrangler.jsonc --local --ip 127.0.0.1 --port 8789 >campus/qa/wrangler-local.log 2>&1 &
           PID=$!
           trap 'kill "$PID" 2>/dev/null || true' EXIT
           python3 campus/tests/cloudflare_smoke.py | tee campus/qa/wrangler-smoke.json
       - name: Retain diagnostics without credentials
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: cloudflare-static-diagnostics
-          path: campus/qa/wrangler-*
+          path: |
+            campus/qa/wrangler-*
+            ${{ runner.temp }}/npm-audit.json
           retention-days: 7

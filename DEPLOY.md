@@ -12,6 +12,8 @@ Este documento es para mantenedores. El README principal está orientado al alum
 
 La configuración técnica detallada se mantiene en [campus/DEPLOY-CLOUDFLARE.md](campus/DEPLOY-CLOUDFLARE.md) y la recuperación en [campus/WORKERS-RECOVERY.md](campus/WORKERS-RECOVERY.md).
 
+El [procedimiento de revisión y publicación](docs/engineering/REVIEW-AND-RELEASE.md) define estados, comprobación de ramas, aceptación por componente, CodeQL y evidencia de producción. El [backlog](docs/BACKLOG.md) registra lo que requiere continuidad. Para preparar una interfaz con Make, conservar los contratos del paquete de [Figma Make](docs/figma-make/README.md).
+
 ## Flujo recomendado
 
 1. Crear una rama de trabajo.

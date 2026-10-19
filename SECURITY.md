@@ -37,3 +37,11 @@ Este documento describe la política del proyecto. No constituye autorización p
 El aula y el simulador son aplicaciones estáticas. No ejecutan los comandos mostrados ni envían respuestas, notas o progreso a un servidor. El registro de OS y el intento del test utilizan claves locales independientes; la restauración valida formato, catálogo e identificadores antes de usar los datos. Bloquear almacenamiento no debe impedir practicar en memoria.
 
 El banco incluye respuestas y explicaciones como material docente público. No lo uses para evaluar identidad, certificación o calificaciones oficiales. Los ejemplos se ejecutan manualmente sobre datos de laboratorio; los enlaces de repaso del test se limitan a contenido del campus.
+
+## Revisión continua y privacidad
+
+La revisión del 18-10-2026 documenta los límites de entrada/salida, almacenamiento, empaquetado, laboratorios y CI en [el informe técnico](docs/security/REVIEW-2026-10-18.md). Las Actions se fijan a commits completos; CodeQL analiza Python, JavaScript y los workflows, y conserva resultados SARIF. Revisar los resultados del commit concreto antes de cerrar una tarea: ejecutar un detector no equivale a acreditar ausencia de vulnerabilidades.
+
+Las decisiones sobre alumnos identificados, proveedores, retención y una futura IA externa se detallan en [privacidad e IA](docs/security/PRIVACY-AND-AI.md). El runtime actual no habilita un backend de alumnos ni envía sus notas a un modelo. Las rutas del mismo dominio no aíslan el almacenamiento frente a otros scripts del mismo origen.
+
+Consulta [el backlog](docs/BACKLOG.md) para controles pendientes y [el procedimiento de revisión](docs/engineering/REVIEW-AND-RELEASE.md) para evidencias y recuperación.

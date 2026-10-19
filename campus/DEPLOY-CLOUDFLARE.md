@@ -49,7 +49,7 @@ Preserve the explicit root `wrangler.jsonc` and `campus/cloudflare.py` wrapper. 
 | Production deploy command | `python3 campus/cloudflare.py deploy` |
 | Preview/version upload command | `python3 campus/cloudflare.py preview` |
 | Environment | `SKIP_DEPENDENCY_INSTALL=1`, `PYTHON_VERSION=3.13.3`, `NODE_VERSION=22.23.2` |
-| Pinned Wrangler | `4.132.0` |
+| Pinned Wrangler | `4.151.1` |
 
 Inspect without publishing:
 
@@ -59,7 +59,7 @@ python3 campus/cloudflare.py build
 python3 campus/cloudflare.py dry-run
 ```
 
-`deploy` publishes production; `preview` uploads a test version; `dry-run` does neither. Use the provider's authorized credentials locally or in its build environment, never paste them into chat, source files, screenshots or logs. Run `python3 campus/cloudflare.py --help` to verify supported operations. Do not run bare `npx wrangler deploy` from the legacy app and allow framework migration to change configuration implicitly.
+`deploy` publishes production; `preview` uploads a test version; `dry-run` does neither. These explicit CLI actions first run `npm ci --ignore-scripts` against `campus/tooling/package-lock.json` and use its verified local Wrangler binary. `build`, `check` and `plan` remain offline. CI audits this development toolchain and tests both raw CLI build hooks from an empty output directory. Use the provider's authorized credentials locally or in its build environment, never paste them into chat, source files, screenshots or logs. Run `python3 campus/cloudflare.py --help` to verify supported operations. Do not run bare `npx wrangler deploy` from the legacy app and allow framework migration to change configuration implicitly.
 
 ## Acceptance after publication / Prueba del alojamiento
 

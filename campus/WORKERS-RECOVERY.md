@@ -1,6 +1,6 @@
 # Workers: publicación en la subruta de SmartKEA
 
-Revisión: 2026-09-20. El campus se publica en **https://smartkea.com/introduccion-ciberseguridad/**. `campus/publication.py` define la base y la URL; la comprobación de `wrangler.jsonc` exige que su única ruta coincida con esa definición.
+Revisión operativa: 2026-10-18; conserva el diagnóstico histórico del 2026-09-20. El campus se publica en **https://smartkea.com/introduccion-ciberseguridad/**. `campus/publication.py` define la base y la URL; la comprobación de `wrangler.jsonc` exige las rutas revisadas del campus y TERM.
 
 ## Diagnóstico y corrección
 
@@ -8,7 +8,7 @@ El log del 20-09-2026 a las 09:47 UTC muestra que `wrangler versions upload` fal
 
 `campus/dist` y `campus/pages-ready.zip` siguen siendo la edición portable. La publicación usa `campus/worker-dist/introduccion-ciberseguridad/`, conserva íntegros los contenidos ES/EN y adapta únicamente la página 404 y los metadatos de publicación. `_headers` queda en la raíz del staging; `.assetsignore` excluye el marcador interno. Los manifiestos se recalculan para reflejar los archivos reales y `build-info.json` conserva el `sourceCommit` original e incorpora la URL, el prefijo y el hash del manifiesto fuente.
 
-El Worker sólo sirve activos estáticos, sin entrypoint JavaScript, backend ni bindings. La única ruta de producción es `smartkea.com/introduccion-ciberseguridad/*`; no captura la web corporativa, otras rutas ni `www`. La redirección exacta de `/introduccion-ciberseguridad` a `/introduccion-ciberseguridad/`, preservando query string, se gestiona por separado en la zona Cloudflare. Una URL de preview se abre añadiendo el mismo prefijo al hostname de preview.
+El Worker sólo sirve activos estáticos, sin entrypoint JavaScript, backend ni bindings. La ruta del campus es `smartkea.com/introduccion-ciberseguridad/*`. El mismo Worker sirve TERM en las rutas explícitas de `wrangler.jsonc`, con URL canónica `https://www.smartkea.com/fundamentos-ciberseguridad/term/`. No captura la portada ni otras rutas de la web corporativa. La redirección exacta de `/introduccion-ciberseguridad` a `/introduccion-ciberseguridad/`, preservando query string, se gestiona por separado en la zona Cloudflare. Una URL de preview se abre añadiendo el mismo prefijo al hostname de preview.
 
 ## Configuración del panel
 
@@ -26,7 +26,7 @@ En Workers > fundamentos-ciberseguridad > Settings > Builds:
 | Build variable | `PYTHON_VERSION=3.13.3` |
 | Build variable | `NODE_VERSION=22.23.2` |
 
-Los wrappers validan la configuración y llaman a Wrangler 4.132.0; Wrangler ejecuta el custom build exactamente una vez. No añadir otro build al panel ni usar `--no-bundle` para intentar saltar el custom build. Las versiones verificadas no tienen un argumento `--no-build`.
+Los wrappers validan la configuración, instalan `campus/tooling/package-lock.json` con `npm ci --ignore-scripts` y llaman a Wrangler 4.151.1; Wrangler ejecuta el custom build exactamente una vez. No añadir otro build al panel ni usar `--no-bundle` para intentar saltar el custom build. Las versiones verificadas no tienen un argumento `--no-build`.
 
 `deploy` publica producción y sincroniza la ruta declarada. `preview` utiliza exclusivamente `versions upload`: sube una versión, no la promueve ni sincroniza las rutas. `workers_dev` y `preview_urls` están habilitados explícitamente para verificar el Worker y las versiones. La cuenta/token de publicación debe permitir gestionar el Worker y su ruta en la zona SmartKEA; mantener los tokens fuera de Git.
 
@@ -42,7 +42,7 @@ Desde la raíz del repositorio:
 python3 campus/cloudflare.py plan
 python3 campus/cloudflare.py dry-run
 python3 campus/cloudflare.py check
-npx --yes wrangler@4.132.0 dev --config wrangler.jsonc --local --ip 127.0.0.1 --port 8789
+node campus/tooling/node_modules/wrangler/bin/wrangler.js dev --config wrangler.jsonc --local --ip 127.0.0.1 --port 8789
 ```
 
 En otra terminal:
@@ -51,7 +51,7 @@ En otra terminal:
 python3 campus/tests/cloudflare_smoke.py
 ```
 
-La CI comprueba comandos raw `versions upload --dry-run` y `deploy --dry-run` desde checkout sin ambos directorios generados, con Wrangler 4.132.0 y 4.135.0. El smoke verifica el prefijo, ambos idiomas, activos, cabeceras, procedencia, respuestas 404 y los recursos enlazados por la propia página 404. Estas pruebas nunca ejecutan laboratorios ni publican.
+La CI audita el lockfile y comprueba comandos raw `versions upload --dry-run` y `deploy --dry-run` desde checkout sin ambos directorios generados, con Wrangler 4.151.1 y el lockfile revisado. El smoke verifica el prefijo, ambos idiomas, activos, cabeceras, procedencia, respuestas 404 y los recursos enlazados por la propia página 404. Estas pruebas nunca ejecutan laboratorios ni publican.
 
 Tras publicar desde un commit limpio, comprobar la URL real, el SHA servido en `/introduccion-ciberseguridad/build-info.json`, las redirecciones y la continuidad de la web corporativa. Se puede usar `python3 campus/tests/cloudflare_smoke.py --origin https://smartkea.com` si el entorno HTTP permite acceder; la aceptación remota exige un `sourceCommit` no nulo que coincida con el checkout. Un upload correcto o un dry-run local no acredita por sí solo la operación del dominio.
 
@@ -65,7 +65,7 @@ Después, verificar de nuevo portada, `/legal` y `/privacidad`, y documentar qu�
 
 ## English operational summary
 
-The September 20 failure was a missing generated asset directory. The dashboard wrappers delegate to Wrangler's checked custom build, which builds and validates the portable course and stages it at `/introduccion-ciberseguridad/` exactly once before uploading. The production route is limited to this prefix on `smartkea.com`; a separate exact redirect adds the missing trailing slash. Preview uploads do not promote versions or synchronize production routes. Static content bytes remain unchanged; publication metadata, 404 links and checksums reflect the staged layout. Verify both the published commit and the corporate site after deployment.
+The September 20 failure was a missing generated asset directory. The dashboard wrappers delegate to Wrangler's checked custom build, which builds and validates the portable course and stages it at `/introduccion-ciberseguridad/` exactly once before uploading. The campus production route is limited to this prefix on `smartkea.com`; TERM keeps its separately reviewed routes and canonical `www` URL; a separate exact redirect adds the missing trailing slash. Preview uploads do not promote versions or synchronize production routes. Static content bytes remain unchanged; publication metadata, 404 links and checksums reflect the staged layout. Verify both the published commit and the corporate site after deployment.
 
 ## Fuentes primarias
 

@@ -2,9 +2,9 @@ name: Campus - build and acceptance
 on:
   push:
     branches: [main, 'feat/**']
-    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', 'formacion/casos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', 'formacion/rutas/**', 'formacion/casos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   pull_request:
-    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', 'formacion/casos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
+    paths: ['term/**', 'campus/**', 'formacion/sistemas-operativos/**', 'formacion/itinerario-integral/**', 'formacion/introduccion-informatica/**', 'formacion/rutas/**', 'formacion/casos/**', '.github/workflows/campus.yml', 'wrangler.jsonc']
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,13 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.13'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
       - name: Prepare reports
@@ -58,6 +58,7 @@ jobs:
           python3 campus/tests/browser_operations.py 2>&1 | tee campus/qa/browser-operations.log
           python3 campus/tests/browser_integral.py 2>&1 | tee campus/qa/browser-integral.log
           python3 campus/tests/browser_exam.py 2>&1 | tee campus/qa/browser-exam.log
+          python3 campus/tests/browser_routes.py 2>&1 | tee campus/qa/browser-routes.log
       - name: WebKit acceptance
         shell: bash
         env:
@@ -68,6 +69,7 @@ jobs:
           python3 campus/tests/browser_operations.py 2>&1 | tee campus/qa/browser-operations-webkit.log
           python3 campus/tests/browser_integral.py 2>&1 | tee campus/qa/browser-integral-webkit.log
           python3 campus/tests/browser_exam.py 2>&1 | tee campus/qa/browser-exam-webkit.log
+          python3 campus/tests/browser_routes.py 2>&1 | tee campus/qa/browser-routes-webkit.log
       - name: Existing kit tests
         working-directory: formacion/sistemas-operativos/kit
         run: python3 -m unittest discover -p 'test_*.py' -v
@@ -76,20 +78,20 @@ jobs:
         run: python3 -m unittest discover -p 'test_*.py' -v
       - name: Diagnostics, including failures
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: campus-diagnostics
           path: campus/qa/
           retention-days: 7
       - name: Pages bundle after successful acceptance
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: cloudflare-pages-ready
           path: campus/pages-ready.zip
           retention-days: 14
           if-no-files-found: error
       - name: Verified source and site snapshot
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: campus-es-en-source
           path: |
@@ -97,6 +99,7 @@ jobs:
             formacion/sistemas-operativos/
             formacion/itinerario-integral/
             formacion/introduccion-informatica/
+            formacion/rutas/
             formacion/casos/
             README.md
             wrangler.jsonc
@@ -112,10 +115,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.13'
       - name: Record seven bounded public GET observations
@@ -130,7 +133,7 @@ jobs:
           Path('qa/public-observation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
           print(json.dumps({'observationRecorded':True,'publicChecksPassed':result['passed']}))
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: public-publication-observation
