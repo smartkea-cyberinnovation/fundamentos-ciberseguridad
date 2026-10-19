@@ -4,6 +4,7 @@ import csv
 import html
 import re
 from pathlib import Path
+from urllib.parse import unquote
 from operations import related_reading
 from integral import IDS as INTEGRAL_IDS, OUTLINE_IDS, translated_resources
 
@@ -51,8 +52,8 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
     if set(guides)!=expected_guides: raise ValueError('Missing translated practical guide')
     out={**spanish,'language':'en','modules':[],'resources':[],
          'blocks':[{**b,'title':v[0],'description':v[1]} for b,v in zip(spanish['blocks'],BLOCKS_EN)]}
-    def render(raw,prefix):
-        data=markdown(raw,prefix=prefix)
+    def render(raw,prefix,source=''):
+        data=markdown(raw,source=source,prefix=prefix)
         data['html']=data['html'].replace('aria-label="Tabla desplazable"','aria-label="Scrollable table"')
         for sl in data['slides']:
             sl['html']=sl['html'].replace('aria-label="Tabla desplazable"','aria-label="Scrollable table"')
@@ -88,8 +89,14 @@ def collect_en(spanish: dict, directory: Path, markdown, read_text) -> dict:
         raw=resources[original['id']]
         is_operational = original['id'] in ('D22','D23','D24','D25')
         body='\n'.join(raw.splitlines()[1:]).strip() if is_operational or original['id'] in INTEGRAL_IDS else raw
+        source=''
+        if original['id'] in INTEGRAL_IDS:
+            base=spanish['repository']+'/blob/main/'
+            if not original['source'].startswith(base):
+                raise ValueError('Integral reading must identify its repository source')
+            source=unquote(original['source'][len(base):])
         record={**original,'title':raw.splitlines()[0].split(' · ',1)[1],
-            'kind':'Extended lesson' if original['kind']=='Lección ampliada' else 'Reference',**render(body,original['id'])}
+            'kind':'Extended lesson' if original['kind']=='Lección ampliada' else 'Reference',**render(body,original['id'],source)}
         if original['id'] in OUTLINE_IDS:
             record['kind'] = 'English summary'
         if is_operational:

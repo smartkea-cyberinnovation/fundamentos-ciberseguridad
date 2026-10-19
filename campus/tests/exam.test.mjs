@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import {
   BANK_SIZE, SESSION_LENGTH, STORAGE_KEY, validateBank, bankRevision, cryptoRandomInt,
   shuffle, createAttempt, answerQuestion, navigateAttempt, finishAttempt,
-  restoreAttempt, summarizeAttempt, createPersistence,
+  restoreAttempt, summarizeAttempt, createPersistence, sameAttempt, reconcileAttempts,
 } from '../exam/model.mjs';
 
 function fixture() {
@@ -33,6 +33,20 @@ const bank = validateBank(fixture());
 const options = () => ({ randomInt: randomSource(), now: new Date('2026-10-18T10:00:00.000Z') });
 const copy = value => JSON.parse(JSON.stringify(value));
 const questionAt = (attempt, index) => bank.questions.find(question => question.id === attempt.questionIds[index]);
+
+function sharedPersistence() {
+  const store = new Map();
+  let tail = Promise.resolve();
+  const locks = { request(name, options, callback) {
+    assert.equal(name, `${STORAGE_KEY}:write`);
+    assert.equal(options.mode, 'exclusive');
+    const result = tail.then(callback);
+    tail = result.catch(() => {});
+    return result;
+  } };
+  const storage = { getItem: key => store.get(key) ?? null, setItem: (key, value) => store.set(key, value) };
+  return { store, storage, locks, tab: () => createPersistence(() => storage, () => locks) };
+}
 
 test('el banco real contiene 100 preguntas válidas, cuatro opciones y una solución por pregunta', () => {
   const actual = validateBank(JSON.parse(readFileSync(new URL('../../formacion/introduccion-informatica/banco-preguntas.json', import.meta.url), 'utf8')));
@@ -223,14 +237,15 @@ test('una revisión del banco invalida el intento anterior aunque el editor no c
   assert.equal(restoreAttempt(revised, oldAttempt), null);
 });
 
-test('almacenamiento denegado, cuota agotada o JSON corrupto no impiden practicar', () => {
+test('almacenamiento denegado, cuota agotada o JSON corrupto no impiden practicar', async () => {
   const attempt = createAttempt(bank, options());
-  const denied = createPersistence(() => { throw new Error('SecurityError'); });
+  const { locks } = sharedPersistence();
+  const denied = createPersistence(() => { throw new Error('SecurityError'); }, () => locks);
   assert.deepEqual(denied.load(bank), { status: 'unavailable', attempt: null });
-  assert.equal(denied.save(attempt), false);
-  const full = createPersistence(() => ({ getItem: () => null, setItem() { throw new Error('QuotaExceededError'); } }));
+  assert.equal((await denied.commit(bank, attempt, { replace: true })).status, 'unavailable');
+  const full = createPersistence(() => ({ getItem: () => null, setItem() { throw new Error('QuotaExceededError'); } }), () => locks);
   assert.equal(full.load(bank).status, 'empty');
-  assert.equal(full.save(attempt), false);
+  assert.equal((await full.commit(bank, attempt, { replace: true })).status, 'unavailable');
   for (const bad of ['not-json', '{}', 'null', '[1]', 'x'.repeat(50_001)]) {
     const broken = createPersistence(() => ({ getItem: () => bad }));
     assert.equal(broken.load(bank).status, 'invalid');
@@ -239,13 +254,117 @@ test('almacenamiento denegado, cuota agotada o JSON corrupto no impiden practica
   assert.equal(summarizeAttempt(bank, answerQuestion(bank, attempt, question.id, question.correctOptionId)).correct, 1);
 });
 
-test('el intento utiliza su propia clave y no modifica el progreso general del campus', () => {
+test('el intento utiliza su propia clave y no modifica el progreso general del campus', async () => {
   const courseKey = 'fundamentos-ciberseguridad:progress:v1';
-  const store = new Map([[courseKey, 'progreso existente']]);
-  const persistence = createPersistence(() => ({ getItem: key => store.get(key) ?? null, setItem: (key, value) => store.set(key, value) }));
+  const { store, tab } = sharedPersistence();
+  store.set(courseKey, 'progreso existente');
+  const persistence = tab();
   const attempt = createAttempt(bank, options());
-  assert.equal(persistence.save(attempt), true);
+  assert.equal((await persistence.commit(bank, attempt, { replace: true })).status, 'saved');
   assert.equal(store.get(courseKey), 'progreso existente');
   assert.deepEqual([...store.keys()].sort(), [courseKey, STORAGE_KEY].sort());
   assert.deepEqual(persistence.load(bank).attempt, attempt);
+});
+
+test('la identidad del intento v1 es estable y la reconciliación conserva la primera respuesta', () => {
+  const initial = createAttempt(bank, options());
+  const first = questionAt(initial, 0);
+  const second = questionAt(initial, 1);
+  const stored = answerQuestion(bank, initial, first.id, 'a');
+  const proposed = answerQuestion(bank, answerQuestion(bank, initial, first.id, 'b'), second.id, 'c');
+  assert.ok(sameAttempt(initial, restoreAttempt(bank, copy(stored))));
+  assert.deepEqual(reconcileAttempts(stored, proposed).answers, { [first.id]: 'a', [second.id]: 'c' });
+  const different = createAttempt(bank, { ...options(), randomInt: randomSource(40) });
+  assert.equal(sameAttempt(initial, different), false);
+  assert.throws(() => reconcileAttempts(stored, different), /intentos distintos/);
+});
+
+test('dos pestañas que escriben a la vez desde la misma instantánea conservan ambas respuestas', async () => {
+  const { tab } = sharedPersistence();
+  const tabA = tab();
+  const tabB = tab();
+  const initial = createAttempt(bank, options());
+  await tabA.commit(bank, initial, { replace: true });
+  const snapshotA = tabA.load(bank).attempt;
+  const snapshotB = tabB.load(bank).attempt;
+  const first = questionAt(initial, 0);
+  const second = questionAt(initial, 1);
+  const [resultA, resultB] = await Promise.all([
+    tabA.commit(bank, answerQuestion(bank, snapshotA, first.id, first.correctOptionId)),
+    tabB.commit(bank, answerQuestion(bank, snapshotB, second.id, second.correctOptionId)),
+  ]);
+  assert.equal(resultA.status, 'saved');
+  assert.equal(resultB.status, 'saved');
+  assert.deepEqual(tabA.load(bank).attempt.answers, { [first.id]: first.correctOptionId, [second.id]: second.correctOptionId });
+  assert.equal(summarizeAttempt(bank, tabA.load(bank).attempt).grade, 1);
+});
+
+test('respuestas simultáneas en conflicto conservan la primera escritura confirmada', async () => {
+  const { tab } = sharedPersistence();
+  const tabA = tab();
+  const tabB = tab();
+  const initial = createAttempt(bank, options());
+  await tabA.commit(bank, initial, { replace: true });
+  const question = questionAt(initial, 0);
+  const incorrect = question.options.find(option => option.id !== question.correctOptionId).id;
+  const [first, second] = await Promise.all([
+    tabA.commit(bank, answerQuestion(bank, initial, question.id, incorrect)),
+    tabB.commit(bank, answerQuestion(bank, initial, question.id, question.correctOptionId)),
+  ]);
+  assert.deepEqual(first.attempt.answers, second.attempt.answers);
+  assert.equal(tabB.load(bank).attempt.answers[question.id], incorrect);
+  assert.equal(summarizeAttempt(bank, tabB.load(bank).attempt).incorrect, 1);
+});
+
+test('un intento cerrado incorpora respuestas ya guardadas y no acepta respuestas tardías', async () => {
+  const { tab } = sharedPersistence();
+  const persistence = tab();
+  const initial = createAttempt(bank, options());
+  await persistence.commit(bank, initial, { replace: true });
+  const first = questionAt(initial, 0);
+  const second = questionAt(initial, 1);
+  await persistence.commit(bank, answerQuestion(bank, initial, first.id, first.correctOptionId));
+  const finished = (await persistence.commit(bank, finishAttempt(initial, '2026-10-18T11:00:00.000Z'))).attempt;
+  assert.equal(summarizeAttempt(bank, finished).correct, 1);
+  const late = await tab().commit(bank, answerQuestion(bank, initial, second.id, second.correctOptionId));
+  assert.deepEqual(late.attempt, finished);
+  assert.deepEqual(persistence.load(bank).attempt, finished);
+});
+
+test('una pestaña antigua no sustituye otro intento ni resucita uno eliminado', async () => {
+  const { store, tab } = sharedPersistence();
+  const persistence = tab();
+  const initial = createAttempt(bank, options());
+  const next = createAttempt(bank, { ...options(), randomInt: randomSource(39) });
+  await persistence.commit(bank, initial, { replace: true });
+  const question = questionAt(initial, 0);
+  const stale = answerQuestion(bank, initial, question.id, question.correctOptionId);
+  assert.equal((await persistence.commit(bank, next, { replace: true, expected: initial })).status, 'saved');
+  for (const commitOptions of [{}, { replace: true, expected: initial }, { replace: true }]) {
+    const result = await tab().commit(bank, stale, commitOptions);
+    assert.equal(result.status, 'superseded');
+    assert.deepEqual(result.attempt, next);
+  }
+  assert.deepEqual(persistence.load(bank).attempt, next);
+  store.delete(STORAGE_KEY);
+  const deleted = await tab().commit(bank, next);
+  assert.deepEqual(deleted, { status: 'superseded', attempt: null });
+  assert.equal(store.has(STORAGE_KEY), false);
+});
+
+test('sin Web Locks o con coordinación denegada no se escribe almacenamiento compartido', async () => {
+  const { store, storage } = sharedPersistence();
+  const initial = createAttempt(bank, options());
+  store.set(STORAGE_KEY, JSON.stringify(initial));
+  const before = store.get(STORAGE_KEY);
+  const question = questionAt(initial, 0);
+  const answered = answerQuestion(bank, initial, question.id, question.correctOptionId);
+  for (const locks of [() => undefined, () => { throw new Error('Denied'); },
+    () => ({ request: async () => { throw new Error('Denied'); } })]) {
+    const persistence = createPersistence(() => storage, locks);
+    const result = await persistence.commit(bank, answered);
+    assert.equal(result.status, 'unavailable');
+    assert.deepEqual(result.attempt, answered);
+    assert.equal(store.get(STORAGE_KEY), before);
+  }
 });

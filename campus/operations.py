@@ -15,6 +15,9 @@ RELATED = {
     'M23': ('D22','D25'), 'M24': ('D23','D24'), 'M25': ('D24',),
     'M27': ('D25',), 'M28': ('D25',), 'M29': ('D25',),
 }
+CASE_MODULES = frozenset(('M27', 'M28', 'M29'))
+CASE_BASE = 'https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/blob/main/formacion/casos/c99-forense/'
+
 
 def related_reading(mid: str, language: str) -> str:
     if language not in ('es','en'):
@@ -26,7 +29,25 @@ def related_reading(mid: str, language: str) -> str:
     note = ('Lecturas complementarias; no añaden horas ni nuevas marcas de progreso.' if language == 'es'
             else 'Supplementary readings; no added hours or progress milestones.')
     links = ' · '.join(f'[{rid}: {labels[rid]}](#/recurso/{rid})' for rid in RELATED[mid])
-    return f'\n\n## {title}\n\n{note}\n\n{links}\n'
+    result = f'\n\n## {title}\n\n{note}\n\n{links}\n'
+    if mid in CASE_MODULES:
+        if language == 'es':
+            heading = 'Caso práctico C99-DFIR: forense y shells'
+            label = 'Abrir la práctica guiada en GitHub'
+            filename = 'PRACTICA.md'
+            summary = ('Diez actividades de preservación, descubrimiento, uso de una shell legítima en laboratorio, '
+                       'análisis estático, cronología y respuesta. Incluye evidencias sintéticas, controles negativos, '
+                       'herramientas offline, soluciones y rúbrica. No se ejecuta la webshell C99.')
+        else:
+            heading = 'C99-DFIR case study: forensics and shells'
+            label = 'Open the guided exercise on GitHub'
+            filename = 'PRACTICA.en.md'
+            summary = ('Ten activities covering preservation, discovery, a legitimate classroom shell, static analysis, '
+                       'timelines and response. Includes synthetic evidence, negative controls, offline tools, '
+                       'solutions and a rubric. The C99 webshell is not executed.')
+        result += f'\n## {heading}\n\n{summary}\n\n[{label}]({CASE_BASE}{filename})\n'
+    return result
+
 
 def add_resources(resources, course, root, repo, markdown, read_text) -> None:
     if [r['id'] for r in resources] != [f'D{i:02}' for i in range(1,22)]:

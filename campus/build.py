@@ -268,6 +268,7 @@ def route_content(data: dict) -> None:
 def build() -> dict:
     commit = source_commit(ROOT)
     data = collect(); english = collect_en(data, HERE/'locales/en', markdown, read_text); out = HERE/'dist'
+    route_content(english)
     if out.is_symlink(): raise ValueError('dist no puede ser un enlace.')
     if out.exists() and not (out/'.campus-generated').is_file(): raise ValueError('dist no pertenece al generador.')
     stage = Path(tempfile.mkdtemp(prefix='.campus-build-', dir=HERE))

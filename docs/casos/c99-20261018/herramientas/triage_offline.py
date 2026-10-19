@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Iterator
 
 MAX_BYTES = 5 * 1024 * 1024
+LINE_COMMENT_END = re.compile(r'\r|\n|\?>')
 CALLBACK = 'svgflow.digital/sz/log.php'
 KNOWN_SHA256 = {
  '1e07598c2e41b7827840ba6c8611912abd88c0344a5d1eff364eaabeccdc6420': 'PHP sin salto final / blob público',
@@ -57,11 +58,10 @@ def literals(source: str, warnings: list[dict] | None = None) -> Iterator[tuple[
         if source.startswith('?>', i):
             i, in_php = i + 2, False
         elif source.startswith('//', i) or (source[i] == '#' and not source.startswith('#[', i)):
-            ends = [pos for marker in ('\r', '\n', '?>')
-                    if (pos := source.find(marker, i + 1)) >= 0]
-            if not ends:
+            match = LINE_COMMENT_END.search(source, i + 1)
+            if match is None:
                 return
-            end = min(ends)
+            end = match.start()
             if source.startswith('?>', end):
                 i, in_php = end + 2, False
             else:

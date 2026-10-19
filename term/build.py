@@ -154,7 +154,8 @@ def headers(lab: dict, pattern: str = '/*') -> str:
     return (pattern + '\n  Content-Security-Policy: ' + BASE_CSP + '; frame-src ' + frames + '\n'
             '  X-Content-Type-Options: nosniff\n  X-Frame-Options: DENY\n'
             '  Referrer-Policy: no-referrer\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n'
-            '  Cache-Control: no-cache\n')
+            # Preserve reviewed bytes; prevents automatic RUM beacon injection.
+            '  Cache-Control: public, no-cache, no-transform\n')
 
 
 def inline(text: str) -> str:

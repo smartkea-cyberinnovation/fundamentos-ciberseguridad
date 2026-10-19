@@ -34,7 +34,9 @@ El simulador está en español. El banco de respuestas es público porque su fin
 
 ## Estado local
 
-El intento activo se conserva únicamente en el navegador cuando el almacenamiento está disponible. La aplicación valida versión de banco, selección, opciones, respuestas e índices antes de restaurarlo. Si la copia no es compatible, informa y permite comenzar de nuevo. Si el navegador impide guardar, la sesión puede continuar en memoria.
+El intento activo se conserva únicamente en el navegador cuando el guardado está disponible. La aplicación valida versión de banco, selección, opciones, respuestas e índices antes de restaurarlo. Si la copia no es compatible, informa y permite comenzar de nuevo. Si el navegador impide guardar o no puede coordinar las pestañas, la aplicación avisa y la sesión continúa en memoria.
+
+Las pestañas de un mismo navegador combinan las respuestas del mismo intento y conservan la primera respuesta guardada de cada pregunta. Finalizar o sustituir un intento se refleja en las otras pestañas; una pestaña antigua no puede reabrirlo ni recuperar una selección sustituida.
 
 Las claves del test son independientes del progreso del campus y del aula de sistemas. Cerrar o borrar almacenamiento puede eliminar la continuidad de un intento. No hay sincronización entre dispositivos ni recepción de respuestas por parte del docente.
 
@@ -67,6 +69,8 @@ El ejemplo describe el formato y no forma parte del banco evaluable. Dificultade
 ## Arquitectura y verificación
 
 `campus/exam/` contiene HTML, CSS claro, controlador y modelo sin dependencias de producción. `campus/exam_build.py` valida y publica el banco y los activos en `campus/dist/examen/` antes de generar manifiesto y ZIP. El Worker los sirve bajo `/introduccion-ciberseguridad/examen/` con la CSP existente.
+
+La escritura compartida se coordina con Web Locks y valida el intento vigente antes de combinarlo. Las regresiones incluyen escrituras simultáneas de dos pestañas, cierre y sustitución con una pestaña rezagada y funcionamiento en memoria cuando no hay coordinación disponible.
 
 Desde la raíz:
 

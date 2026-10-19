@@ -1,0 +1,23 @@
+services:
+  lab:
+    build:
+      context: .
+      dockerfile: Dockerfile.laboratorio
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-python:3.13-slim}
+    image: smartkea-c99-dfir-lab:local
+    network_mode: none
+    read_only: true
+    user: "10001:10001"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.5
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=16m,mode=1777
+    stdin_open: true
+    tty: true
+    restart: "no"

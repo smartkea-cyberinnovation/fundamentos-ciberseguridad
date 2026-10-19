@@ -68,7 +68,7 @@ class ExamBrowserAcceptance(unittest.TestCase):
                 route.abort()
             else:
                 route.continue_()
-        self.page.route('**/*', local_only)
+        self.context.route('**/*', local_only)
 
     def tearDown(self):
         try:
@@ -86,18 +86,52 @@ class ExamBrowserAcceptance(unittest.TestCase):
         self.page.locator('#start-attempt').click()
         expect(self.page.locator('#question-title')).to_be_visible()
 
-    def state(self):
-        return self.page.evaluate('(key) => JSON.parse(localStorage.getItem(key))', KEY)
+    def wait_saved(self, page=None):
+        expect((page or self.page).locator('#main')).to_have_attribute('data-saving', 'false')
 
-    def current_question(self):
-        return self.questions[self.page.locator('[data-question-id]').get_attribute('data-question-id')]
+    def state(self, page=None):
+        page = page or self.page
+        self.wait_saved(page)
+        return page.evaluate('(key) => JSON.parse(localStorage.getItem(key))', KEY)
 
-    def answer(self, correct=True):
-        question = self.current_question()
+    def current_question(self, page=None):
+        return self.questions[(page or self.page).locator('[data-question-id]').get_attribute('data-question-id')]
+
+    def answer(self, correct=True, page=None):
+        page = page or self.page
+        question = self.current_question(page)
         option = question['correctOptionId'] if correct else next(item['id'] for item in question['options'] if item['id'] != question['correctOptionId'])
-        self.page.locator(f'input[name=answer][value="{option}"]').check()
-        expect(self.page.locator('#answer-feedback')).to_be_visible()
+        page.locator(f'input[name=answer][value="{option}"]').check()
+        expect(page.locator('#answer-feedback')).to_be_visible()
+        self.wait_saved(page)
         return question
+
+    def peer(self, ignore_storage=False):
+        page = self.context.new_page()
+        page.on('pageerror', lambda error: self.errors.append(str(error)))
+        if ignore_storage:
+            page.add_init_script("window.addEventListener('storage', event => event.stopImmediatePropagation(), true);")
+        page.goto(self.base, wait_until='networkidle')
+        page.locator('#resume-attempt').click()
+        expect(page.locator('#question-title')).to_be_visible()
+        return page
+
+    def hold_storage_lock(self):
+        self.page.evaluate('''key => new Promise(ready => {
+            navigator.locks.request(`${key}:write`, {mode: 'exclusive'}, () => new Promise(release => {
+                window.releaseExamLock = release;
+                ready(true);
+            }));
+        })''', KEY)
+
+    def release_storage_lock(self):
+        self.page.evaluate('window.releaseExamLock()')
+
+    def wait_pending_writes(self, count):
+        self.page.wait_for_function('''async ([key, count]) => {
+            const {pending} = await navigator.locks.query();
+            return pending.filter(lock => lock.name === `${key}:write`).length === count;
+        }''', arg=[KEY, count])
 
     def test_01_start_20_unique_questions_and_keyboard_correction(self):
         self.go()
@@ -226,6 +260,7 @@ class ExamBrowserAcceptance(unittest.TestCase):
         expect(self.page.locator('#storage-note')).to_contain_text('otra versión')
         expect(self.page.locator('#resume-attempt')).to_have_count(0)
         self.page.locator('#start-attempt').click()
+        self.wait_saved()
         self.page.evaluate('(key) => { const state = JSON.parse(localStorage.getItem(key)); state.questionIds[1] = state.questionIds[0]; localStorage.setItem(key, JSON.stringify(state)); }', KEY)
         self.page.reload()
         expect(self.page.locator('#resume-attempt')).to_have_count(0)
@@ -272,10 +307,136 @@ class ExamBrowserAcceptance(unittest.TestCase):
         self.page.locator('#finish-attempt').click()
         self.page.locator('#accept-confirmation').click()
         expect(self.page.locator('#result-grade')).to_have_text('0')
+        self.wait_saved()
         self.page.reload()
         expect(self.page.locator('#resume-attempt')).to_have_text('Ver último resultado')
         self.page.locator('#resume-attempt').click()
         expect(self.page.locator('#result-unanswered')).to_have_text('20')
+
+    def test_13_storage_events_share_answers_without_moving_the_other_tab(self):
+        self.start()
+        other = self.peer()
+        first = self.current_question()
+        other.locator('#next-question').click()
+        self.wait_saved(other)
+        second = self.current_question(other)
+        self.answer()
+        expect(other.locator('#answered-count')).to_have_text('1 de 20 respondidas')
+        expect(other.locator('[data-question-id]')).to_have_attribute('data-question-id', second['id'])
+        self.answer(page=other)
+        expect(self.page.locator('#answered-count')).to_have_text('2 de 20 respondidas')
+        expect(self.page.locator('[data-question-id]')).to_have_attribute('data-question-id', first['id'])
+        self.assertEqual(self.state()['answers'], {first['id']: first['correctOptionId'], second['id']: second['correctOptionId']})
+
+    def test_14_simultaneous_stale_snapshots_keep_both_answers(self):
+        # Suppress synchronization so the writer must reconcile stale snapshots under the lock.
+        self.context.add_init_script("window.addEventListener('storage', event => event.stopImmediatePropagation(), true);")
+        self.start()
+        other = self.peer()
+        other.locator('#next-question').click()
+        self.wait_saved(other)
+        first, second = self.current_question(), self.current_question(other)
+        self.hold_storage_lock()
+        try:
+            for page, question in [(self.page, first), (other, second)]:
+                page.locator(f'input[value="{question["correctOptionId"]}"]').click()
+                expect(page.locator('#answer-feedback')).to_contain_text('Respuesta correcta')
+                expect(page.locator('#main')).to_have_attribute('data-saving', 'true')
+                expect(page.locator('#next-question')).to_be_disabled()
+            self.wait_pending_writes(2)
+            self.assertEqual(self.page.evaluate('(key) => JSON.parse(localStorage.getItem(key)).answers', KEY), {})
+        finally:
+            self.release_storage_lock()
+        self.wait_saved()
+        self.wait_saved(other)
+        self.assertEqual(self.state()['answers'], {first['id']: first['correctOptionId'], second['id']: second['correctOptionId']})
+        self.page.reload()
+        self.page.locator('#resume-attempt').click()
+        expect(self.page.locator('#answered-count')).to_have_text('2 de 20 respondidas')
+
+    def test_15_conflicting_queued_answers_keep_the_first_committed_choice(self):
+        self.context.add_init_script("window.addEventListener('storage', event => event.stopImmediatePropagation(), true);")
+        self.start()
+        other = self.peer()
+        question = self.current_question()
+        incorrect = next(option['id'] for option in question['options'] if option['id'] != question['correctOptionId'])
+        self.hold_storage_lock()
+        try:
+            self.page.locator(f'input[value="{incorrect}"]').click()
+            expect(self.page.locator('#main')).to_have_attribute('data-saving', 'true')
+            self.wait_pending_writes(1)
+            other.locator(f'input[value="{question["correctOptionId"]}"]').click()
+            expect(other.locator('#answer-feedback')).to_contain_text('Respuesta correcta')
+            expect(other.locator('#main')).to_have_attribute('data-saving', 'true')
+            self.wait_pending_writes(2)
+        finally:
+            self.release_storage_lock()
+        self.wait_saved()
+        self.wait_saved(other)
+        self.assertEqual(self.state()['answers'], {question['id']: incorrect})
+        self.assertEqual(self.state(other)['answers'], {question['id']: incorrect})
+        expect(other.locator('#answer-feedback')).to_contain_text('Esta vez no es correcta')
+        expect(other.locator(f'input[value="{incorrect}"]')).to_be_checked()
+        expect(other.locator('input[type=radio]:disabled')).to_have_count(4)
+
+    def test_16_stale_answer_or_replacement_dialog_cannot_overwrite_a_new_attempt(self):
+        self.start()
+        other = self.peer(ignore_storage=True)
+        self.page.locator('#restart-attempt').click()
+        self.page.locator('#accept-confirmation').click()
+        latest = self.state()
+        question = self.current_question(other)
+        other.locator(f'input[value="{question["correctOptionId"]}"]').click()
+        expect(other.locator('#resume-attempt')).to_be_visible()
+        self.assertEqual(self.state(), latest)
+        other.locator('#resume-attempt').click()
+        other.locator('#restart-attempt').click()
+        expect(other.locator('#confirm-dialog')).to_be_visible()
+        self.page.locator('#restart-attempt').click()
+        self.page.locator('#accept-confirmation').click()
+        newest = self.state()
+        other.locator('#accept-confirmation').click()
+        expect(other.locator('#resume-attempt')).to_be_visible()
+        self.assertEqual(self.state(), newest)
+        self.assertNotEqual(newest['questionIds'], latest['questionIds'])
+
+    def test_17_stale_active_tab_cannot_change_a_finished_result(self):
+        self.start()
+        other = self.peer(ignore_storage=True)
+        question = self.current_question(other)
+        self.page.locator('#finish-attempt').click()
+        self.page.locator('#accept-confirmation').click()
+        finished = self.state()
+        other.locator(f'input[value="{question["correctOptionId"]}"]').click()
+        expect(other.locator('#result-grade')).to_have_text('0')
+        expect(other.locator('#result-unanswered')).to_have_text('20')
+        self.wait_saved(other)
+        self.assertEqual(self.state(), finished)
+
+    def test_18_stale_tab_cannot_resurrect_a_deleted_attempt(self):
+        self.start()
+        other = self.peer(ignore_storage=True)
+        question = self.current_question(other)
+        self.page.evaluate('(key) => localStorage.removeItem(key)', KEY)
+        other.locator(f'input[value="{question["correctOptionId"]}"]').click()
+        expect(other.locator('#start-attempt')).to_be_visible()
+        expect(other.locator('#resume-attempt')).to_have_count(0)
+        self.assertIsNone(self.state(other))
+
+    def test_19_without_web_locks_tabs_practice_in_memory_without_overwriting_saved_answers(self):
+        self.start()
+        saved = self.state()
+        self.context.add_init_script("Object.defineProperty(navigator, 'locks', {value: undefined, configurable: true});")
+        self.page.reload()
+        self.page.locator('#resume-attempt').click()
+        other = self.peer()
+        self.answer()
+        other.locator('#next-question').click()
+        self.answer(page=other)
+        for page in (self.page, other):
+            expect(page.locator('#storage-note')).to_contain_text('solo mientras permanezca abierta')
+            expect(page.locator('#answered-count')).to_have_text('1 de 20 respondidas')
+        self.assertEqual(self.state(), saved)
 
 
 if __name__ == '__main__':

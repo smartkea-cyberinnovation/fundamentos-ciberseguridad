@@ -1,0 +1,4 @@
+SYNTHETIC NEGATIVE CONTROL — DOCUMENTATION, NOT PROGRAM CODE
+A security note may mention c99shcook, goto, eval or curl_exec while explaining detection.
+The exact same text can therefore appear in benign training documentation.
+Keyword presence is a candidate selection aid; it is not proof of execution, infection or attribution.

@@ -41,6 +41,18 @@ class BilingualTests(unittest.TestCase):
         guides=[l for m in self.en['modules'] for l in m['labs'] if 'guide' in l]
         self.assertEqual(len(guides),8)
         for l in guides:self.assertGreater(len(l['guide']['html']),300)
+    def test_english_coverage_preserves_all_shared_source_links(self):
+        english=copy.deepcopy(self.en)
+        build.route_content(english)
+        es=next(r for r in self.es['resources'] if r['id']=='D46')
+        en=next(r for r in english['resources'] if r['id']=='D46')
+        links=lambda raw:set(re.findall(r'href="([^"]+)"',raw))
+        self.assertEqual(links(en['html']),links(es['html']))
+        self.assertEqual(len(links(en['html'])),8)
+        for rid in ('D27','D28','D29'):
+            self.assertIn('#/recurso/'+rid,links(en['html']))
+        references=next(sl for sl in en['slides'] if 'Sources and traceability' in sl['title'])
+        self.assertEqual(len(links(references['html'])),7)
     def test_quiz_answer_positions_match_spanish(self):
         for es,en in zip(self.es['modules'],self.en['modules']):
             q=en['quiz'];self.assertEqual(q['correct'],es['quiz']['correct']);self.assertEqual(len(q['options']),3)

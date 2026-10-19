@@ -73,4 +73,21 @@ class LexerRegressionTests(unittest.TestCase):
         report=analyze_bytes(b'<?php // "'+IOC+b'"\r$a="normal";')
         self.assertFalse(report['hits'])
 
+    def test_many_short_comments_do_not_repeatedly_scan_the_remaining_input(self):
+        class SearchBudgetText(str):
+            # Count characters covered by str.find, including unsuccessful scans.
+            # This catches quadratic tail rescans without a machine-speed timeout.
+            scanned = 0
+            def find(self, sub, start=0, end=None):
+                end = len(self) if end is None else end
+                result = super().find(sub, start, end)
+                self.scanned += max(0, (result + len(sub) if result >= 0 else end) - start)
+                if self.scanned > 4 * len(self):
+                    raise AssertionError('Repeated scans exceed a linear input budget')
+                return result
+        source = SearchBudgetText('<?php ' + '// short comment\n' * 20000 + '"kept";')
+        warnings = []
+        self.assertEqual([value for _, value in literals(source, warnings)], ['"kept"'])
+        self.assertEqual(warnings, [])
+
 if __name__ == '__main__': unittest.main()

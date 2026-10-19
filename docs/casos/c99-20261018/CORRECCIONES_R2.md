@@ -15,6 +15,22 @@ Se mantiene un estado explícito dentro/fuera de PHP, se reconocen CR/LF y cierr
 
 No se evalúan expresiones ni se amplían las funciones de la webshell. No se hace tráfico de red. El analizador sigue siendo una ayuda de triage, no un parser completo ni un veredicto de ausencia de malware. Las etiquetas PHP cortas dependientes de configuración y la interpolación compleja siguen fuera de alcance.
 
+## Revisión adicional de complejidad
+
+La revisión independiente de `35dfbc2f8dd0eb108cb781b8c27c0d89ef0e070e` detectó que buscar CR, LF y cierre PHP por separado recorría repetidamente el resto de la evidencia cuando contenía muchas líneas cortas `//` terminadas en LF. El coste crecía de forma cuadrática. Se sustituye por un único patrón compilado que localiza el primer terminador desde la posición actual, sin crear una copia del resto del texto.
+
+Una regresión con 20.000 comentarios limita el volumen de texto cubierto por búsquedas `str.find` y verifica el literal posterior. Falla sobre `35dfbc2` y pasa con la corrección; no depende de un umbral de tiempo ni de la velocidad de la máquina.
+
+Se midieron además tres ejecuciones por tamaño, con comentarios LF y un marcador al final. Las cifras son medianas locales del candidato corregido sobre `35dfbc2`, no un SLA ni un umbral de CI:
+
+| Entrada | Líneas de comentario | Mediana local |
+|---|---:|---:|
+| 512 KiB | 47.660 | 0,030 s |
+| 1 MiB | 95.323 | 0,049 s |
+| 5 MiB, límite admitido | 476.623 | 0,200 s |
+
+En los tres tamaños se conserva el hash, se encuentra el marcador posterior y no se generan advertencias léxicas. La prueba usa texto sintético y nunca invoca PHP ni servicios externos.
+
 ## Verificación reproducible
 
 Desde `docs/casos/c99-20261018`:
@@ -23,7 +39,7 @@ Desde `docs/casos/c99-20261018`:
 python3 -m unittest discover -s pruebas -v
 ```
 
-Resultado local R2: 26 tests superados, incluidos los 10 originales y 16 nuevos métodos de regresión con subcasos. Se prueban comentarios CR/LF/CRLF, ambos estilos de comentario, límites entre PHP/HTML, cadena truncada, comilla escapada, backticks, heredoc y salida CLI conservando el informe. No se ha ejecutado PHP ni la muestra original.
+Resultado local R2 con corrección de complejidad: 27 tests superados, incluidos los 10 originales y 17 nuevos métodos de regresión con subcasos. Se prueban comentarios CR/LF/CRLF, ambos estilos de comentario, límites entre PHP/HTML, cadena truncada, comilla escapada, backticks, heredoc, muchas líneas cortas y salida CLI conservando el informe. No se ha ejecutado PHP ni la muestra original.
 
 Los motores YARA/Suricata y la conversión Sigma a un backend real no se han validado por estas pruebas. Tampoco se acredita una ejecución de la webshell en un servidor propio.
 

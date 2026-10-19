@@ -58,6 +58,7 @@ jobs:
                   time.sleep(0.2)
           PY
           node term/tests/browser.mjs | tee term/qa/browser.json
+          node term/tests/persistence-browser.mjs | tee term/qa/persistence-browser.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -83,3 +84,36 @@ jobs:
           docker compose -f term/labs/compose.yaml config --quiet
       - name: Build images and execute synthetic lab
         run: bash term/labs/scripts/smoke.sh
+      - name: ShellCheck inside the actual Kali toolbox
+        run: docker compose -f term/labs/compose.yaml run --rm --no-deps -T toolbox bash -c 'shellcheck /opt/lab/bin/*.sh'
+      - name: Validate Swarm configuration without creating a cluster
+        env:
+          LAB_WEB_IMAGE: smartkea-term-web:dev
+          LAB_TOOLBOX_IMAGE: smartkea-term-toolbox:dev
+          LAB_CLOUDFLARED_IMAGE: smartkea-cloudflared:syntax-check-only
+          LAB_STUDENT_ID: ci-validation
+          LAB_TUNNEL_CONFIG: ci-not-created
+          LAB_TUNNEL_SECRET: ci-not-created
+        run: docker stack config -c term/labs/stack.yaml -c term/labs/stack.writable.yaml > /dev/null
+  public-release:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: [course, labs]
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify the exact commit served on both public domains
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: python3 term/verify_public.py --expected-commit "$EXPECTED_COMMIT" --attempts 12 --output term/qa/public-release.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: term-public-release-evidence
+          path: term/qa/public-release.json
+          retention-days: 14
