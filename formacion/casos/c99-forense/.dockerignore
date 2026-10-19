@@ -1,0 +1,11 @@
+# Explicit classroom build allowlist; never send a student's workspace to a builder.
+**
+!Dockerfile.laboratorio
+!herramientas/
+!herramientas/forense.py
+!evidencias/
+!evidencias/escenario.json
+!evidencias/webroot/
+!evidencias/webroot/cache.php.txt
+!evidencias/webroot/health.php.txt
+!evidencias/webroot/security-notes.txt
