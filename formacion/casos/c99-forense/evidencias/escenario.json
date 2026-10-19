@@ -1,0 +1,24 @@
+{
+  "schema": "smartkea.c99-dfir/1",
+  "synthetic": true,
+  "case_id": "C99-DFIR-LAB",
+  "description": "Fictional classroom dataset. Not victim telemetry, not a native EDR/auditd export, not live DNS. All identities, addresses, tickets and times are exercise data.",
+  "clock": {"precision_seconds": 1, "offset_correction_applied": false, "note": "Explicit time zones are normalized; equal seconds do not establish causal order."},
+  "scope": {"host": "web-01", "window_start": "2026-10-01T08:45:00Z", "window_end": "2026-10-01T09:15:00Z", "missing": ["packet capture", "callback receiver logs", "complete HTTP request bodies", "memory acquisition", "events outside this window"]},
+  "events": [
+    {"id":"E01","time":"2026-10-01T08:45:00Z","source":"change-register","host":"web-01","kind":"baseline","details":{"ticket":"CHG-42","authorized":true,"path":"/var/www/html/health.php","purpose":"HTTP health check; no shell execution"}},
+    {"id":"E02","time":"2026-10-01T08:50:00Z","source":"web-access-normalized","host":"web-01","kind":"http","details":{"request_id":"health-01","client":"192.0.2.10","method":"GET","path":"/health.php","status":200,"ticket":"CHG-42"}},
+    {"id":"E03","time":"2026-10-01T09:00:01Z","source":"filesystem-event-normalized","host":"web-01","kind":"file_write","details":{"path":"/var/www/html/uploads/cache.php","uid":33,"process_uid":"proc-700","ticket":null,"request_id":"req-A"}},
+    {"id":"E04","time":"2026-10-01T09:01:00Z","source":"web-request-start-normalized","host":"web-01","kind":"http_start","details":{"request_id":"req-B","client":"198.51.100.42","method":"GET","path":"/uploads/cache.php?case=LAB","process_uid":"proc-700","body_captured":false}},
+    {"id":"E05","time":"2026-10-01T11:01:00+02:00","source":"process-event-normalized","host":"web-01","kind":"process_start","details":{"process_uid":"proc-701","parent_process_uid":"proc-700","parent":"php-fpm","image":"/bin/sh","argv":["/bin/sh","-c","id"],"uid":33,"request_id":"req-B","authorized":false}},
+    {"id":"E06","time":"2026-10-01T09:01:01Z","source":"dns-normalized","host":"web-01","kind":"dns","details":{"query":"collector.training.invalid","answer":"203.0.113.9","process_uid":"proc-700","note":"Synthetic answer; no resolver was queried."}},
+    {"id":"E07","time":"2026-10-01T09:01:02Z","source":"firewall-normalized","host":"web-01","kind":"egress","details":{"destination":"203.0.113.9","port":443,"protocol":"TCP","decision":"DROP","application_bytes_forwarded":0,"flow_id":"flow-7","visibility":"network-layer decision, not HTTP content"}},
+    {"id":"E08","time":"2026-10-01T09:01:03Z","source":"web-response-normalized","host":"web-01","kind":"http_response","details":{"request_id":"req-B","status":401,"note":"Response code alone does not establish which earlier operations ran."}},
+    {"id":"E09","time":"2026-10-01T09:02:00Z","source":"admin-session-normalized","host":"web-01","kind":"authorized_shell","details":{"user":"training-admin","uid":1001,"parent":"sshd","image":"/bin/sh","command":"id","ticket":"LAB-01","authorized":true}},
+    {"id":"E10","time":"2026-10-01T09:03:00Z","source":"filesystem-metadata-normalized","host":"web-01","kind":"metadata_observation","details":{"path":"/var/www/html/uploads/cache.php","mtime":"2026-01-01T00:00:00Z","ctime":"2026-10-01T09:03:00Z","platform":"Unix-like exercise model","note":"ctime is inode status change here, not birth time; no historical hash is available."}},
+    {"id":"E11","time":"2026-10-01T09:05:00Z","source":"analyst-record","host":"web-01","kind":"alert_triage","details":{"finding":"Unexpected upload-directory file and web-parent shell require investigation","receiver_delivery_proven":false}},
+    {"id":"E12","time":"2026-10-01T09:06:00Z","source":"response-decision","host":"web-01","kind":"containment","details":{"approved_by":"exercise-response-lead","action":"Disable affected route; retain egress deny; preserve evidence copies","ticket":"IR-LAB-01"}},
+    {"id":"E13","time":"2026-10-01T09:15:00Z","source":"recovery-check","host":"web-01","kind":"recovery","details":{"baseline":"CHG-42","health_status":200,"affected_route_status":404,"note":"Functional checks; not a claim of full eradication."}},
+    {"id":"E14","time":"2026-10-01T09:00:02Z","source":"web-response-normalized","host":"web-01","kind":"upload_response","details":{"request_id":"req-A","client":"198.51.100.42","method":"POST","path":"/upload","status":201,"request_body_available":false,"note":"Correlated with E03 through synthetic request ID; initial vulnerability is not established."}}
+  ]
+}

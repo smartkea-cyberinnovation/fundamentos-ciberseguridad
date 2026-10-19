@@ -1,0 +1,5 @@
+SYNTHETIC CLASSROOM RECORD — INERT TEXT, NOT PHP SOURCE
+Original path in fictional scenario: /var/www/html/health.php
+Approved change: CHG-42. Purpose: return a fixed HTTP health response.
+No command runner, upload handler or outbound connection is described in this card.
+A .php path alone does not demonstrate a webshell. Correlate E01 and E02.

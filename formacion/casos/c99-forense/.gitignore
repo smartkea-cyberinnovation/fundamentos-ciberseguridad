@@ -1,0 +1,4 @@
+trabajo/
+__pycache__/
+*.pyc
+salidas/
