@@ -13,7 +13,15 @@ if [[ "$help_text" != *'--writable'* || "$help_text" != *'--check-origin'* ]]; t
 fi
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 work_dir=${HOME:?}/term-workspace
-mkdir -p -m 0700 -- "$work_dir"
+# HOME already exists. Reuse only an owned directory, never a symlink or file.
+if [[ ! -e "$work_dir" && ! -L "$work_dir" ]]; then
+  mkdir -m 0700 -- "$work_dir"
+fi
+if [[ ! -d "$work_dir" || -L "$work_dir" || ! -O "$work_dir" ]]; then
+  printf 'Workspace must be an owned directory, not a symlink.\n' >&2
+  exit 73
+fi
+chmod 0700 -- "$work_dir"
 port=7681
 if [[ "$mode" == --observe ]]; then port=7682; fi
 args=(--interface 127.0.0.1 --port "$port" --check-origin --max-clients 1 --cwd "$work_dir"
