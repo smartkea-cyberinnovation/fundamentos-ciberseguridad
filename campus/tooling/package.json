@@ -4,5 +4,5 @@
   "private": true,
   "description": "Herramientas de despliegue; no forman parte de los activos del alumno",
   "engines": {"node": ">=22"},
-  "devDependencies": {"wrangler": "4.151.1"}
+  "devDependencies": {"wrangler": "4.152.0"}
 }
