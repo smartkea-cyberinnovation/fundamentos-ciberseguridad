@@ -1,0 +1,85 @@
+name: TERM - explicit reviewed deployment
+on:
+  push:
+    branches: [ops/term-deploy-20261028]
+    paths: [.github/workflows/term-explicit-deploy.yml]
+permissions:
+  contents: read
+concurrency:
+  group: fundamentos-ciberseguridad-explicit-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+      CI: 'true'
+      EXPECTED_COMMIT: a86caf07350de3e2ef6c60de1f174f2eb4377271
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: a86caf07350de3e2ef6c60de1f174f2eb4377271
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Require reviewed checkout and existing deployment credentials
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, subprocess, sys
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'term-deployment-evidence'
+          out.mkdir(exist_ok=True)
+          actual = subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip()
+          dirty = subprocess.check_output(['git','status','--porcelain'], text=True)
+          if actual != os.environ['EXPECTED_COMMIT'] or dirty:
+              raise SystemExit('Refusing an unexpected or modified checkout.')
+          missing = [key for key in ('CLOUDFLARE_API_TOKEN','CLOUDFLARE_ACCOUNT_ID') if not os.environ.get(key)]
+          report = {'expectedCommit':actual, 'credentialPreflight':'blocked' if missing else 'available',
+                    'missingConfigurationNames':missing, 'credentialsDisclosed':False}
+          (out/'preflight.json').write_text(json.dumps(report, indent=2)+'\n')
+          if missing:
+              print('Deployment blocked: the required repository credential configuration is not available.')
+              sys.exit(1)
+          PY
+      - name: Publish the reviewed static Worker without changing its scope
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: python3 campus/cloudflare.py deploy
+      - name: Verify the exact public release
+        run: python3 term/verify_public.py --expected-commit "$EXPECTED_COMMIT" --attempts 12 --output "$RUNNER_TEMP/term-deployment-evidence/public-release.json"
+      - name: Record bounded public metadata even when publication is blocked
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, sys
+          from datetime import datetime, timezone
+          sys.path.insert(0, 'term')
+          import verify_public as v
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'term-deployment-evidence'
+          out.mkdir(exist_ok=True)
+          report = {'mode':'observation-not-acceptance', 'checkedAt':datetime.now(timezone.utc).isoformat(timespec='seconds'),
+                    'expectedCommit':os.environ['EXPECTED_COMMIT'], 'resources':[]}
+          for name in ('build-info.json','config.json'):
+              try:
+                  r=v.fetch(v.BASE+name)
+                  report['resources'].append({'path':name,'url':r['url'],'status':r['status'],
+                      'sha256':v.sha(r['body']), 'document':json.loads(r['body']) if r['status']==200 else None})
+              except (ValueError,OSError) as error:
+                  report['resources'].append({'path':name,'error':str(error)})
+          (out/'public-observation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps(report,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: term-explicit-deployment-evidence
+          path: ${{ runner.temp }}/term-deployment-evidence
+          retention-days: 14
