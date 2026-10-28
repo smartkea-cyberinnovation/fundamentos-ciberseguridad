@@ -1,0 +1,33 @@
+name: Wrangler - bounded lockfile refresh
+on:
+  push:
+    branches: [maintenance/wrangler-lock-20261028]
+permissions:
+  contents: read
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Generate exact lockfile without lifecycle scripts
+        working-directory: campus/tooling
+        run: npm install --package-lock-only --ignore-scripts --save-dev --save-exact wrangler@4.154.0
+      - name: Audit locked dependency graph
+        run: npm audit --prefix campus/tooling --audit-level=high --json > campus/tooling/audit-review.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: wrangler-reviewed-lock
+          path: |
+            campus/tooling/package.json
+            campus/tooling/package-lock.json
+            campus/tooling/audit-review.json
+          retention-days: 14
