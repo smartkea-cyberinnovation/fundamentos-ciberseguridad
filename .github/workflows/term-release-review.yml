@@ -1,0 +1,52 @@
+name: TERM - release review evidence
+on:
+  push:
+    branches: [review/term-release-20261028]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Archive tracked source only
+        run: |
+          mkdir -p /tmp/term-review
+          git archive --format=zip --output=/tmp/term-review/source.zip HEAD
+          git rev-parse HEAD > /tmp/term-review/commit.txt
+          sha256sum /tmp/term-review/source.zip > /tmp/term-review/SHA256SUMS.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: term-review-source
+          path: /tmp/term-review
+          retention-days: 14
+  persistence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.13'
+      - name: Build and prepare browser
+        run: |
+          python3 campus/build.py
+          python3 -m pip install playwright==1.55.0
+          python3 -m playwright install --with-deps webkit
+      - name: Reproduce queued writes repeatedly
+        env:
+          CAMPUS_BROWSER: webkit
+        run: |
+          python3 - <<'PY'
+          import sys, unittest
+          sys.path.insert(0, 'campus/tests')
+          from browser_routes import RoutesAcceptance
+          suite = unittest.TestSuite(RoutesAcceptance('test_11_simultaneous_pending_writes_merge_after_the_exclusive_lock') for _ in range(12))
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          sys.exit(not result.wasSuccessful())
+          PY
