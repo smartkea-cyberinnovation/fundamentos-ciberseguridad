@@ -25,7 +25,7 @@ jobs:
           retention-days: 14
   persistence:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -35,18 +35,27 @@ jobs:
           python-version: '3.13'
       - name: Build and prepare browser
         run: |
+          mkdir -p /tmp/term-review
           python3 campus/build.py
-          python3 -m pip install playwright==1.55.0
-          python3 -m playwright install --with-deps webkit
+          python3 -m pip install playwright==1.55.0 > /tmp/term-review/dependencies.log 2>&1
+          python3 -m playwright install --with-deps webkit >> /tmp/term-review/dependencies.log 2>&1
       - name: Reproduce queued writes repeatedly
         env:
           CAMPUS_BROWSER: webkit
+        shell: bash
         run: |
-          python3 - <<'PY'
+          set -o pipefail
+          python3 - <<'PY' 2>&1 | tee /tmp/term-review/persistence.log
           import sys, unittest
           sys.path.insert(0, 'campus/tests')
           from browser_routes import RoutesAcceptance
-          suite = unittest.TestSuite(RoutesAcceptance('test_11_simultaneous_pending_writes_merge_after_the_exclusive_lock') for _ in range(12))
+          suite = unittest.TestSuite(RoutesAcceptance('test_11_simultaneous_pending_writes_merge_after_the_exclusive_lock') for _ in range(40))
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           sys.exit(not result.wasSuccessful())
           PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: term-review-persistence
+          path: /tmp/term-review
+          retention-days: 14
