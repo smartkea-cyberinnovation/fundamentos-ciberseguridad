@@ -23,7 +23,8 @@ function snapshot(){return new Set(phases.filter(p=>p.checked).map(p=>p.dataset.
 function load(){knownRaw=localStorage.getItem(KEY);return knownRaw===null?null:read(knownRaw);}
 function canCoordinate(){try{return typeof navigator.locks?.request==='function';}catch{return false;}}
 function checkpoint(){
- // Keep the lock across a task boundary so Firefox publishes its storage snapshot.
+ // Yield while holding the lock: peer notifications may arrive after lock grant.
+ // This is a task boundary, not a timeout or a retry of a failed write.
  return new Promise(resolve=>{
   const channel=new MessageChannel();
   channel.port1.onmessage=()=>{channel.port1.close();channel.port2.close();resolve();};
@@ -41,6 +42,7 @@ async function save(token,change=null,draft=null){
  try{
   if(!canCoordinate())throw Error('COORDINATION');
   await navigator.locks.request(LOCK,{mode:'exclusive'},async()=>{
+   await checkpoint();
    if(session!==token||!remember.checked)return;
    const current=load();
    if(change&&(!current||current.recordId!==token.recordId)){recordChanged(current);return;}
@@ -81,6 +83,7 @@ async function disableSaving(clear=false){
   if(!canCoordinate())throw Error('COORDINATION');
   let changed=false;
   await navigator.locks.request(LOCK,{mode:'exclusive'},async()=>{
+   await checkpoint();
    const raw=localStorage.getItem(KEY);
    let record=null;try{if(raw!==null)record=read(raw);}catch{}
    const same=record?record.recordId===(previous?.recordId??expectedId):raw!==null&&raw===expectedRaw;
