@@ -3,7 +3,7 @@ on:
   push:
     branches: [maintenance/wrangler-lock-20261028]
 permissions:
-  contents: read
+  contents: write
 jobs:
   lock:
     runs-on: ubuntu-latest
@@ -22,6 +22,28 @@ jobs:
         run: npm install --package-lock-only --ignore-scripts --save-dev --save-exact wrangler@4.154.0
       - name: Audit locked dependency graph
         run: npm audit --prefix campus/tooling --audit-level=high --json > campus/tooling/audit-review.json
+      - name: Store only the audited immutable Git blobs; no branches or commits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib, subprocess
+          root = pathlib.Path('campus/tooling')
+          result = {}
+          for name in ('package.json','package-lock.json'):
+              content = (root/name).read_text()
+              payload = json.dumps({'content':content,'encoding':'utf-8'}).encode()
+              response = subprocess.run(['gh','api','--method','POST',
+                  'repos/smartkea-cyberinnovation/fundamentos-ciberseguridad/git/blobs','--input','-'],
+                  input=payload, capture_output=True, check=True)
+              blob = json.loads(response.stdout)
+              expected = hashlib.sha1(b'blob '+str(len(content.encode())).encode()+b'\0'+content.encode()).hexdigest()
+              if blob['sha'] != expected:
+                  raise SystemExit('Unexpected Git blob identity')
+              result[name] = {'sha':blob['sha'],'sha256':hashlib.sha256(content.encode()).hexdigest()}
+          (root/'blob-ids.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result))
+          PY
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
@@ -30,4 +52,5 @@ jobs:
             campus/tooling/package.json
             campus/tooling/package-lock.json
             campus/tooling/audit-review.json
+            campus/tooling/blob-ids.json
           retention-days: 14
