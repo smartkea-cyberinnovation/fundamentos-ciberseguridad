@@ -21,7 +21,7 @@ from stage_worker import stage, validate_staging
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CONFIG = ROOT / 'wrangler.jsonc'
-WRANGLER = '4.151.1'
+WRANGLER = '4.154.0'
 TOOLING = HERE / 'tooling'
 WRANGLER_BIN = TOOLING / 'node_modules/wrangler/bin/wrangler.js'
 # Chokidar does not apply our Git ignore rules. Watch source paths explicitly:

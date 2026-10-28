@@ -8,6 +8,21 @@ Domina la terminal comprendiendo lo que hace cada comando, practicando en Linux 
 
 **Manual completo:** [lectura e impresión](https://smartkea.com/fundamentos-ciberseguridad/term/manual.html)
 
+## Accesos directos
+
+| Necesidad | Enlace |
+|---|---|
+| Estudiar paso a paso | [Abrir TERM](https://www.smartkea.com/fundamentos-ciberseguridad/term/) |
+| Leer o imprimir el manual | [Manual Linux](https://www.smartkea.com/fundamentos-ciberseguridad/term/manual.html) |
+| Practicar en tu VM | [Laboratorios Docker/Kali — ZIP](https://www.smartkea.com/fundamentos-ciberseguridad/term/downloads/labs.zip) |
+| Conectar una máquina real | [Guía ttyd, Tunnel y Access](https://www.smartkea.com/fundamentos-ciberseguridad/term/docs/CONEXION-TTYD.html) |
+| Comprobar qué edición se sirve | [Metadatos públicos del build](https://www.smartkea.com/fundamentos-ciberseguridad/term/build-info.json) |
+| Revisar pruebas y publicación | [GitHub Actions de TERM](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/actions/workflows/term.yml) |
+
+Un curso publicado no implica una máquina conectada: `labConfigured` en los metadatos indica si se incluyó un endpoint, no acredita su disponibilidad ni su autorización. Sin endpoint se practica en una VM propia. Nunca publiques una terminal sin validar antes su política de acceso.
+
+El progreso se guarda por origen del navegador. Utiliza de forma habitual la URL canónica con `www`; exporta e importa tu progreso cuando cambies de dominio, navegador o equipo. Un enlace al manual o al ZIP no exige conectar ttyd.
+
 ## Empieza aquí
 
 1. Prepara una VM Debian, Ubuntu o Kali y una cuenta de alumno. Identifica equipo, usuario, ruta y red antes de actuar. [Guía de laboratorio](docs/LABS.md).
