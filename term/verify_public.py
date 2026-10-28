@@ -103,6 +103,42 @@ def verify_documents(info: dict, course_body: bytes, config_body: bytes, expecte
     return counts
 
 
+def verify_security_headers(headers: dict) -> None:
+    """Check the course's strict, single-policy contract, not substrings.
+
+    A different policy may be secure but is not this release contract. Reject
+    duplicates and script element/attribute overrides rather than guessing.
+    """
+    h = {name.lower(): value.strip() for name, value in headers.items()}
+    csp = h.get('content-security-policy', '')
+    directives = {}
+    for part in csp.split(';'):
+        tokens = part.split()
+        if not tokens:
+            continue
+        name = tokens[0].lower()
+        if name in directives or ',' in part:
+            raise ValueError('Ambiguous public CSP policy.')
+        directives[name] = tokens[1:]
+    required = {'default-src': ["'self'"], 'script-src': ["'self'"],
+                'object-src': ["'none'"], 'base-uri': ["'none'"],
+                'frame-ancestors': ["'none'"], 'form-action': ["'none'"]}
+    for name, values in required.items():
+        if directives.get(name) != values:
+            raise ValueError('Unexpected public CSP directive: ' + name)
+    for name, values in {'script-src-elem': ["'self'"],
+                         'script-src-attr': ["'none'"]}.items():
+        if name in directives and directives[name] != values:
+            raise ValueError('Unexpected public CSP override: ' + name)
+    if h.get('x-content-type-options', '').lower() != 'nosniff':
+        raise ValueError('Public nosniff header is missing.')
+    if h.get('x-frame-options', '').upper() != 'DENY':
+        raise ValueError('Public frame protection is missing.')
+    cache = {part.strip().lower() for part in h.get('cache-control', '').split(',')}
+    if not {'no-cache', 'no-transform'} <= cache:
+        raise ValueError('Public cache contract requires no-cache and no-transform.')
+
+
 def check(expected: str, reader=fetch) -> dict:
     result={'checkedAt':datetime.now(timezone.utc).isoformat(timespec='seconds'),
             'expectedCommit':expected,'baseUrl':BASE,'checks':[]}
@@ -121,25 +157,24 @@ def check(expected: str, reader=fetch) -> dict:
         r=reader(BASE+name)
         if r['status'] not in ((200,404) if name=='404.html' else (200,)) or sha(r['body'])!=digest:
             raise ValueError('Public asset mismatch: '+name)
-        if name=='index.html':
-            headers={k.lower():v for k,v in r['headers'].items()}
-            csp=headers.get('content-security-policy','')
-            for directive in ("default-src 'self'","object-src 'none'","frame-ancestors 'none'"):
-                if directive not in csp:
-                    raise ValueError('Missing public security header: '+directive)
-            if headers.get('x-content-type-options')!='nosniff':
-                raise ValueError('Public nosniff header is missing.')
+        if name.endswith('.html'):
+            verify_security_headers(r['headers'])
         bodies[name]=r['body']
         result['checks'].append({'path':name,'status':r['status'],'sha256':digest})
     result.update(verify_documents(info,bodies['course.json'],bodies['config.json'],expected))
+    result['entries'] = []
     for host in sorted(HOSTS):
         for suffix in ('','/'):
             r=reader('https://'+host+PREFIX[:-1]+suffix)
             if r['status']!=200 or sha(r['body'])!=manifest['index.html']:
                 raise ValueError('Course entry does not resolve on '+host+suffix)
+            verify_security_headers(r['headers'])
+            result['entries'].append({'requestedUrl':'https://'+host+PREFIX[:-1]+suffix,
+                                      'finalUrl':r['url'],'status':r['status']})
     missing=reader(BASE+'__term_release_check_missing__')
     if missing['status']!=404:
         raise ValueError('A missing route must return HTTP 404, not a soft 200.')
+    verify_security_headers(missing['headers'])
     final=reader(BASE+'build-info.json')
     if final['status']!=200 or final['body']!=info_response['body']:
         raise ValueError('Deployment changed during verification; repeat the check.')

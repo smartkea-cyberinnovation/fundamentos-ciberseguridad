@@ -84,3 +84,14 @@ La corrección declara `Cache-Control: public, no-cache, no-transform` para los 
 La CSP permanece sin permisos para el beacon ni scripts inline. Tampoco se normaliza el HTML, se eliminan scripts antes de calcular hashes o se excluyen HTML de la aceptación. El verificador continúa exigiendo los bytes exactos y el commit limpio publicado. Su resultado posterior al despliegue es la evidencia definitiva de esta corrección.
 
 Este control puede impedir optimizaciones de transformación, incluida compresión en el edge cuando el origen entrega datos sin comprimir. Se prioriza aquí el contenido docente verificable y sin inyección automática; no equivale a desactivar el WAF, la autenticación o Access. Referencia: [Origin Cache Control](https://developers.cloudflare.com/cache/concepts/cache-control/). La eficacia de las cabeceras se vuelve a comprobar por HTTPS; una configuración de zona que las sobrescriba se detectaría como fallo, no se aceptaría silenciosamente.
+
+
+## Revisión del contrato de publicación · 28 de octubre de 2026
+
+El verificador interpreta las directivas CSP como listas de tokens, no como subcadenas: `default-src 'self' https://otro.example` no satisface una política que exige únicamente `'self'`. También rechaza ampliaciones de `script-src`, overrides de elementos/atributos, directivas duplicadas y políticas múltiples ambiguas para este contrato. Esto valida la política concreta del curso; no es un evaluador general de cualquier CSP.
+
+La comprobación se aplica a todos los HTML del manifiesto, a las cuatro entradas públicas y a la ruta 404. Exige `nosniff`, `X-Frame-Options: DENY`, revalidación y `no-transform`. Conserva hashes exactos, commit limpio y límites de red. El JSON incluye las cuatro URL solicitadas y sus destinos finales para facilitar la trazabilidad.
+
+La incidencia [#31 de las rutas del campus](https://github.com/smartkea-cyberinnovation/fundamentos-ciberseguridad/issues/31) se reproduce por separado en WebKit. No se considera resuelta por una ejecución verde aislada ni por la aceptación de TERM. No se incorpora a producción el ensayo insuficiente de la rama de diagnóstico. Hasta resolverla, editar las marcas de la vista de rutas desde una sola pestaña. Esta observación no equivale a una certificación de todos los mecanismos de persistencia.
+
+La publicación estática y la aceptación Docker no verifican una VM de alumno ni el recorrido Access/Tunnel. El material del laboratorio SSH es un despliegue independiente; no se ha conectado automáticamente al curso.

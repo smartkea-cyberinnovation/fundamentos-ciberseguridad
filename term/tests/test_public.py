@@ -8,6 +8,9 @@ ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('term_verify',ROOT/'verify_public.py')
 v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
 COMMIT='a'*40
+HEADERS={'Content-Security-Policy':"default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'",
+         'X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY',
+         'Cache-Control':'public, no-cache, no-transform'}
 
 class PublicTests(unittest.TestCase):
     def test_url_scope(self):
@@ -57,7 +60,7 @@ class PublicTests(unittest.TestCase):
             name=url.split(v.PREFIX,1)[1] if v.PREFIX in url else ''
             name=name or 'index.html'
             return {'status':200 if name in files else 404,'body':files.get(name,b'missing'),
-                    'url':url,'headers':{'Content-Security-Policy':"default-src 'self'; object-src 'none'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}}
+                    'url':url,'headers':dict(HEADERS)}
         return files,reader
 
     def test_complete_verification_includes_both_entries_and_404(self):
@@ -79,3 +82,43 @@ class PublicTests(unittest.TestCase):
             if result['status']==404:result['status']=200
             return result
         with self.assertRaises(ValueError):v.check(COMMIT,soft)
+
+    def test_security_headers_accept_case_insensitive_names(self):
+        v.verify_security_headers({k.upper(): val for k,val in HEADERS.items()})
+
+    def test_csp_rejects_substring_matches_and_script_overrides(self):
+        csp = HEADERS['Content-Security-Policy']
+        cases = [csp.replace("default-src 'self'", "default-src 'self' https://external.example"),
+                 csp.replace("script-src 'self'", "script-src *"),
+                 csp.replace("script-src 'self'", "script-src 'self' 'unsafe-inline'"),
+                 csp + "; script-src-elem *", csp + "; script-src-attr 'unsafe-inline'",
+                 csp + "; script-src *", csp + ", default-src *"]
+        for policy in cases:
+            with self.subTest(policy=policy), self.assertRaises(ValueError):
+                v.verify_security_headers(dict(HEADERS, **{'Content-Security-Policy':policy}))
+
+    def test_required_headers_cannot_disappear(self):
+        for name in HEADERS:
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                v.verify_security_headers({k:val for k,val in HEADERS.items() if k != name})
+        for cache in ('public', 'public, no-cache', 'public, no-transform'):
+            with self.subTest(cache=cache), self.assertRaises(ValueError):
+                v.verify_security_headers(dict(HEADERS, **{'Cache-Control':cache}))
+
+    def test_manual_entries_and_missing_routes_require_headers_too(self):
+        for path in ('manual.html', '', '__term_release_check_missing__'):
+            _,reader=self.transport()
+            def weakened(url):
+                response=reader(url)
+                if url == v.BASE + path:
+                    response['headers'].pop('Content-Security-Policy')
+                return response
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                v.check(COMMIT,weakened)
+
+    def test_verification_records_all_four_entry_urls(self):
+        _,reader=self.transport()
+        result=v.check(COMMIT,reader)
+        self.assertEqual(len(result['entries']),4)
+        self.assertEqual({entry['requestedUrl'] for entry in result['entries']},
+                         {'https://'+host+v.PREFIX[:-1]+slash for host in v.HOSTS for slash in ('','/')})
