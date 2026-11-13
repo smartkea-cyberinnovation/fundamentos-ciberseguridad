@@ -49,7 +49,7 @@ Preserve the explicit root `wrangler.jsonc` and `campus/cloudflare.py` wrapper. 
 | Production deploy command | `python3 campus/cloudflare.py deploy` |
 | Preview/version upload command | `python3 campus/cloudflare.py preview` |
 | Environment | `SKIP_DEPENDENCY_INSTALL=1`, `PYTHON_VERSION=3.13.3`, `NODE_VERSION=22.23.2` |
-| Pinned Wrangler | `4.151.1` |
+| Pinned Wrangler | Exact version in `campus/tooling/package.json`, verified against `package-lock.json`; inspect with `python3 campus/cloudflare.py plan` |
 
 Inspect without publishing:
 
@@ -66,6 +66,16 @@ python3 campus/cloudflare.py dry-run
 Open the actual provider URL with `?lang=es#/curso` and `?lang=en#/curso`. For the SmartKEA Worker use `https://smartkea.com/introduccion-ciberseguridad/` and verify the release version and source commit in `/introduccion-ciberseguridad/build-info.json`; a root-hosted Pages site uses `/build-info.json`. Then check the syllabus filters; theory/labs/self-check in M05; L05A five phases and recovery; language switching without lost notes; presentation and keyboard; export/import; and a progress link between two separate browser profiles. Import must require confirmation and must not transfer notes. Try 320/390px phone and 768/820px tablet widths, portrait and landscape, then a real iPad/Safari when available.
 
 Confirm `_headers` protections are delivered, absent files return 404 rather than misleading HTML success, no unintended external font/analytics request exists and the kit downloads. Static HTML rendering, browser tests and provider hosting are separate checks. Do not claim an account deployment from a local Wrangler test.
+
+## CI and production are separate / CI y producción son distintos
+
+Browser and release jobs use **`ubuntu-24.04`**, not the moving `ubuntu-latest` alias. Updating the runner or Playwright is an explicit, tested change. The browser suites and dependency audit are mandatory; do not skip them to make a release green.
+
+Dependabot may update the exact Wrangler version in `campus/tooling/package.json` and its lockfile. The wrapper reads that version, checks both lockfile declarations, the npm registry URL and integrity metadata, installs with `npm ci --ignore-scripts`, and checks the installed CLI. There is no third version literal in Python to update manually.
+
+Cloudflare Workers Builds publishes after a push to the configured production branch. A PR build, a local dry-run and an Actions artifact do **not** deploy production. TERM acceptance polls `build-info.json` for the exact integrated commit (at most 60 attempts, ten seconds apart). Once it appears, all asset hashes, headers and entry/404 responses must pass. Hash/CSP/schema failures are not retried; publication delays and network errors are recorded in `attemptHistory`.
+
+For the existing Worker, use the production command `python3 campus/cloudflare.py deploy`, not `preview`/`versions upload`. Confirm the account-side setting in Cloudflare; repository changes do not change that setting. The unrelated experimental `ops/term-deploy-20261028` Actions workflow was not the production publisher and cannot substitute for Workers Builds without its own authorized credentials. Do not create a second automatic publisher.
 
 ## Rollback and troubleshooting / Recuperación
 
