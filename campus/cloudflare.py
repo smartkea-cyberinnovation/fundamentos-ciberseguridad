@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -21,7 +22,6 @@ from stage_worker import stage, validate_staging
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CONFIG = ROOT / 'wrangler.jsonc'
-WRANGLER = '4.154.0'
 TOOLING = HERE / 'tooling'
 WRANGLER_BIN = TOOLING / 'node_modules/wrangler/bin/wrangler.js'
 # Chokidar does not apply our Git ignore rules. Watch source paths explicitly:
@@ -73,6 +73,39 @@ def wrangler_args(action: str) -> list[str]:
     return [*actions[action], '--config', str(CONFIG)]
 
 
+def toolchain_version() -> str:
+    """Read the exact reviewed version once from package.json and verify its lock.
+
+    Dependabot updates the manifest and lock together. A second version literal
+    in Python would reject an otherwise valid update before Wrangler can run.
+    npm ci still verifies the complete dependency graph and package integrity.
+    """
+    paths = [TOOLING / 'package.json', TOOLING / 'package-lock.json']
+    if any(path.is_symlink() or not path.is_file() for path in paths):
+        raise ValueError('package.json y lockfile deben ser archivos regulares.')
+    package, lock = [json.loads(path.read_text(encoding='utf-8')) for path in paths]
+    if not isinstance(package, dict) or not isinstance(lock, dict):
+        raise ValueError('package.json o lockfile no contienen objetos JSON.')
+    dependencies = package.get('devDependencies')
+    version = dependencies.get('wrangler') if isinstance(dependencies, dict) else None
+    if (not isinstance(version, str) or not re.fullmatch(r'(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)', version)
+            or dependencies != {'wrangler': version}):
+        raise ValueError('Wrangler requiere una versión estable exacta, sin rangos ni fuentes externas.')
+    packages = lock.get('packages')
+    if lock.get('lockfileVersion') != 3 or not isinstance(packages, dict):
+        raise ValueError('Se requiere un lockfile npm v3.')
+    root_package = packages.get('')
+    cli_package = packages.get('node_modules/wrangler')
+    if (not isinstance(root_package, dict) or not isinstance(cli_package, dict)
+            or root_package.get('devDependencies') != dependencies
+            or cli_package.get('version') != version
+            or cli_package.get('resolved') != f'https://registry.npmjs.org/wrangler/-/wrangler-{version}.tgz'
+            or not isinstance(cli_package.get('integrity'), str)
+            or not cli_package['integrity'].startswith('sha512-')):
+        raise ValueError('La versión de Wrangler y su lockfile deben actualizarse juntos.')
+    return version
+
+
 def install_tooling() -> str:
     """Install the reviewed lockfile without lifecycle scripts, then verify the CLI.
 
@@ -82,14 +115,10 @@ def install_tooling() -> str:
     npm, node = shutil.which('npm'), shutil.which('node')
     if not npm or not node:
         raise ValueError('Node.js 22 y npm son necesarios para Wrangler, no para compilar el curso.')
-    package = json.loads((TOOLING / 'package.json').read_text(encoding='utf-8'))
-    lock = json.loads((TOOLING / 'package-lock.json').read_text(encoding='utf-8'))
-    if (package.get('devDependencies') != {'wrangler': WRANGLER}
-            or lock.get('packages', {}).get('node_modules/wrangler', {}).get('version') != WRANGLER):
-        raise ValueError('La versión de Wrangler y su lockfile deben actualizarse juntos.')
+    version = toolchain_version()
     execute([npm, 'ci', '--prefix', str(TOOLING), '--ignore-scripts', '--no-audit', '--no-fund'])
     installed = json.loads((TOOLING / 'node_modules/wrangler/package.json').read_text(encoding='utf-8'))
-    if installed.get('version') != WRANGLER or not WRANGLER_BIN.is_file():
+    if installed.get('version') != version or not WRANGLER_BIN.is_file():
         raise ValueError('La instalación de Wrangler no coincide con la versión revisada.')
     return node
 
@@ -117,7 +146,7 @@ def run(action: str) -> int:
         print(json.dumps({'root': str(ROOT), 'assets': 'campus/worker-dist',
             'publicUrl': PUBLIC_URL, 'publicBasePath': PUBLIC_BASE_PATH,
             'productionRoutes': PRODUCTION_ROUTES, 'previewChangesRoutes': False,
-            'wrangler': WRANGLER, 'toolchainLock': 'campus/tooling/package-lock.json', 'publishes': False,
+            'wrangler': toolchain_version(), 'toolchainLock': 'campus/tooling/package-lock.json', 'publishes': False,
             'install': ['npm', 'ci', '--prefix', str(TOOLING), '--ignore-scripts', '--no-audit', '--no-fund'],
             'production': ['node', str(WRANGLER_BIN), *wrangler_args('deploy')],
             'preview': ['node', str(WRANGLER_BIN), *wrangler_args('preview')]}, ensure_ascii=False, indent=2))

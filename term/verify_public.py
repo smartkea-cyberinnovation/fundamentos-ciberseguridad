@@ -25,6 +25,10 @@ REQUIRED = {'index.html','manual.html','course.json','config.json','build-info.j
             'assets/app.js','assets/state.js','assets/styles.css','downloads/labs.zip'}
 
 
+class PublicationPending(ValueError):
+    """The expected commit has not reached the public route yet; not acceptance."""
+
+
 def allowed_url(url: str) -> bool:
     try:
         u = urlsplit(url)
@@ -143,11 +147,17 @@ def check(expected: str, reader=fetch) -> dict:
     result={'checkedAt':datetime.now(timezone.utc).isoformat(timespec='seconds'),
             'expectedCommit':expected,'baseUrl':BASE,'checks':[]}
     info_response=reader(BASE+'build-info.json')
+    if info_response['status'] in (404, 429, 502, 503, 504):
+        raise PublicationPending('Build metadata is temporarily unavailable over HTTPS.')
     if info_response['status']!=200:
         raise ValueError('Build metadata is not available over HTTPS.')
     info=json.loads(info_response['body'])
+    if not isinstance(info, dict):
+        raise ValueError('Public build metadata must be a JSON object.')
     if info.get('sourceCommit')!=expected:
-        raise ValueError('Waiting for requested commit to reach the public route.')
+        observed = info.get('sourceCommit')
+        observed = observed if isinstance(observed, str) and re.fullmatch(r'[a-f0-9]{40}', observed) else 'unknown'
+        raise PublicationPending('Waiting for requested commit; observed commit: ' + observed)
     manifest_response=reader(BASE+'SHA256SUMS.txt')
     if manifest_response['status']!=200:
         raise ValueError('Public manifest is unavailable.')
@@ -177,33 +187,58 @@ def check(expected: str, reader=fetch) -> dict:
     verify_security_headers(missing['headers'])
     final=reader(BASE+'build-info.json')
     if final['status']!=200 or final['body']!=info_response['body']:
-        raise ValueError('Deployment changed during verification; repeat the check.')
+        raise PublicationPending('Deployment changed during verification; repeat the check.')
     result.update(status='passed',labConfigured=info['labConfigured'],
                   manifestSha256=sha(manifest_response['body']))
+    return result
+
+
+def verify_with_retries(expected: str, attempts: int = 1, *, checker=None, sleeper=None) -> dict:
+    """Retry publication/network delays only; never retry away integrity failures.
+
+    While an older commit is served, check() requests only build-info.json.
+    A matching commit must then pass the unchanged full hash/header/404 contract.
+    """
+    if not re.fullmatch(r'[a-f0-9]{40}', expected) or not 1 <= attempts <= 60:
+        raise ValueError('A full commit SHA and 1-60 attempts are required.')
+    checker = checker or check
+    sleeper = sleeper or time.sleep
+    history = []
+    result = {}
+    for attempt in range(1, attempts + 1):
+        try:
+            result = checker(expected)
+            history.append({'attempt': attempt, 'status': result.get('status'),
+                            'checkedAt': result.get('checkedAt')})
+            break
+        except (ValueError, OSError, KeyError, TypeError) as error:
+            retryable = isinstance(error, (PublicationPending, OSError))
+            result = {'status': 'failed', 'expectedCommit': expected,
+                      'checkedAt': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+                      'error': str(error), 'attempt': attempt, 'retryable': retryable}
+            history.append(dict(result, status='waiting' if retryable else 'failed'))
+            print(json.dumps(history[-1]), file=sys.stderr, flush=True)
+            if not retryable or attempt == attempts:
+                break
+            sleeper(10)
+    result['attemptHistory'] = history
+    result['verificationAttempts'] = len(history)
     return result
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--expected-commit',required=True)
-    parser.add_argument('--attempts',type=int,default=1)
+    parser.add_argument('--attempts',type=int,default=1,
+                        help='1-60 attempts, 10 seconds apart; retry only publication/network delays.')
     parser.add_argument('--output',type=Path)
     args=parser.parse_args()
-    if not re.fullmatch(r'[a-f0-9]{40}',args.expected_commit) or not 1<=args.attempts<=12:
-        parser.error('A full commit SHA and 1–12 attempts are required.')
-    result={}
-    for attempt in range(args.attempts):
-        try:
-            result=check(args.expected_commit);break
-        except (ValueError,OSError,KeyError,TypeError) as error:
-            result={'status':'failed','expectedCommit':args.expected_commit,
-                    'checkedAt':datetime.now(timezone.utc).isoformat(timespec='seconds'),
-                    'error':str(error),'attempt':attempt+1}
-            print(json.dumps(result),file=sys.stderr)
-            if attempt+1<args.attempts:time.sleep(10)
+    if not re.fullmatch(r'[a-f0-9]{40}',args.expected_commit) or not 1<=args.attempts<=60:
+        parser.error('A full commit SHA and 1-60 attempts are required.')
+    result=verify_with_retries(args.expected_commit,args.attempts)
     text=json.dumps(result,ensure_ascii=False,indent=2)+'\n'
     if args.output:
-        args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(text)
+        args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(text,encoding='utf-8')
     print(text,end='')
     return 0 if result.get('status')=='passed' else 1
 

@@ -63,7 +63,7 @@ class CloudflareTests(unittest.TestCase):
     def test_mismatched_lock_prevents_install_and_upload(self):
         with tempfile.TemporaryDirectory() as temporary:
             tooling=Path(temporary)
-            (tooling/'package.json').write_text(json.dumps({'devDependencies':{'wrangler':cloudflare.WRANGLER}}))
+            (tooling/'package.json').write_text(json.dumps({'devDependencies':{'wrangler':"4.158.0"}}))
             (tooling/'package-lock.json').write_text(json.dumps({'packages':{'node_modules/wrangler':{'version':'0.0.0'}}}))
             with patch.object(cloudflare,'TOOLING',tooling), patch.object(cloudflare.shutil,'which',return_value='/usr/bin/node'):
                 with patch.object(cloudflare,'execute') as execute:
